@@ -49,12 +49,12 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 					pCubeComponent->SetupAttachment(RootComponent);
 					
 					pCubeComponent->SetRelativeLocation(FVector(i * CubeSize * 0.4f, j * CubeSize * 0.4f, k * CubeSize * 0.4f));
-					pCubeComponent->SetRelativeRotation(FRotator(FMath::FRandRange(-30.0f, 30.0f), FMath::FRandRange(-30.0f, 30.0f), 0.0f));
+					// pCubeComponent->SetRelativeRotation(FRotator(FMath::FRandRange(-30.0f, 30.0f), FMath::FRandRange(-30.0f, 30.0f), 0.0f));
 					pCubeComponent->SetRelativeScale3D(FVector(CubeSize / 250.0f));
 					pCubeComponent->SetMobility(EComponentMobility::Static);
 					
-					pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
-					//pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
+					// pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
+					pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
 					pCubeComponent->SetVisibility(false);
 				}
 			}

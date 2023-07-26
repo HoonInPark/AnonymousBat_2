@@ -88,13 +88,14 @@ void AAB_Character::PushSoundCube()
 					hitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
 				}
 
-				AB2LOG(Warning, TEXT("Push Sweeping has hit: %s"), *(hitResult.GetComponent()->GetName()));
+				AB2LOG(Warning, TEXT("Push Sweeping has hit: (%s)"), *(hitResult.GetComponent()->GetName()));
 			}
 		}
 	}
 }
 
-TArray<FHitResult> AAB_Character::SweepInRange()
+// Todo: 한번에 두개 스폰되는 현상을 막아야 한다.
+TArray<FHitResult> AAB_Character::SweepInRange() 
 {
 	Controller->GetPlayerViewPoint(OUT PlayerViewPtLoc, OUT PlayerViewPtRot);
 
@@ -135,6 +136,6 @@ bool AAB_Character::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 		}
 	}
 	else
-		return false;
+		return true;
 	return false;
 }

@@ -34,8 +34,6 @@ public:
 
 private:
 	// Set up parameters for getting the player viewport
-	FVector PlayerViewPtLoc;
-	FRotator PlayerViewPtRot;
 	float Reach;
 
 	FVector SweepStartPt;
@@ -50,6 +48,11 @@ private:
 	bool bIsEKeyDown;
 
 public:
+	UPROPERTY(EditAnywhere, Category=AB_Character)
+	FVector PlayerViewPtLoc;
+	UPROPERTY(EditAnywhere, Category=AB_Character)
+	FRotator PlayerViewPtRot;
+
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
 	UPROPERTY()
