@@ -34,34 +34,32 @@ public:
 
 private:
 	// Set up parameters for getting the player viewport
+	bool bIsEKeyDown;
 	float Reach;
 
 	FVector SweepStartPt;
 	FVector SweepEndPt;
 	TArray<FHitResult> HitResults;
 
+	TArray<FString> CubeNames_Hit;
+	TArray<FString> CubeNames_Actor;
+
 	void PushSoundCube();
 	void PrePushSoundCube();
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
-
-	bool bIsEKeyDown;
 
 public:
 	UPROPERTY(EditAnywhere, Category=AB_Character)
 	FVector PlayerViewPtLoc;
 	UPROPERTY(EditAnywhere, Category=AB_Character)
 	FRotator PlayerViewPtRot;
-
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
 	UPROPERTY()
 	UMaterialInstanceDynamic* SoundCubeMatInstDynamic;
 	UPROPERTY()
 	UPrimitiveComponent* pCubeComponent_Hit;
-	UPROPERTY()
-	
-
-	TArray<FString> CubeNames_Hit;
-	TArray<FString> CubeNames_Actor;
+	// UPROPERTY(EditAnywhere)
+	// class UStaticMeshComponent* DynamicMaterialMesh;
 };

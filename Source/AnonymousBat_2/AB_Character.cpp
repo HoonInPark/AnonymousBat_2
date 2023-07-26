@@ -13,7 +13,7 @@ AAB_Character::AAB_Character()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Reach = 500.0f;
-	bIsEKeyDown = false;
+	// bIsEKeyDown = false;
 }
 
 // Called when the game starts or when spawned
@@ -69,7 +69,7 @@ void AAB_Character::PrePushSoundCube()
 
 void AAB_Character::PushSoundCube()
 {
-	bIsEKeyDown = false;
+	// bIsEKeyDown = false;
 
 	HitResults = SweepInRange();
 	if (!HitResults.IsEmpty())
@@ -86,9 +86,8 @@ void AAB_Character::PushSoundCube()
 				{
 					hitResult.GetComponent()->SetVisibility(true);
 					hitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+					AB2LOG(Warning, TEXT("Push Sweeping has hit: (%s)"), *(hitResult.GetComponent()->GetName()));
 				}
-
-				AB2LOG(Warning, TEXT("Push Sweeping has hit: (%s)"), *(hitResult.GetComponent()->GetName()));
 			}
 		}
 	}
@@ -116,12 +115,9 @@ bool AAB_Character::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 
 	if (CubeNames_Hit[2] != "0")
 	{
-		UStaticMeshComponent* pCube_Actor;
-		// 전수조사...는 너무 비효율적인 것 같다... 그리고, 일단 검출 로직은 짰는데 맨 밑에 있는 큐브는 스폰이 안되네?
 		for (auto It = pAB_SoundCube->GetComponents().CreateConstIterator(); It; ++It) // 스태틱메시컴포넌트의 이름을 가져와야 함!
 		{
-			pCube_Actor = Cast<UStaticMeshComponent>(*It);
-			if (pCube_Actor)
+			if (const UStaticMeshComponent* pCube_Actor = Cast<UStaticMeshComponent>(*It))
 			{
 				pCube_Actor->GetName().ParseIntoArray(CubeNames_Actor, TEXT(" "));
 				if (CubeNames_Hit[0] == CubeNames_Actor[0] && CubeNames_Hit[1] == CubeNames_Actor[1])

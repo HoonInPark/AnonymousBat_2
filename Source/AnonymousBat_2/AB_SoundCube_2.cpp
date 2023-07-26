@@ -18,9 +18,9 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 
 	// Find and assign cube meshes
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_Default(TEXT("/Script/Engine.StaticMesh'/Game/_03_BuildingSoundBlock/Meshes/AB_Cube.AB_Cube'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_1(TEXT("/Game/_03_BuildingSoundBlock/Meshes/Actor01_2.Actor01_2"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_2(TEXT("/Game/_03_BuildingSoundBlock/Meshes/Actor02_2.Actor02_2"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_3(TEXT("/Game/_03_BuildingSoundBlock/Meshes/Actor03_2.Actor03_2"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_1(TEXT("/Script/Engine.StaticMesh'/Game/_03_BuildingSoundBlock/Meshes/Actor01_3.Actor01_3'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_2(TEXT("/Script/Engine.StaticMesh'/Game/_03_BuildingSoundBlock/Meshes/Actor02_3.Actor02_3'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_3(TEXT("/Script/Engine.StaticMesh'/Game/_03_BuildingSoundBlock/Meshes/Actor03_3.Actor03_3'"));
 
 	if (CubeMeshFinder_Default.Succeeded() && CubeMeshFinder_1.Succeeded() && CubeMeshFinder_2.Succeeded() && CubeMeshFinder_3.Succeeded())
 	{
