@@ -67,10 +67,10 @@ void AAB_Character::PushSoundCube()
 				{
 					hitResult.GetComponent()->SetVisibility(true);
 					hitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-					AB2LOG(Warning, TEXT("Push Sweeping has hit: %s"), *(hitResult.GetComponent()->GetName()));
+					AB2LOG(Warning, TEXT("Push Sweeping has hit: (%s)"), *(hitResult.GetComponent()->GetName()));
 				}
 
-				AB2LOG(Warning, TEXT("Push Sweeping has hit: %s"), *(hitResult.GetComponent()->GetName()));
+				AB2LOG(Warning, TEXT("Push Sweeping has hit: (%s)"), *(hitResult.GetComponent()->GetName()));
 			}
 		}
 	}
@@ -106,7 +106,7 @@ bool AAB_Character::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 				{
 					if (FCString::Atoi(*CubeNames_Hit[2]) > FCString::Atoi(*CubeNames_Actor[2]) && Cast<UStaticMeshComponent>(*It)->IsVisible() == false)
 					{
-						AB2LOG(Warning, TEXT("'Cause %s is empty, %s IS NOT GROUNDED!!!"), *pCube_Actor->GetName(), *_pCubeComponent->GetName());
+						AB2LOG(Warning, TEXT("'Cause (%s) is empty, (%s) IS NOT GROUNDED!!!"), *pCube_Actor->GetName(), *_pCubeComponent->GetName());
 						return false;
 					}
 				}

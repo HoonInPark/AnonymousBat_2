@@ -97,7 +97,7 @@ void AAB_SoundCube_2::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor
 	if (OverlappedComp == pCubeComponent && OtherActor->IsA(AAB_Character::StaticClass()) && bFromSweep)
 	{
 		
-		AB2LOG(Warning, TEXT("~ Begins Overlap Event!"))
+		AB2LOG(Warning, TEXT("%s Begins Overlap Event!"), *OverlappedComp->GetName());
 	}
 }
 
@@ -106,6 +106,6 @@ void AAB_SoundCube_2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* 
 {
 	if (true)
 	{
-		AB2LOG(Warning, TEXT("~ Begins Overlap Event!"))
+		// AB2LOG(Warning, TEXT("~ Begins Overlap Event!"))
 	}
 }
