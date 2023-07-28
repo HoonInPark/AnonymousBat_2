@@ -13,7 +13,7 @@ AAB_Character::AAB_Character()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Reach = 500.0f;
-	// bIsEKeyDown = false;
+	bIsEKeyDown = false;
 }
 
 // Called when the game starts or when spawned
@@ -35,7 +35,7 @@ void AAB_Character::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComp
 {
 	Super::SetupPlayerInputComponent(_pPlayerInputComponent);
 
-	// _pPlayerInputComponent->BindAction("PreHoldCube", EInputEvent::IE_Pressed, this, &AAB_Character::PrePushSoundCube);
+	_pPlayerInputComponent->BindAction("PreHoldCube", EInputEvent::IE_Pressed, this, &AAB_Character::PrePushSoundCube);
 	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Released, this, &AAB_Character::PushSoundCube);
 }
 
@@ -46,30 +46,12 @@ void AAB_Character::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComp
 /// </summary>
 void AAB_Character::PrePushSoundCube()
 {
-	/*
 	bIsEKeyDown = true;
-
-	HitResults = SweepInRange();
-	if (!HitResults.IsEmpty())
-	{
-		pAB_SoundCube = Cast<AAB_SoundCube_2>(HitResults.GetData()->GetActor());
-		AB2CHECK(nullptr != pAB_SoundCube);
-
-		if (pAB_SoundCube)
-		{
-			for (auto& hitResult : HitResults)
-			{
-				hitResult.GetComponent()->SetVisibility(true);
-				AB2LOG(Warning, TEXT("Push Sweeping has hit: %s"), *(hitResult.GetComponent()->GetName()));
-			}
-		}
-	}
-	*/
 }
 
 void AAB_Character::PushSoundCube()
 {
-	// bIsEKeyDown = false;
+	bIsEKeyDown = false;
 
 	HitResults = SweepInRange();
 	if (!HitResults.IsEmpty())
@@ -81,20 +63,20 @@ void AAB_Character::PushSoundCube()
 		{
 			for (auto& hitResult : HitResults)
 			{
-				pCubeComponent_Hit = hitResult.GetComponent();
-				if (IsGrounded(pCubeComponent_Hit))
+				if (IsGrounded(hitResult.GetComponent()))
 				{
 					hitResult.GetComponent()->SetVisibility(true);
 					hitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-					AB2LOG(Warning, TEXT("Push Sweeping has hit: (%s)"), *(hitResult.GetComponent()->GetName()));
+					AB2LOG(Warning, TEXT("Push Sweeping has hit: %s"), *(hitResult.GetComponent()->GetName()));
 				}
+
+				AB2LOG(Warning, TEXT("Push Sweeping has hit: %s"), *(hitResult.GetComponent()->GetName()));
 			}
 		}
 	}
 }
 
-// Todo: 한번에 두개 스폰되는 현상을 막아야 한다.
-TArray<FHitResult> AAB_Character::SweepInRange() 
+TArray<FHitResult> AAB_Character::SweepInRange()
 {
 	Controller->GetPlayerViewPoint(OUT PlayerViewPtLoc, OUT PlayerViewPtRot);
 
@@ -122,9 +104,9 @@ bool AAB_Character::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 				pCube_Actor->GetName().ParseIntoArray(CubeNames_Actor, TEXT(" "));
 				if (CubeNames_Hit[0] == CubeNames_Actor[0] && CubeNames_Hit[1] == CubeNames_Actor[1])
 				{
-					if (Cast<UStaticMeshComponent>(*It)->IsVisible() == false)
+					if (FCString::Atoi(*CubeNames_Hit[2]) > FCString::Atoi(*CubeNames_Actor[2]) && Cast<UStaticMeshComponent>(*It)->IsVisible() == false)
 					{
-						AB2LOG(Warning, TEXT("'Cause (%s) is empty, (%s) IS NOT GROUNDED!!!"), *pCube_Actor->GetName(), *_pCubeComponent->GetName());
+						AB2LOG(Warning, TEXT("'Cause %s is empty, %s IS NOT GROUNDED!!!"), *pCube_Actor->GetName(), *_pCubeComponent->GetName());
 						return false;
 					}
 				}
@@ -133,5 +115,5 @@ bool AAB_Character::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 	}
 	else
 		return true;
-	return false;
+	return true;
 }

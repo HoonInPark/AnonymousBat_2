@@ -35,6 +35,8 @@ public:
 private:
 	// Set up parameters for getting the player viewport
 	bool bIsEKeyDown;
+	FVector PlayerViewPtLoc;
+	FRotator PlayerViewPtRot;
 	float Reach;
 
 	FVector SweepStartPt;
@@ -50,16 +52,10 @@ private:
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
 
 public:
-	UPROPERTY(EditAnywhere, Category=AB_Character)
-	FVector PlayerViewPtLoc;
-	UPROPERTY(EditAnywhere, Category=AB_Character)
-	FRotator PlayerViewPtRot;
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
 	UPROPERTY()
 	UMaterialInstanceDynamic* SoundCubeMatInstDynamic;
-	UPROPERTY()
-	UPrimitiveComponent* pCubeComponent_Hit;
 	// UPROPERTY(EditAnywhere)
 	// class UStaticMeshComponent* DynamicMaterialMesh;
 };

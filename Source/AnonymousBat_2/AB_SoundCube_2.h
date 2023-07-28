@@ -21,7 +21,12 @@ class ANONYMOUSBAT_2_API AAB_SoundCube_2 : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AAB_SoundCube_2();
-
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+	                           class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+	                           const FHitResult& SweepResult);
+	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+	                         class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);	
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -32,7 +37,6 @@ public:
 
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
 		TArray<UStaticMesh*> pCubeMeshes;
-
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
 		float CubeSize;
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
