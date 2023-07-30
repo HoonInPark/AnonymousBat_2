@@ -10,7 +10,7 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	CubeSize = 50.0f;
+	CubeSize = 30.0f;
 	NumCubes = 10;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
@@ -92,20 +92,17 @@ void AAB_SoundCube_2::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor
                                      UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                      const FHitResult& SweepResult)
 {
-	// Todo: 먼저 메시가 무작위의 각도로 스폰되는 경우 겹침이벤트가 생기므로 이걸 무시하는 로직이 필요... 만약 이 무시하는 로직을 E키를 누르지도 않았는데 계속 실행한다면 너무 비효율적이다.
-	// Todo: 그리고 캐릭터의 스윕에 쓰이는 콜리전만 인식하도록 설정해야 함.
-	if (OverlappedComp == pCubeComponent && OtherActor->IsA(AAB_Character::StaticClass()) && bFromSweep)
-	{
-		
-		AB2LOG(Warning, TEXT("%s Begins Overlap Event!"), *OverlappedComp->GetName());
-	}
+	// if (OtherActor && OtherActor != this && OtherComp && OtherComp->IsA<UPrimitiveComponent>())
+	// {
+	// 	// GetMesh()->SetMaterial(0, OverlapMaterial);
+	// }
 }
 
 void AAB_SoundCube_2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (true)
-	{
-		// AB2LOG(Warning, TEXT("~ Begins Overlap Event!"))
-	}
+	// if (true)
+	// {
+	// 	// AB2LOG(Warning, TEXT("~ Begins Overlap Event!"))
+	// }
 }
