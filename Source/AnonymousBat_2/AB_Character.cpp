@@ -5,6 +5,7 @@
 /// 
 
 #include "AB_Character.h"
+#include "AB_PlayerController.h"
 
 // Sets default values
 AAB_Character::AAB_Character()
@@ -25,31 +26,48 @@ void AAB_Character::BeginPlay()
 
 void AAB_Character::ProcessKeyPitch(float _Rate)
 {
+	if (FMath::Abs(_Rate) > .2f)
+		ProcessPitch(_Rate * 2.f);
 }
 
 void AAB_Character::ProcessKeyRoll(float _Rate)
 {
+	if (FMath::Abs(_Rate) > .2f)
+		ProcessPitch(_Rate * 2.f);
 }
 
 void AAB_Character::ProcessMouseInputY(float _Value)
 {
+	ProcessPitch(_Value);
 }
 
 void AAB_Character::ProcessMouseInputX(float _Value)
 {
-}
+	ProcessRoll(_Value);
+}  
 
 void AAB_Character::ProcessRoll(float _Value)
 {
+	const float TargetSpeedRoll = _Value * RateMultiplierRoll;
+	currentSpeed_Roll = FMath::FInterpTo(currentSpeed_Roll, TargetSpeedRoll, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
 void AAB_Character::ProcessPitch(float _Value)
 {
+	const float TargetSpeedPitch = _Value * RateMultiplierPitch;
+	currentSpeed_Roll = FMath::FInterpTo(currentSpeed_Pitch, TargetSpeedPitch, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
 // Called every frame
 void AAB_Character::Tick(float DeltaTime)
 {
+	FRotator DeltaRotation(0, 0, 0);
+	DeltaRotation.Roll = currentSpeed_Roll * DeltaTime;
+	DeltaRotation.Yaw = currentSpeed_Yaw * DeltaTime;
+	DeltaRotation.Pitch = currentSpeed_Pitch * DeltaTime;
+
+	AddActorLocalRotation(DeltaRotation);
+	
 	Super::Tick(DeltaTime);
 
 }
@@ -62,6 +80,10 @@ void AAB_Character::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComp
 	
 	// _pPlayerInputComponent->BindAction("PreHoldCube", EInputEvent::IE_Pressed, this, &AAB_Character::PrePushSoundCube);
 	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Released, this, &AAB_Character::PushSoundCube);
+	_pPlayerInputComponent->BindAxis("Turn", this, &AAB_Character::ProcessMouseInputX);
+	_pPlayerInputComponent->BindAxis("TurnRate", this, &AAB_Character::ProcessKeyRoll);
+	_pPlayerInputComponent->BindAxis("LookUp", this, &AAB_Character::ProcessMouseInputY);
+	_pPlayerInputComponent->BindAxis("LookUpRate", this, &AAB_Character::ProcessKeyPitch);
 }
 
 /// <summary>

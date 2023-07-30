@@ -21,6 +21,8 @@ class ANONYMOUSBAT_2_API AAB_Character : public ACharacter
 	float speed_Max{4000.f};
 	float speed_min{500.f};
 
+	float RateMultiplierRoll{200.f};
+	float RateMultiplierPitch{200.f};
 	float currentSpeed_Forward{500.f};
 	
 	float currentSpeed_Yaw;
@@ -77,4 +79,10 @@ public:
 	UMaterialInstanceDynamic* SoundCubeMatInstDynamic;
 	// UPROPERTY(EditAnywhere)
 	// class UStaticMeshComponent* DynamicMaterialMesh;
+
+private:
+	UPROPERTY()
+	class AAB_PlayerController* AB_PlayerController;
+
+	
 };
