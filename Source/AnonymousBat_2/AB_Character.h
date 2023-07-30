@@ -17,6 +17,16 @@ class ANONYMOUSBAT_2_API AAB_Character : public ACharacter
 {
 	GENERATED_BODY()
 
+	float Acceleration{30.f};
+	float speed_Max{4000.f};
+	float speed_min{500.f};
+
+	float currentSpeed_Forward{500.f};
+	
+	float currentSpeed_Yaw;
+	float currentSpeed_Pitch;
+	float currentSpeed_Roll;
+	
 public:
 	// Sets default values for this character's properties
 	AAB_Character();
@@ -24,6 +34,15 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void ProcessKeyPitch(float _Rate);
+	void ProcessKeyRoll(float _Rate);
+	
+	void ProcessMouseInputY(float _Value);
+	void ProcessMouseInputX(float _Value);
+	
+	void ProcessRoll(float _Value);
+	void ProcessPitch(float _Value);
 
 public:
 	// Called every frame

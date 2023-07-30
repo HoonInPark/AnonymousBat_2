@@ -23,6 +23,30 @@ void AAB_Character::BeginPlay()
 
 }
 
+void AAB_Character::ProcessKeyPitch(float _Rate)
+{
+}
+
+void AAB_Character::ProcessKeyRoll(float _Rate)
+{
+}
+
+void AAB_Character::ProcessMouseInputY(float _Value)
+{
+}
+
+void AAB_Character::ProcessMouseInputX(float _Value)
+{
+}
+
+void AAB_Character::ProcessRoll(float _Value)
+{
+}
+
+void AAB_Character::ProcessPitch(float _Value)
+{
+}
+
 // Called every frame
 void AAB_Character::Tick(float DeltaTime)
 {
@@ -35,7 +59,8 @@ void AAB_Character::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComp
 {
 	Super::SetupPlayerInputComponent(_pPlayerInputComponent);
 
-	_pPlayerInputComponent->BindAction("PreHoldCube", EInputEvent::IE_Pressed, this, &AAB_Character::PrePushSoundCube);
+	
+	// _pPlayerInputComponent->BindAction("PreHoldCube", EInputEvent::IE_Pressed, this, &AAB_Character::PrePushSoundCube);
 	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Released, this, &AAB_Character::PushSoundCube);
 }
 
