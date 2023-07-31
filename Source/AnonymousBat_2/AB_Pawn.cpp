@@ -26,7 +26,7 @@ AAB_Pawn::AAB_Pawn()
 
 	// static ConstructorHelpers::FObjectFinder<UMeshComponent> AB_SUBMARINE(TEXT(""));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_SUBMARINE(TEXT(
-		"/Script/Engine.SkeletalMesh'/Engine/EditorMeshes/SkeletalMesh/DefaultSkeletalMesh.DefaultSkeletalMesh'"));
+		"/Script/Engine.SkeletalMesh'/Game/_03_BuildingSoundBlock/Meshes/AB_DefaultSkeletalMesh.AB_DefaultSkeletalMesh'"));
 	if (AB_SUBMARINE.Succeeded())
 		pMesh->SetSkeletalMesh(AB_SUBMARINE.Object);
 }
