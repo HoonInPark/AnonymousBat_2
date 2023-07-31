@@ -3,7 +3,7 @@
 #pragma once
 
 #include "AnonymousBat_2.h"
-#include "AB_Character.h"
+#include "AB_Pawn.h"
 #include "GameFramework/PlayerController.h"
 #include "AB_PlayerController.generated.h"
 

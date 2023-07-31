@@ -2,7 +2,7 @@
 
 
 #include "AB_SoundCube_2.h"
-#include "AB_Character.h"
+#include "AB_Pawn.h"
 
 // Sets default values
 AAB_SoundCube_2::AAB_SoundCube_2()
