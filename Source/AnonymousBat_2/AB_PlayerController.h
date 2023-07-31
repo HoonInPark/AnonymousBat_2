@@ -14,5 +14,8 @@ UCLASS()
 class ANONYMOUSBAT_2_API AAB_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void PostInitializeComponents() override;
+	virtual void OnPossess(APawn* _InPawn) override;
 };

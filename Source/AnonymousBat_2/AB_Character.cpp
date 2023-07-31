@@ -21,69 +21,22 @@ AAB_Character::AAB_Character()
 void AAB_Character::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
-void AAB_Character::ProcessKeyPitch(float _Rate)
-{
-	if (FMath::Abs(_Rate) > .2f)
-		ProcessPitch(_Rate * 2.f);
-}
-
-void AAB_Character::ProcessKeyRoll(float _Rate)
-{
-	if (FMath::Abs(_Rate) > .2f)
-		ProcessPitch(_Rate * 2.f);
-}
-
-void AAB_Character::ProcessMouseInputY(float _Value)
-{
-	ProcessPitch(_Value);
-}
-
-void AAB_Character::ProcessMouseInputX(float _Value)
-{
-	ProcessRoll(_Value);
-}  
-
-void AAB_Character::ProcessRoll(float _Value)
-{
-	const float TargetSpeedRoll = _Value * RateMultiplierRoll;
-	currentSpeed_Roll = FMath::FInterpTo(currentSpeed_Roll, TargetSpeedRoll, GetWorld()->GetDeltaSeconds(), 2.f);
-}
-
-void AAB_Character::ProcessPitch(float _Value)
-{
-	const float TargetSpeedPitch = _Value * RateMultiplierPitch;
-	currentSpeed_Roll = FMath::FInterpTo(currentSpeed_Pitch, TargetSpeedPitch, GetWorld()->GetDeltaSeconds(), 2.f);
-}
-
-// Called every frame
 void AAB_Character::Tick(float DeltaTime)
 {
-	FRotator DeltaRotation(0, 0, 0);
-	DeltaRotation.Roll = currentSpeed_Roll * DeltaTime;
-	DeltaRotation.Yaw = currentSpeed_Yaw * DeltaTime;
-	DeltaRotation.Pitch = currentSpeed_Pitch * DeltaTime;
-
-	AddActorLocalRotation(DeltaRotation);
-	
 	Super::Tick(DeltaTime);
-
 }
+
 
 // Called to bind functionality to input
 void AAB_Character::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(_pPlayerInputComponent);
 
-	
+
 	// _pPlayerInputComponent->BindAction("PreHoldCube", EInputEvent::IE_Pressed, this, &AAB_Character::PrePushSoundCube);
 	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Released, this, &AAB_Character::PushSoundCube);
-	_pPlayerInputComponent->BindAxis("Turn", this, &AAB_Character::ProcessMouseInputX);
-	_pPlayerInputComponent->BindAxis("TurnRate", this, &AAB_Character::ProcessKeyRoll);
-	_pPlayerInputComponent->BindAxis("LookUp", this, &AAB_Character::ProcessMouseInputY);
-	_pPlayerInputComponent->BindAxis("LookUpRate", this, &AAB_Character::ProcessKeyPitch);
 }
 
 /// <summary>
@@ -127,13 +80,14 @@ TArray<FHitResult> AAB_Character::SweepInRange()
 {
 	Controller->GetPlayerViewPoint(OUT PlayerViewPtLoc, OUT PlayerViewPtRot);
 
-	SweepStartPt = PlayerViewPtLoc + 100.0f * PlayerViewPtRot.Vector();
-	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 500.0f;
+	SweepStartPt = PlayerViewPtLoc + 100.f * PlayerViewPtRot.Vector();
+	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 500.f;
 
 	//DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
 
-	const FCollisionQueryParams TraceParams(FName(TEXT("")), true, GetOwner()); 
-	GetWorld()->SweepMultiByChannel(HitResults, SweepStartPt, SweepEndPt, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(0.5f), TraceParams);
+	const FCollisionQueryParams TraceParams(FName(TEXT("")), true, GetOwner());
+	GetWorld()->SweepMultiByChannel(HitResults, SweepStartPt, SweepEndPt, FQuat::Identity, ECC_Visibility,
+	                                FCollisionShape::MakeSphere(0.5f), TraceParams);
 
 	return HitResults;
 }
@@ -151,9 +105,11 @@ bool AAB_Character::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 				pCube_Actor->GetName().ParseIntoArray(CubeNames_Actor, TEXT(" "));
 				if (CubeNames_Hit[0] == CubeNames_Actor[0] && CubeNames_Hit[1] == CubeNames_Actor[1])
 				{
-					if (FCString::Atoi(*CubeNames_Hit[2]) > FCString::Atoi(*CubeNames_Actor[2]) && Cast<UStaticMeshComponent>(*It)->IsVisible() == false)
+					if (FCString::Atoi(*CubeNames_Hit[2]) > FCString::Atoi(*CubeNames_Actor[2]) && Cast<
+						UStaticMeshComponent>(*It)->IsVisible() == false)
 					{
-						AB2LOG(Warning, TEXT("'Cause (%s) is empty, (%s) IS NOT GROUNDED!!!"), *pCube_Actor->GetName(), *_pCubeComponent->GetName());
+						AB2LOG(Warning, TEXT("'Cause (%s) is empty, (%s) IS NOT GROUNDED!!!"), *pCube_Actor->GetName(),
+						       *_pCubeComponent->GetName());
 						return false;
 					}
 				}
