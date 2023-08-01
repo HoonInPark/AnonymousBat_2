@@ -49,21 +49,19 @@ void AAB_Pawn::PossessedBy(AController* _NewController)
 
 void AAB_Pawn::ThrustInput(float _Value)
 {
-	const bool bHasInput = !FMath::IsNearlyEqual(_Value, 0.f);
-	const float CurrentAcc = bHasInput ? (_Value * Acceleration) : (-0.5f * Acceleration);
-	const float NewForwardSpeed = CurrentSpeed_Forward + (GetWorld()->GetDeltaSeconds() * CurrentAcc);
-	CurrentSpeed_Forward = FMath::Clamp(NewForwardSpeed, Speed_min, Speed_Max);
+	if (!FMath::IsNearlyEqual(_Value, 0.f))
+	{
+		const float CurrentAcc = _Value * Acceleration;
+		const float NewForwardSpeed = CurrentSpeed_Forward + (GetWorld()->GetDeltaSeconds() * CurrentAcc);
+		CurrentSpeed_Forward = FMath::Clamp(NewForwardSpeed, Speed_min, Speed_Max);
+
+		const FVector NewLocation = GetActorLocation() + GetActorForwardVector() * CurrentSpeed_Forward * GetWorld()->GetDeltaSeconds();
+		SetActorLocation(NewLocation);
+	}
 }
 
-void AAB_Pawn::ProcessMouseInputY(float _Value)
-{
-	ProcessPitch(_Value);
-}
-
-void AAB_Pawn::ProcessMouseInputX(float _Value)
-{
-	ProcessRoll(_Value);
-}
+void AAB_Pawn::ProcessMouseInputY(float _Value) { ProcessPitch(_Value); }
+void AAB_Pawn::ProcessMouseInputX(float _Value) { ProcessRoll(_Value); }
 
 void AAB_Pawn::ProcessRoll(float _Value)
 {
