@@ -14,7 +14,5 @@ AAnonymousBat_2GameModeBase::AAnonymousBat_2GameModeBase()
 
 void AAnonymousBat_2GameModeBase::PostLogin(APlayerController* _NewPlayer)
 {
-	AB2LOG(Warning, TEXT("PostLogin Begin"));
 	Super::PostLogin(_NewPlayer);
-	AB2LOG(Warning, TEXT("PostLogin Complete"));
 }
