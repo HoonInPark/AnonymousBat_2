@@ -32,8 +32,8 @@ protected:
 	float currentSpeed_Pitch;
 	float currentSpeed_Roll;
 
-	void ProcessKeyPitch(float _Rate);
-	void ProcessKeyRoll(float _Rate);
+	void ProcessKeyInputForward(float _Value);
+	void ProcessKeyInputRight(float _Value);
 	
 	void ProcessMouseInputY(float _Value);
 	void ProcessMouseInputX(float _Value);
@@ -50,11 +50,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(VisibleAnywhere, Category=Collision)
+	UPROPERTY(BlueprintReadOnly, Category=Collision)
 	UCapsuleComponent* pCapsule;
-	UPROPERTY(VisibleAnywhere, Category=Collision)
+	UPROPERTY(BlueprintReadOnly, Category=Collision)
 	USkeletalMeshComponent* pMesh;
-	UPROPERTY(VisibleAnywhere, Category=Collision)
+	UPROPERTY(BlueprintReadOnly, Category=Collision)
 	UCameraComponent* pCamera;
 
 private:

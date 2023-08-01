@@ -15,13 +15,13 @@ AAB_Pawn::AAB_Pawn()
 
 	pCapsule->SetCapsuleHalfHeight(100.f);
 	pCapsule->SetCapsuleRadius(50.f);
-	pCapsule->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
+	pCapsule->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 	RootComponent = pCapsule;
 
 	pMesh->SetupAttachment(pCapsule);
 	pCamera->SetupAttachment(pCapsule);
 
-	pMesh->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
+	pMesh->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, -90.f, 0.f));
 	pCamera->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 
 	// static ConstructorHelpers::FObjectFinder<UMeshComponent> AB_SUBMARINE(TEXT(""));
@@ -49,16 +49,13 @@ void AAB_Pawn::PossessedBy(AController* _NewController)
 	Super::PossessedBy(_NewController);
 }
 
-void AAB_Pawn::ProcessKeyPitch(float _Rate)
+
+void AAB_Pawn::ProcessKeyInputForward(float _Value)
 {
-	if (FMath::Abs(_Rate) > .2f)
-		ProcessPitch(_Rate * 2.f);
 }
 
-void AAB_Pawn::ProcessKeyRoll(float _Rate)
+void AAB_Pawn::ProcessKeyInputRight(float _Value)
 {
-	if (FMath::Abs(_Rate) > .2f)
-		ProcessPitch(_Rate * 2.f);
 }
 
 void AAB_Pawn::ProcessMouseInputY(float _Value)
@@ -80,7 +77,7 @@ void AAB_Pawn::ProcessRoll(float _Value)
 void AAB_Pawn::ProcessPitch(float _Value)
 {
 	const float TargetSpeedPitch = _Value * RateMultiplierPitch;
-	currentSpeed_Roll = FMath::FInterpTo(currentSpeed_Pitch, TargetSpeedPitch, GetWorld()->GetDeltaSeconds(), 2.f);
+	currentSpeed_Pitch = FMath::FInterpTo(currentSpeed_Pitch, TargetSpeedPitch, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
 // Called every frame
@@ -102,9 +99,11 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 	Super::SetupPlayerInputComponent(_pPlayerInputComponent);
 
 	_pPlayerInputComponent->BindAxis("Turn", this, &AAB_Pawn::ProcessMouseInputX);
-	_pPlayerInputComponent->BindAxis("TurnRate", this, &AAB_Pawn::ProcessKeyRoll);
 	_pPlayerInputComponent->BindAxis("LookUp", this, &AAB_Pawn::ProcessMouseInputY);
-	_pPlayerInputComponent->BindAxis("LookUpRate", this, &AAB_Pawn::ProcessKeyPitch);
+	_pPlayerInputComponent->BindAxis("BackNForth", this, &AAB_Pawn::);
+	_pPlayerInputComponent->BindAxis("LeftNRight", this, &AAB_Pawn::);
+	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Pressed, this, &AAB_Pawn::PushSoundCube);
+	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
 }
 
 void AAB_Pawn::PrePushSoundCube()
