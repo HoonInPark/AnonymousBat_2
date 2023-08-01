@@ -16,21 +16,25 @@ public:
 	// Sets default values for this pawn's properties
 	AAB_Pawn();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	float CurrentForwardSpeed{500.f};
+	float Acceleration{30.f};
+	float Speed_Max{4000.f};
+	float Speed_min{500.f};
+	float CurrentSpeed_Forward{500.f};
+	float CurrentSpeed_Right{500.f};
 
 	float RateMultiplierRoll{200.f};
 	float RateMultiplierPitch{200.f};
 	
-	float currentSpeed_Yaw;
-	float currentSpeed_Pitch;
-	float currentSpeed_Roll;
+	float CurrentSpeed_Yaw;
+	float CurrentSpeed_Pitch;
+	float CurrentSpeed_Roll;
 
-	void ProcessKeyInputForward(float _Value);
-	void ProcessKeyInputRight(float _Value);
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	void PlaneMov_Forward(float _InputForward);
+	void PlaneMov_Right(float _InputRight);
 	
 	void ProcessMouseInputY(float _Value);
 	void ProcessMouseInputX(float _Value);
@@ -40,7 +44,7 @@ protected:
 	
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float _DeltaTime) override;
 	virtual void PostInitializeComponents() override;
 	virtual void PossessedBy(AController* _NewController) override;
 	

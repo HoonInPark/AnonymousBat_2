@@ -47,13 +47,18 @@ void AAB_Pawn::PossessedBy(AController* _NewController)
 	Super::PossessedBy(_NewController);
 }
 
-
-void AAB_Pawn::ProcessKeyInputForward(float _Value)
+void AAB_Pawn::PlaneMov_Forward(float _InputForward)
 {
+	const float CurrentAccForward = -_InputForward * Acceleration;
+	const float NewSpeed_Forward = CurrentSpeed_Forward + CurrentAccForward * GetWorld()->GetDeltaSeconds();
+	CurrentSpeed_Forward = FMath::Clamp(NewSpeed_Forward, Speed_min, Speed_Max);
 }
 
-void AAB_Pawn::ProcessKeyInputRight(float _Value)
+void AAB_Pawn::PlaneMov_Right(float _InputRight)
 {
+	const float CurrentAccSide = _InputRight * Acceleration;
+	const float NewSpeed_Side = CurrentSpeed_Right + CurrentAccSide * GetWorld()->GetDeltaSeconds();
+	CurrentSpeed_Right = FMath::Clamp(NewSpeed_Side, -Speed_Max, Speed_Max);
 }
 
 void AAB_Pawn::ProcessMouseInputY(float _Value)
@@ -69,29 +74,39 @@ void AAB_Pawn::ProcessMouseInputX(float _Value)
 void AAB_Pawn::ProcessRoll(float _Value)
 {
 	const float TargetSpeedRoll = _Value * RateMultiplierRoll;
-	currentSpeed_Roll = FMath::FInterpTo(currentSpeed_Roll, TargetSpeedRoll, GetWorld()->GetDeltaSeconds(), 2.f);
+	CurrentSpeed_Roll = FMath::FInterpTo(CurrentSpeed_Roll, TargetSpeedRoll, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
 void AAB_Pawn::ProcessPitch(float _Value)
 {
 	const float TargetSpeedPitch = _Value * RateMultiplierPitch;
-	currentSpeed_Pitch = FMath::FInterpTo(currentSpeed_Pitch, TargetSpeedPitch, GetWorld()->GetDeltaSeconds(), 2.f);
+	CurrentSpeed_Pitch = FMath::FInterpTo(CurrentSpeed_Pitch, TargetSpeedPitch, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
 // Called every frame
-void AAB_Pawn::Tick(float DeltaTime)
+void AAB_Pawn::Tick(float _DeltaTime)
 {
-	const FVector LocalMove = FVector(CurrentForwardSpeed * DeltaTime, 0.f, 0.f);
- 
-	FRotator DeltaRotation(0.f, 0.f, 0.f);
-	DeltaRotation.Roll = currentSpeed_Roll * DeltaTime;
-	DeltaRotation.Yaw = currentSpeed_Yaw * DeltaTime;
-	DeltaRotation.Pitch = currentSpeed_Pitch * DeltaTime;
+	const float InputForward = InputComponent->GetAxisValue("BackNForth");
+	const float InputRight = InputComponent->GetAxisValue("LeftNRight");
+
+	if (InputForward || InputRight)
+	{
+		PlaneMov_Forward(InputForward);
+		PlaneMov_Right(InputRight);
+		AB2LOG(Warning, TEXT("Axis Value is : %f and %f"), InputForward, InputRight);
+	}
 	
-	AddActorLocalOffset(LocalMove, true);
+	const FVector LocalMove = FVector(CurrentSpeed_Forward * _DeltaTime, CurrentSpeed_Right * _DeltaTime, 0.f);
+	AddMovementInput(LocalMove, true);
+
+	FRotator DeltaRotation(0.f, 0.f, 0.f);
+	DeltaRotation.Roll = CurrentSpeed_Roll * _DeltaTime;
+	DeltaRotation.Yaw = CurrentSpeed_Yaw * _DeltaTime;
+	DeltaRotation.Pitch = CurrentSpeed_Pitch * _DeltaTime;
+
 	AddActorLocalRotation(DeltaRotation);
 
-	Super::Tick(DeltaTime);
+	Super::Tick(_DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -99,10 +114,11 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(_pPlayerInputComponent);
 
+	_pPlayerInputComponent->BindAxis("BackNForth", this, &AAB_Pawn::PlaneMov_Forward);
+	_pPlayerInputComponent->BindAxis("LeftNRight", this, &AAB_Pawn::PlaneMov_Right);
+
 	_pPlayerInputComponent->BindAxis("Turn", this, &AAB_Pawn::ProcessMouseInputX);
 	_pPlayerInputComponent->BindAxis("LookUp", this, &AAB_Pawn::ProcessMouseInputY);
-	_pPlayerInputComponent->BindAxis(TEXT("BackNForth"), this, &AAB_Pawn::ProcessKeyInputForward);
-	_pPlayerInputComponent->BindAxis(TEXT("LeftNRight"), this, &AAB_Pawn::ProcessKeyInputRight);
 
 	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Pressed, this, &AAB_Pawn::PushSoundCube);
 	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
