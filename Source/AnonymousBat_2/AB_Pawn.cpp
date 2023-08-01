@@ -47,16 +47,18 @@ void AAB_Pawn::PossessedBy(AController* _NewController)
 	Super::PossessedBy(_NewController);
 }
 
-void AAB_Pawn::PlaneMov_Forward(float _InputForward)
+void AAB_Pawn::PlaneMov_Forward(float _Value)
 {
-	const float CurrentAccForward = -_InputForward * Acceleration;
+	AB2LOG_S(Warning);
+	const float CurrentAccForward = -_Value * Acceleration;
 	const float NewSpeed_Forward = CurrentSpeed_Forward + CurrentAccForward * GetWorld()->GetDeltaSeconds();
 	CurrentSpeed_Forward = FMath::Clamp(NewSpeed_Forward, Speed_min, Speed_Max);
 }
 
-void AAB_Pawn::PlaneMov_Right(float _InputRight)
+void AAB_Pawn::PlaneMov_Right(float _Value)
 {
-	const float CurrentAccSide = _InputRight * Acceleration;
+	AB2LOG_S(Warning);
+	const float CurrentAccSide = _Value * Acceleration;
 	const float NewSpeed_Side = CurrentSpeed_Right + CurrentAccSide * GetWorld()->GetDeltaSeconds();
 	CurrentSpeed_Right = FMath::Clamp(NewSpeed_Side, -Speed_Max, Speed_Max);
 }
@@ -86,18 +88,8 @@ void AAB_Pawn::ProcessPitch(float _Value)
 // Called every frame
 void AAB_Pawn::Tick(float _DeltaTime)
 {
-	const float InputForward = InputComponent->GetAxisValue("BackNForth");
-	const float InputRight = InputComponent->GetAxisValue("LeftNRight");
-
-	if (InputForward || InputRight)
-	{
-		PlaneMov_Forward(InputForward);
-		PlaneMov_Right(InputRight);
-		AB2LOG(Warning, TEXT("Axis Value is : %f and %f"), InputForward, InputRight);
-	}
-	
 	const FVector LocalMove = FVector(CurrentSpeed_Forward * _DeltaTime, CurrentSpeed_Right * _DeltaTime, 0.f);
-	AddMovementInput(LocalMove, true);
+	AddActorLocalOffset(LocalMove, true);
 
 	FRotator DeltaRotation(0.f, 0.f, 0.f);
 	DeltaRotation.Roll = CurrentSpeed_Roll * _DeltaTime;
@@ -116,7 +108,7 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 
 	_pPlayerInputComponent->BindAxis("BackNForth", this, &AAB_Pawn::PlaneMov_Forward);
 	_pPlayerInputComponent->BindAxis("LeftNRight", this, &AAB_Pawn::PlaneMov_Right);
-
+	
 	_pPlayerInputComponent->BindAxis("Turn", this, &AAB_Pawn::ProcessMouseInputX);
 	_pPlayerInputComponent->BindAxis("LookUp", this, &AAB_Pawn::ProcessMouseInputY);
 
