@@ -39,13 +39,11 @@ void AAB_Pawn::BeginPlay()
 
 void AAB_Pawn::PostInitializeComponents()
 {
-	AB2LOG_S(Warning);
 	Super::PostInitializeComponents();
 }
 
 void AAB_Pawn::PossessedBy(AController* _NewController)
 {
-	AB2LOG_S(Warning);
 	Super::PossessedBy(_NewController);
 }
 
@@ -83,11 +81,14 @@ void AAB_Pawn::ProcessPitch(float _Value)
 // Called every frame
 void AAB_Pawn::Tick(float DeltaTime)
 {
+	const FVector LocalMove = FVector(CurrentForwardSpeed * DeltaTime, 0.f, 0.f);
+ 
 	FRotator DeltaRotation(0.f, 0.f, 0.f);
 	DeltaRotation.Roll = currentSpeed_Roll * DeltaTime;
 	DeltaRotation.Yaw = currentSpeed_Yaw * DeltaTime;
 	DeltaRotation.Pitch = currentSpeed_Pitch * DeltaTime;
-
+	
+	AddActorLocalOffset(LocalMove, true);
 	AddActorLocalRotation(DeltaRotation);
 
 	Super::Tick(DeltaTime);
@@ -100,8 +101,9 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 
 	_pPlayerInputComponent->BindAxis("Turn", this, &AAB_Pawn::ProcessMouseInputX);
 	_pPlayerInputComponent->BindAxis("LookUp", this, &AAB_Pawn::ProcessMouseInputY);
-	_pPlayerInputComponent->BindAxis("BackNForth", this, &AAB_Pawn::);
-	_pPlayerInputComponent->BindAxis("LeftNRight", this, &AAB_Pawn::);
+	_pPlayerInputComponent->BindAxis(TEXT("BackNForth"), this, &AAB_Pawn::ProcessKeyInputForward);
+	_pPlayerInputComponent->BindAxis(TEXT("LeftNRight"), this, &AAB_Pawn::ProcessKeyInputRight);
+
 	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Pressed, this, &AAB_Pawn::PushSoundCube);
 	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
 }
@@ -109,7 +111,6 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 void AAB_Pawn::PrePushSoundCube()
 {
 	bIsEKeyDown = true;
-	
 }
 
 void AAB_Pawn::PushSoundCube()
@@ -150,7 +151,7 @@ TArray<FHitResult> AAB_Pawn::SweepInRange()
 
 	const FCollisionQueryParams TraceParams(FName(TEXT("")), true, GetOwner());
 	GetWorld()->SweepMultiByChannel(HitResults, SweepStartPt, SweepEndPt, FQuat::Identity, ECC_Visibility,
-									FCollisionShape::MakeSphere(0.5f), TraceParams);
+	                                FCollisionShape::MakeSphere(0.5f), TraceParams);
 
 	return HitResults;
 }
@@ -162,7 +163,7 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 	if (CubeNames_Hit[2] != "0")
 	{
 		for (auto It = pAB_SoundCube->GetComponents().CreateConstIterator(); It; ++It) // 스태틱메시컴포넌트의 이름을 가져와야 함!
-			{
+		{
 			if (const UStaticMeshComponent* pCube_Actor = Cast<UStaticMeshComponent>(*It))
 			{
 				pCube_Actor->GetName().ParseIntoArray(CubeNames_Actor, TEXT(" "));
@@ -172,7 +173,7 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 						UStaticMeshComponent>(*It)->IsVisible() == false)
 					{
 						AB2LOG(Warning, TEXT("'Cause (%s) is empty, (%s) IS NOT GROUNDED!!!"), *pCube_Actor->GetName(),
-							   *_pCubeComponent->GetName());
+						       *_pCubeComponent->GetName());
 						return false;
 					}
 				}

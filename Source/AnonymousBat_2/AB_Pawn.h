@@ -20,13 +20,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	float Acceleration{30.f};
-	float speed_Max{4000.f};
-	float speed_min{500.f};
+	float CurrentForwardSpeed{500.f};
 
 	float RateMultiplierRoll{200.f};
 	float RateMultiplierPitch{200.f};
-	float currentSpeed_Forward{500.f};
 	
 	float currentSpeed_Yaw;
 	float currentSpeed_Pitch;
