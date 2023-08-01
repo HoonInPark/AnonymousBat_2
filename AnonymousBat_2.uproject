@@ -22,15 +22,15 @@
 			]
 		},
 		{
-			"Name": "PythonFoundationPackages",
-			"Enabled": true
-		},
-		{
 			"Name": "GeometryScripting",
 			"Enabled": true
 		},
 		{
 			"Name": "PythonAutomationTest",
+			"Enabled": true
+		},
+		{
+			"Name": "PythonFoundationPackages",
 			"Enabled": true
 		}
 	]

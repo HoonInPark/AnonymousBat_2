@@ -49,18 +49,20 @@ void AAB_Pawn::PossessedBy(AController* _NewController)
 
 void AAB_Pawn::PlaneMov_Forward(float _Value)
 {
-	AB2LOG_S(Warning);
-	const float CurrentAccForward = -_Value * Acceleration;
+	const bool bHasInput = !FMath::IsNearlyEqual(_Value, 0.f);
+	const float CurrentAccForward = bHasInput ? -_Value * Acceleration : (-0.5f * Acceleration);
 	const float NewSpeed_Forward = CurrentSpeed_Forward + CurrentAccForward * GetWorld()->GetDeltaSeconds();
 	CurrentSpeed_Forward = FMath::Clamp(NewSpeed_Forward, Speed_min, Speed_Max);
+	AB2LOG(Warning, TEXT("Current Acceleration : %f"), CurrentAccForward);
 }
 
 void AAB_Pawn::PlaneMov_Right(float _Value)
 {
-	AB2LOG_S(Warning);
-	const float CurrentAccSide = _Value * Acceleration;
-	const float NewSpeed_Side = CurrentSpeed_Right + CurrentAccSide * GetWorld()->GetDeltaSeconds();
-	CurrentSpeed_Right = FMath::Clamp(NewSpeed_Side, -Speed_Max, Speed_Max);
+	const bool bHasInput = !FMath::IsNearlyEqual(_Value, 0.f);
+	const float CurrentAccRight = bHasInput ? -_Value * Acceleration : (-0.5f * Acceleration);
+	const float NewSpeed_Right = CurrentSpeed_Right + CurrentAccRight * GetWorld()->GetDeltaSeconds();
+	CurrentSpeed_Right = FMath::Clamp(NewSpeed_Right, Speed_min, Speed_Max);
+	AB2LOG(Warning, TEXT("Current Acceleration : %f"), CurrentAccRight);
 }
 
 void AAB_Pawn::ProcessMouseInputY(float _Value)
@@ -89,13 +91,13 @@ void AAB_Pawn::ProcessPitch(float _Value)
 void AAB_Pawn::Tick(float _DeltaTime)
 {
 	const FVector LocalMove = FVector(CurrentSpeed_Forward * _DeltaTime, CurrentSpeed_Right * _DeltaTime, 0.f);
+
 	AddActorLocalOffset(LocalMove, true);
 
 	FRotator DeltaRotation(0.f, 0.f, 0.f);
 	DeltaRotation.Roll = CurrentSpeed_Roll * _DeltaTime;
 	DeltaRotation.Yaw = CurrentSpeed_Yaw * _DeltaTime;
 	DeltaRotation.Pitch = CurrentSpeed_Pitch * _DeltaTime;
-
 	AddActorLocalRotation(DeltaRotation);
 
 	Super::Tick(_DeltaTime);
@@ -106,14 +108,13 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(_pPlayerInputComponent);
 
-	_pPlayerInputComponent->BindAxis("BackNForth", this, &AAB_Pawn::PlaneMov_Forward);
-	_pPlayerInputComponent->BindAxis("LeftNRight", this, &AAB_Pawn::PlaneMov_Right);
-	
-	_pPlayerInputComponent->BindAxis("Turn", this, &AAB_Pawn::ProcessMouseInputX);
-	_pPlayerInputComponent->BindAxis("LookUp", this, &AAB_Pawn::ProcessMouseInputY);
+	_pPlayerInputComponent->BindAxis(TEXT("BackNForth"), this, &AAB_Pawn::PlaneMov_Forward);
+	_pPlayerInputComponent->BindAxis(TEXT("LeftNRight"), this, &AAB_Pawn::PlaneMov_Right);
+	_pPlayerInputComponent->BindAxis(TEXT("Turn"), this, &AAB_Pawn::ProcessMouseInputX);
+	_pPlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AAB_Pawn::ProcessMouseInputY);
 
-	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Pressed, this, &AAB_Pawn::PushSoundCube);
-	_pPlayerInputComponent->BindAction("HoldCube", EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
+	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Pressed, this, &AAB_Pawn::PrePushSoundCube);
+	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
 }
 
 void AAB_Pawn::PrePushSoundCube()

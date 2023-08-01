@@ -19,12 +19,12 @@ public:
 	float Acceleration{30.f};
 	float Speed_Max{4000.f};
 	float Speed_min{500.f};
-	float CurrentSpeed_Forward{500.f};
-	float CurrentSpeed_Right{500.f};
+	float CurrentSpeed_Forward{0.f};
+	float CurrentSpeed_Right{0.f};
 
 	float RateMultiplierRoll{200.f};
 	float RateMultiplierPitch{200.f};
-	
+
 	float CurrentSpeed_Yaw;
 	float CurrentSpeed_Pitch;
 	float CurrentSpeed_Roll;
@@ -35,19 +35,19 @@ protected:
 
 	void PlaneMov_Forward(float _InputForward);
 	void PlaneMov_Right(float _InputRight);
-	
+
 	void ProcessMouseInputY(float _Value);
 	void ProcessMouseInputX(float _Value);
-	
+
 	void ProcessRoll(float _Value);
 	void ProcessPitch(float _Value);
-	
-public:	
+
+public:
 	// Called every frame
 	virtual void Tick(float _DeltaTime) override;
 	virtual void PostInitializeComponents() override;
 	virtual void PossessedBy(AController* _NewController) override;
-	
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -75,7 +75,7 @@ private:
 	void PrePushSoundCube();
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
-	
+
 public:
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
@@ -84,8 +84,7 @@ public:
 	// UPROPERTY(EditAnywhere)
 	// class UStaticMeshComponent* DynamicMaterialMesh;
 
-	private:
+private:
 	UPROPERTY()
 	class AAB_PlayerController* AB_PlayerController;
-
 };
