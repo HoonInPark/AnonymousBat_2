@@ -50,7 +50,7 @@ void AAB_Pawn::PossessedBy(AController* _NewController)
 void AAB_Pawn::PlaneMov_Forward(float _Value)
 {
 	const bool bHasInput = !FMath::IsNearlyEqual(_Value, 0.f);
-	const float CurrentAccForward = bHasInput ? -_Value * Acceleration : (-0.5f * Acceleration);
+	const float CurrentAccForward = bHasInput ? (-0.5f * Acceleration) : -_Value * Acceleration;
 	const float NewSpeed_Forward = CurrentSpeed_Forward + CurrentAccForward * GetWorld()->GetDeltaSeconds();
 	CurrentSpeed_Forward = FMath::Clamp(NewSpeed_Forward, Speed_min, Speed_Max);
 	AB2LOG(Warning, TEXT("Current Acceleration : %f"), CurrentAccForward);
@@ -59,7 +59,7 @@ void AAB_Pawn::PlaneMov_Forward(float _Value)
 void AAB_Pawn::PlaneMov_Right(float _Value)
 {
 	const bool bHasInput = !FMath::IsNearlyEqual(_Value, 0.f);
-	const float CurrentAccRight = bHasInput ? -_Value * Acceleration : (-0.5f * Acceleration);
+	const float CurrentAccRight = bHasInput ? (-0.5f * Acceleration) : -_Value * Acceleration;
 	const float NewSpeed_Right = CurrentSpeed_Right + CurrentAccRight * GetWorld()->GetDeltaSeconds();
 	CurrentSpeed_Right = FMath::Clamp(NewSpeed_Right, Speed_min, Speed_Max);
 	AB2LOG(Warning, TEXT("Current Acceleration : %f"), CurrentAccRight);
