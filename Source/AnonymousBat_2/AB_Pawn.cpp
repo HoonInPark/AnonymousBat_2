@@ -47,17 +47,34 @@ void AAB_Pawn::PossessedBy(AController* _NewController)
 	Super::PossessedBy(_NewController);
 }
 
-void AAB_Pawn::ThrustInput(float _Value)
+void AAB_Pawn::PlaneMove_Forward(float _Value)
 {
 	if (!FMath::IsNearlyEqual(_Value, 0.f))
 	{
-		const float CurrentAcc = _Value * Acceleration;
-		const float NewForwardSpeed = CurrentSpeed_Forward + (GetWorld()->GetDeltaSeconds() * CurrentAcc);
-		CurrentSpeed_Forward = FMath::Clamp(NewForwardSpeed, Speed_min, Speed_Max);
+		const float TargetSpeed = _Value * Speed_Max;
+		CurrentSpeed_Forward = FMath::FInterpTo(CurrentSpeed_Forward, TargetSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 
-		const FVector NewLocation = GetActorLocation() + GetActorForwardVector() * CurrentSpeed_Forward * GetWorld()->GetDeltaSeconds();
+		const FVector NewLocation = GetActorLocation() + GetActorForwardVector() * CurrentSpeed_Forward * GetWorld()->
+			GetDeltaSeconds();
 		SetActorLocation(NewLocation);
 	}
+	else
+		CurrentSpeed_Forward = FMath::FInterpTo(CurrentSpeed_Forward, 0.0f, GetWorld()->GetDeltaSeconds(), 2.f);
+}
+
+void AAB_Pawn::PlaneMove_Right(float _Value)
+{
+	if (!FMath::IsNearlyEqual(_Value, 0.f))
+	{
+		const float TargetSpeed = _Value * Speed_Max;
+		CurrentSpeed_Right = FMath::FInterpTo(CurrentSpeed_Right, TargetSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+
+		const FVector NewLocation = GetActorLocation() + GetActorRightVector() * CurrentSpeed_Right * GetWorld()->
+			GetDeltaSeconds();
+		SetActorLocation(NewLocation);
+	}
+	else
+		CurrentSpeed_Right = FMath::FInterpTo(CurrentSpeed_Right, 0.0f, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
 void AAB_Pawn::ProcessMouseInputY(float _Value) { ProcessPitch(_Value); }
@@ -92,11 +109,13 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(_pPlayerInputComponent);
 
-	_pPlayerInputComponent->BindAxis(TEXT("BackNForth"), this, &AAB_Pawn::ThrustInput);
+	_pPlayerInputComponent->BindAxis(TEXT("BackNForth"), this, &AAB_Pawn::PlaneMove_Forward);
+	_pPlayerInputComponent->BindAxis(TEXT("LeftNRight"), this, &AAB_Pawn::PlaneMove_Right);
+	
 	_pPlayerInputComponent->BindAxis(TEXT("Turn"), this, &AAB_Pawn::ProcessMouseInputX);
 	_pPlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AAB_Pawn::ProcessMouseInputY);
 
-	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Pressed, this, &AAB_Pawn::PrePushSoundCube);
+	_pPlayerInputComponent->BindAction(TEXT("PreHoldCube"), EInputEvent::IE_Pressed, this, &AAB_Pawn::PrePushSoundCube);
 	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
 }
 
@@ -154,7 +173,7 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 
 	if (CubeNames_Hit[2] != "0")
 	{
-		for (auto It = pAB_SoundCube->GetComponents().CreateConstIterator(); It; ++It) // 스태틱메시컴포넌트의 이름을 가져와야 함!
+		for (auto It = pAB_SoundCube->GetComponents().CreateConstIterator(); It; ++It)
 		{
 			if (const UStaticMeshComponent* pCube_Actor = Cast<UStaticMeshComponent>(*It))
 			{

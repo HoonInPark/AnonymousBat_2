@@ -16,10 +16,10 @@ public:
 	// Sets default values for this pawn's properties
 	AAB_Pawn();
 
-	float Acceleration{500.f};
 	float Speed_Max{4000.f};
 	float Speed_min{500.f};
 	float CurrentSpeed_Forward{0.f};
+	float CurrentSpeed_Right{0.f};
 
 	float RateMultiplierRoll{200.f};
 	float RateMultiplierPitch{200.f};
@@ -32,7 +32,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void ThrustInput(float _Value);
+	void PlaneMove_Forward(float _Value);
+	void PlaneMove_Right(float _Value);
 	
 	void ProcessMouseInputY(float _Value);
 	void ProcessMouseInputX(float _Value);
