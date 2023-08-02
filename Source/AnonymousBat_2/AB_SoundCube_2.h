@@ -49,6 +49,6 @@ public:
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
 	UStaticMeshComponent* _pSoundCube;
 
-	void UpdateCubesScale(float _scaleMultipier); // _scaleMultipier는 1.xf와 같은 형식임!
+	// void UpdateCubesScale(float _scaleMultipier); // _scaleMultipier는 1.xf와 같은 형식임!
 
 };

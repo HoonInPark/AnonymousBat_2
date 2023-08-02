@@ -62,8 +62,9 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 					pCubeComponent->SetRelativeScale3D(FVector(CubeSize / 250.0f));
 					pCubeComponent->SetMobility(EComponentMobility::Static);
 
-					pCubeComponent->OnComponentBeginOverlap.AddDynamic(this, &AAB_SoundCube_2::OnOverlapBegin);
-					pCubeComponent->OnComponentEndOverlap.AddDynamic(this, &AAB_SoundCube_2::OnOverlapEnd);
+					pCubeComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+					pCubeComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+					pCubeComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
 					// pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
 					pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
@@ -80,46 +81,51 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 void AAB_SoundCube_2::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// UpdateCubesScale(100.f);
 }
 
 // Called every frame
 void AAB_SoundCube_2::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 void AAB_SoundCube_2::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-                                     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-                                     const FHitResult& SweepResult)
+									 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+									 const FHitResult& SweepResult)
 {
-	// if (OtherActor && OtherActor != this && OtherComp && OtherComp->IsA<UPrimitiveComponent>())
-	// {
-	// 	// GetMesh()->SetMaterial(0, OverlapMaterial);
-	// }
+	if (OtherActor && OtherActor != this && OtherComp && OtherComp->IsA<UPrimitiveComponent>())
+	{
+		
+	}
 }
 
 void AAB_SoundCube_2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-                                   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+								   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	// if (true)
-	// {
-	// 	// AB2LOG(Warning, TEXT("~ Begins Overlap Event!"))
-	// }
-}
-
-void AAB_SoundCube_2::UpdateCubesScale(float _scaleMultipier)
-{
-	for (auto It = this->GetComponents().CreateConstIterator(); It; ++It)
+	if (OtherActor && OtherActor != this && OtherComp && OtherComp->IsA<UPrimitiveComponent>())
 	{
-		_pSoundCube = Cast<UStaticMeshComponent>(*It);
-		if (_pSoundCube)
-		{
-			FVector currentScale = _pSoundCube->GetComponentScale();
-			const FVector targetScale = currentScale * _scaleMultipier;
-
-			const FVector newScale = UKismetMathLibrary::VInterpTo(currentScale, targetScale,
-			                                                       GetWorld()->GetDeltaSeconds(), 5.0f);
-			_pSoundCube->SetRelativeScale3D(newScale);
-		}
+		
 	}
 }
+
+// void AAB_SoundCube_2::UpdateCubesScale(float _scaleMultipier)
+// {
+// 	
+// 	for (auto It = this->GetComponents().CreateConstIterator(); It; ++It)
+// 	{
+// 		_pSoundCube = Cast<UStaticMeshComponent>(*It);
+// 		if (_pSoundCube)
+// 		{
+// 			FVector currentScale = _pSoundCube->GetComponentScale();
+// 			const FVector targetScale = currentScale * _scaleMultipier;
+//
+// 			FVector newScale = UKismetMathLibrary::VInterpTo(currentScale, targetScale,
+// 			                                                       GetWorld()->GetDeltaSeconds(), 1.0f);
+// 			_pSoundCube->SetRelativeScale3D(newScale);
+// 		}
+// 	}
+// }
+

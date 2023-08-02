@@ -11,6 +11,8 @@ AAB_Pawn::AAB_Pawn()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	bIsEKeyDown = false;
+
 	pCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CAPSULE"));
 	pMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MESH"));
 	pCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
@@ -19,6 +21,8 @@ AAB_Pawn::AAB_Pawn()
 	pCapsule->SetCapsuleRadius(50.f);
 	pCapsule->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 	RootComponent = pCapsule;
+
+	pCapsule->SetCollisionProfileName(TEXT("Pawn"));
 
 	pMesh->SetupAttachment(pCapsule);
 	pCamera->SetupAttachment(pCapsule);
@@ -30,7 +34,10 @@ AAB_Pawn::AAB_Pawn()
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_SUBMARINE(TEXT(
 		"/Script/Engine.SkeletalMesh'/Game/_03_BuildingSoundBlock/Meshes/AB_DefaultSkeletalMesh.AB_DefaultSkeletalMesh'"));
 	if (AB_SUBMARINE.Succeeded())
+	{
 		pMesh->SetSkeletalMesh(AB_SUBMARINE.Object);
+		pMesh->SetCollisionProfileName(TEXT("BlockAll"));
+	}
 }
 
 // Called when the game starts or when spawned
@@ -207,6 +214,6 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 
 void AAB_Pawn::MusicStart()
 {
-	
+	AB2LOG_S(Warning);
 }
 
