@@ -14,16 +14,14 @@ AAB_Pawn::AAB_Pawn()
 	bIsEKeyDown = false;
 
 	pCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CAPSULE"));
-	pMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MESH"));
+	pMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	pCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 
 	pCapsule->SetCapsuleHalfHeight(100.f);
 	pCapsule->SetCapsuleRadius(50.f);
 	pCapsule->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 	RootComponent = pCapsule;
-
-	pCapsule->SetCollisionProfileName(TEXT("Pawn"));
-
+	
 	pMesh->SetupAttachment(pCapsule);
 	pCamera->SetupAttachment(pCapsule);
 
@@ -31,13 +29,10 @@ AAB_Pawn::AAB_Pawn()
 	pCamera->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 
 	// static ConstructorHelpers::FObjectFinder<UMeshComponent> AB_SUBMARINE(TEXT(""));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_SUBMARINE(TEXT(
-		"/Script/Engine.SkeletalMesh'/Game/_03_BuildingSoundBlock/Meshes/AB_DefaultSkeletalMesh.AB_DefaultSkeletalMesh'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> AB_SUBMARINE(TEXT(
+		"/Script/Engine.StaticMesh'/Game/_03_BuildingSoundBlock/Meshes/AB_SM_Shape_SoundBlock.AB_SM_Shape_SoundBlock'"));
 	if (AB_SUBMARINE.Succeeded())
-	{
-		pMesh->SetSkeletalMesh(AB_SUBMARINE.Object);
-		pMesh->SetCollisionProfileName(TEXT("BlockAll"));
-	}
+		pMesh->SetStaticMesh(AB_SUBMARINE.Object);
 }
 
 // Called when the game starts or when spawned
@@ -217,3 +212,10 @@ void AAB_Pawn::MusicStart()
 	AB2LOG_S(Warning);
 }
 
+///
+///<구현해야 하는 기능들>
+///이미 큐브가 놓여져 있으면 거기에 스윕이 닿았을때 사라지도록. 큐브를 집는 것이다.
+///큐브가 없는데 큐브를 놓아야할 자리이거나 큐브가 있는 경우 스윕이 닿으면 (Visibility가 true인 상태에서)거기에 머티리얼의 색이 변하도록!
+///스페이스바를 누르면 모든 사운드큐브의 크기가 커지면서 각 큐브에 할당된 음악이 종합되어 하나의 선율이 되도록
+///테마를 선택하고 장면이 전환될 수 있도록.
+///

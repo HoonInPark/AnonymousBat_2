@@ -54,7 +54,7 @@ public:
 	UPROPERTY(EditAnywhere, Category=Collision)
 	UCapsuleComponent* pCapsule;
 	UPROPERTY(EditAnywhere, Category=Collision)
-	USkeletalMeshComponent* pMesh;
+	UStaticMeshComponent* pMesh;
 	UPROPERTY(EditAnywhere, Category=Collision)
 	UCameraComponent* pCamera;
 
@@ -89,3 +89,5 @@ private:
 	UPROPERTY()
 	class AAB_PlayerController* AB_PlayerController;
 };
+
+
