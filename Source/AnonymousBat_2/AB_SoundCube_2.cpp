@@ -3,6 +3,7 @@
 
 #include "AB_SoundCube_2.h"
 #include "AB_Pawn.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AAB_SoundCube_2::AAB_SoundCube_2()
@@ -61,7 +62,6 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 					pCubeComponent->SetRelativeScale3D(FVector(CubeSize / 250.0f));
 					pCubeComponent->SetMobility(EComponentMobility::Static);
 
-					// 오버랩 이벤트 등록
 					pCubeComponent->OnComponentBeginOverlap.AddDynamic(this, &AAB_SoundCube_2::OnOverlapBegin);
 					pCubeComponent->OnComponentEndOverlap.AddDynamic(this, &AAB_SoundCube_2::OnOverlapEnd);
 
@@ -105,4 +105,27 @@ void AAB_SoundCube_2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* 
 	// {
 	// 	// AB2LOG(Warning, TEXT("~ Begins Overlap Event!"))
 	// }
+}
+
+void AAB_SoundCube_2::IncreaseCubeSize(float SizeMultiplier)
+{
+	CubeSize *= SizeMultiplier;
+	UpdateCubesScale();
+}
+
+void AAB_SoundCube_2::UpdateCubesScale()
+{
+	for (auto It = this->GetComponents().CreateConstIterator(); It; ++It)
+	{
+		_pSoundCube = Cast<UStaticMeshComponent>(*It);
+		if (_pSoundCube)
+		{
+			FVector currentScale = _pSoundCube->GetComponentScale();
+			const FVector targetScale = currentScale * 1.1f; 
+
+			FVector newScale = UKismetMathLibrary::VInterpTo(currentScale, targetScale, GetWorld()->GetDeltaSeconds(), 5.0f);
+			_pSoundCube->SetRelativeScale3D(newScale);
+		}
+		
+	}
 }

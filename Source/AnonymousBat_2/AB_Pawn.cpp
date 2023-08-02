@@ -3,6 +3,8 @@
 
 #include "AB_Pawn.h"
 
+#include "Kismet/KismetMathLibrary.h"
+
 // Sets default values
 AAB_Pawn::AAB_Pawn()
 {
@@ -123,6 +125,7 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 
 	_pPlayerInputComponent->BindAction(TEXT("PreHoldCube"), EInputEvent::IE_Pressed, this, &AAB_Pawn::PrePushSoundCube);
 	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
+	_pPlayerInputComponent->BindAction(TEXT("MusicStart"), EInputEvent::IE_Pressed, this, &AAB_Pawn::MusicStart);
 }
 
 void AAB_Pawn::PrePushSoundCube()
@@ -201,3 +204,9 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 		return true;
 	return true;
 }
+
+void AAB_Pawn::MusicStart()
+{
+	
+}
+

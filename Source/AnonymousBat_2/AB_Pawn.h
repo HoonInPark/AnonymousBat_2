@@ -75,6 +75,7 @@ private:
 	void PrePushSoundCube();
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
+	void MusicStart();
 
 public:
 	UPROPERTY()

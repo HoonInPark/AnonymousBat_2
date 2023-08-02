@@ -46,4 +46,10 @@ public:
 		int32 NumCubes;
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
 		UStaticMeshComponent* pCubeComponent;
+	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
+	UStaticMeshComponent* _pSoundCube;
+
+	void IncreaseCubeSize(float SizeMultiplier);
+	void UpdateCubesScale();
+
 };
