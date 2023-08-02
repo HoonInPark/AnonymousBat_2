@@ -109,8 +109,7 @@ void AAB_SoundCube_2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* 
 
 void AAB_SoundCube_2::IncreaseCubeSize(float SizeMultiplier)
 {
-	CubeSize *= SizeMultiplier;
-	UpdateCubesScale();
+	
 }
 
 void AAB_SoundCube_2::UpdateCubesScale()
