@@ -67,7 +67,7 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 
 					// pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
 					pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
-					pCubeComponent->SetVisibility(false);
+					pCubeComponent->SetVisibility(true);
 				}
 			}
 		}
@@ -107,12 +107,7 @@ void AAB_SoundCube_2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* 
 	// }
 }
 
-void AAB_SoundCube_2::IncreaseCubeSize(float SizeMultiplier)
-{
-	
-}
-
-void AAB_SoundCube_2::UpdateCubesScale()
+void AAB_SoundCube_2::UpdateCubesScale(float _scaleMultipier)
 {
 	for (auto It = this->GetComponents().CreateConstIterator(); It; ++It)
 	{
@@ -120,11 +115,11 @@ void AAB_SoundCube_2::UpdateCubesScale()
 		if (_pSoundCube)
 		{
 			FVector currentScale = _pSoundCube->GetComponentScale();
-			const FVector targetScale = currentScale * 1.1f; 
+			const FVector targetScale = currentScale * _scaleMultipier;
 
-			FVector newScale = UKismetMathLibrary::VInterpTo(currentScale, targetScale, GetWorld()->GetDeltaSeconds(), 5.0f);
+			const FVector newScale = UKismetMathLibrary::VInterpTo(currentScale, targetScale,
+			                                                       GetWorld()->GetDeltaSeconds(), 5.0f);
 			_pSoundCube->SetRelativeScale3D(newScale);
 		}
-		
 	}
 }
