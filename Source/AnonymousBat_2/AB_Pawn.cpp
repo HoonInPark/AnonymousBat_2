@@ -78,13 +78,7 @@ void AAB_Pawn::PlaneMove_Right(float _Value)
 }
 
 void AAB_Pawn::ProcessMouseInputY(float _Value) { ProcessPitch(_Value); }
-void AAB_Pawn::ProcessMouseInputX(float _Value) { ProcessRoll(_Value); }
-
-void AAB_Pawn::ProcessRoll(float _Value)
-{
-	const float TargetSpeedRoll = _Value * RateMultiplierRoll;
-	CurrentSpeed_Roll = FMath::FInterpTo(CurrentSpeed_Roll, TargetSpeedRoll, GetWorld()->GetDeltaSeconds(), 2.f);
-}
+void AAB_Pawn::ProcessMouseInputZ(float _Value) { ProcessYaw(_Value); }
 
 void AAB_Pawn::ProcessPitch(float _Value)
 {
@@ -92,13 +86,25 @@ void AAB_Pawn::ProcessPitch(float _Value)
 	CurrentSpeed_Pitch = FMath::FInterpTo(CurrentSpeed_Pitch, TargetSpeedPitch, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
+void AAB_Pawn::ProcessYaw(float _Value)
+{
+	const float TargetSpeedYaw = _Value * RateMultiplierYaw;
+	CurrentSpeed_Yaw = FMath::FInterpTo(CurrentSpeed_Yaw, TargetSpeedYaw, GetWorld()->GetDeltaSeconds(), 2.f);
+}
+
 // Called every frame
 void AAB_Pawn::Tick(float _DeltaTime)
 {
+	const float currentRollAngle = GetActorRotation().Roll;
+	const float targetSpeedRoll = -currentRollAngle * RateMultiplierRoll; // RateMultiplierRoll은 설정에 따라 조절 가능한 보간 속도입니다.
+	CurrentSpeed_Roll = FMath::FInterpTo(CurrentSpeed_Roll, targetSpeedRoll, _DeltaTime, 2.f);
+	const FRotator newDeltaRotation(0.f, 0.f, CurrentSpeed_Roll * _DeltaTime);
+	AddActorLocalRotation(newDeltaRotation);
+	
 	FRotator DeltaRotation(0.f, 0.f, 0.f);
-	DeltaRotation.Roll = CurrentSpeed_Roll * _DeltaTime;
-	DeltaRotation.Yaw = CurrentSpeed_Yaw * _DeltaTime;
+	DeltaRotation.Pitch = CurrentSpeed_Roll * _DeltaTime;
 	DeltaRotation.Pitch = CurrentSpeed_Pitch * _DeltaTime;
+	DeltaRotation.Yaw = CurrentSpeed_Yaw * _DeltaTime;
 	AddActorLocalRotation(DeltaRotation);
 
 	Super::Tick(_DeltaTime);
@@ -112,7 +118,7 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 	_pPlayerInputComponent->BindAxis(TEXT("BackNForth"), this, &AAB_Pawn::PlaneMove_Forward);
 	_pPlayerInputComponent->BindAxis(TEXT("LeftNRight"), this, &AAB_Pawn::PlaneMove_Right);
 	
-	_pPlayerInputComponent->BindAxis(TEXT("Turn"), this, &AAB_Pawn::ProcessMouseInputX);
+	_pPlayerInputComponent->BindAxis(TEXT("Turn"), this, &AAB_Pawn::ProcessMouseInputZ);
 	_pPlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AAB_Pawn::ProcessMouseInputY);
 
 	_pPlayerInputComponent->BindAction(TEXT("PreHoldCube"), EInputEvent::IE_Pressed, this, &AAB_Pawn::PrePushSoundCube);

@@ -21,12 +21,13 @@ public:
 	float CurrentSpeed_Forward{0.f};
 	float CurrentSpeed_Right{0.f};
 
-	float RateMultiplierRoll{200.f};
+	float RateMultiplierRoll{1.0f};
+	float RateMultiplierYaw{200.f};
 	float RateMultiplierPitch{200.f};
 
-	float CurrentSpeed_Yaw;
-	float CurrentSpeed_Pitch;
-	float CurrentSpeed_Roll;
+	float CurrentSpeed_Roll{0.f};
+	float CurrentSpeed_Pitch{0.f};
+	float CurrentSpeed_Yaw{0.f};
 
 protected:
 	// Called when the game starts or when spawned
@@ -36,9 +37,9 @@ protected:
 	void PlaneMove_Right(float _Value);
 	
 	void ProcessMouseInputY(float _Value);
-	void ProcessMouseInputX(float _Value);
+	void ProcessMouseInputZ(float _Value);
 
-	void ProcessRoll(float _Value);
+	void ProcessYaw(float _Value);
 	void ProcessPitch(float _Value);
 
 public:
