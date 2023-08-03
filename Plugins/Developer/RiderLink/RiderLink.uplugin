@@ -1,7 +1,7 @@
 {
   "FileVersion": 3,
   "Version": 1,
-  "VersionName": "2023.1.0.282",
+  "VersionName": "2023.2.0.153",
   "FriendlyName": "RiderLink",
   "Description": "Plugin for establishing IPC connection with JetBrains Rider IDE",
   "Category": "Programming",
@@ -48,13 +48,7 @@
     {
       "Name": "RiderLC",
       "Type": "EditorNoCommandlet",
-      "LoadingPhase": "PostEngineInit",
-      "WhitelistPlatforms": [
-        "Win64"
-      ],
-      "PlatformAllowList": [
-        "Win64"
-      ]
+      "LoadingPhase": "PostEngineInit"
     }
   ]
 }
