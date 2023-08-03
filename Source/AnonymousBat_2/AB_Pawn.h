@@ -18,10 +18,10 @@ public:
 
 	float Speed_Max{4000.f};
 	float Speed_min{500.f};
-	float CurrentSpeed_Forward{0.f};
+	float CurrentSpeed_Forward{1.f};
 	float CurrentSpeed_Right{0.f};
 
-	float RateMultiplierRoll{1.0f};
+	float RateMultiplierRoll{1.f};
 	float RateMultiplierYaw{200.f};
 	float RateMultiplierPitch{200.f};
 
@@ -36,9 +36,6 @@ protected:
 	void PlaneMove_Forward(float _Value);
 	void PlaneMove_Right(float _Value);
 	
-	void ProcessMouseInputY(float _Value);
-	void ProcessMouseInputZ(float _Value);
-
 	void ProcessYaw(float _Value);
 	void ProcessPitch(float _Value);
 
@@ -66,7 +63,8 @@ private:
 
 	FVector SweepStartPt;
 	FVector SweepEndPt;
-	TArray<FHitResult> HitResults;
+	TArray<FHitResult> Hit_pressed;
+	TArray<FHitResult> Hit_released;
 
 	TArray<FString> CubeNames_Hit;
 	TArray<FString> CubeNames_Actor;

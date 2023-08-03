@@ -1,5 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+///
+/// 투명한 큐브의 로직 => 
+///
 
 #include "AB_SoundCube_2.h"
 #include "AB_Pawn.h"
@@ -57,8 +60,8 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 
 					pCubeComponent->SetRelativeLocation(FVector(i * CubeSize * 0.4f, j * CubeSize * 0.4f,
 					                                            k * CubeSize * 0.4f));
-					// pCubeComponent->SetRelativeRotation(
-					// 	FRotator(FMath::FRandRange(-30.0f, 30.0f), FMath::FRandRange(-30.0f, 30.0f), 0.0f));
+					pCubeComponent->SetRelativeRotation(
+						FRotator(FMath::FRandRange(-30.0f, 30.0f), FMath::FRandRange(-30.0f, 30.0f), 0.0f));
 					pCubeComponent->SetRelativeScale3D(FVector(CubeSize / 250.0f));
 					pCubeComponent->SetMobility(EComponentMobility::Static);
 
@@ -66,9 +69,9 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 					pCubeComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 					pCubeComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
-					// pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
-					pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
-					pCubeComponent->SetVisibility(true);
+					pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
+					// pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
+					pCubeComponent->SetVisibility(false);
 				}
 			}
 		}
@@ -110,22 +113,3 @@ void AAB_SoundCube_2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* 
 		
 	}
 }
-
-// void AAB_SoundCube_2::UpdateCubesScale(float _scaleMultipier)
-// {
-// 	
-// 	for (auto It = this->GetComponents().CreateConstIterator(); It; ++It)
-// 	{
-// 		_pSoundCube = Cast<UStaticMeshComponent>(*It);
-// 		if (_pSoundCube)
-// 		{
-// 			FVector currentScale = _pSoundCube->GetComponentScale();
-// 			const FVector targetScale = currentScale * _scaleMultipier;
-//
-// 			FVector newScale = UKismetMathLibrary::VInterpTo(currentScale, targetScale,
-// 			                                                       GetWorld()->GetDeltaSeconds(), 1.0f);
-// 			_pSoundCube->SetRelativeScale3D(newScale);
-// 		}
-// 	}
-// }
-

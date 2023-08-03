@@ -24,11 +24,11 @@ public:
 	
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
-	                           class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-	                           const FHitResult& SweepResult);
+							   class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+							   const FHitResult& SweepResult);
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
-	                         class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);	
+							 class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);	
 	
 protected:
 	// Called when the game starts or when spawned
@@ -39,13 +39,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
-		TArray<UStaticMesh*> pCubeMeshes;
+	TArray<UStaticMesh*> pCubeMeshes;
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
-		float CubeSize;
+	float CubeSize;
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
-		int32 NumCubes;
+	int32 NumCubes;
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
-		UStaticMeshComponent* pCubeComponent;
+	UStaticMeshComponent* pCubeComponent;
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
 	UStaticMeshComponent* _pSoundCube;
 

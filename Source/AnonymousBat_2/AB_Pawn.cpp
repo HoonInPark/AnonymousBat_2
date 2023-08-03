@@ -17,7 +17,7 @@ AAB_Pawn::AAB_Pawn()
 	pCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 
 	RootComponent = pMesh;
-	
+
 	pCamera->SetupAttachment(pMesh);
 
 	pMesh->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, -90.f, 0.f));
@@ -79,37 +79,35 @@ void AAB_Pawn::PlaneMove_Right(float _Value)
 		CurrentSpeed_Right = FMath::FInterpTo(CurrentSpeed_Right, 0.0f, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
-void AAB_Pawn::ProcessMouseInputY(float _Value) { ProcessPitch(_Value); }
-void AAB_Pawn::ProcessMouseInputZ(float _Value) { ProcessYaw(_Value); }
-
 void AAB_Pawn::ProcessPitch(float _Value)
 {
 	const float TargetSpeedPitch = _Value * RateMultiplierPitch;
 	CurrentSpeed_Pitch = FMath::FInterpTo(CurrentSpeed_Pitch, TargetSpeedPitch, GetWorld()->GetDeltaSeconds(), 2.f);
+	CurrentSpeed_Pitch = FMath::Clamp(CurrentSpeed_Pitch, -300, 300);
 }
 
 void AAB_Pawn::ProcessYaw(float _Value)
 {
 	const float TargetSpeedYaw = _Value * RateMultiplierYaw;
 	CurrentSpeed_Yaw = FMath::FInterpTo(CurrentSpeed_Yaw, TargetSpeedYaw, GetWorld()->GetDeltaSeconds(), 2.f);
+	CurrentSpeed_Yaw = FMath::Clamp(CurrentSpeed_Yaw, -300, 300);
 }
 
 // Called every frame
 void AAB_Pawn::Tick(float _DeltaTime)
 {
+	Super::Tick(_DeltaTime);
+
 	const float currentRollAngle = GetActorRotation().Roll;
 	const float targetSpeedRoll = -currentRollAngle * RateMultiplierRoll; // RateMultiplierRoll은 설정에 따라 조절 가능한 보간 속도입니다.
 	CurrentSpeed_Roll = FMath::FInterpTo(CurrentSpeed_Roll, targetSpeedRoll, _DeltaTime, 2.f);
-	const FRotator newDeltaRotation(0.f, 0.f, CurrentSpeed_Roll * _DeltaTime);
-	AddActorLocalRotation(newDeltaRotation);
-	
-	FRotator DeltaRotation(0.f, 0.f, 0.f);
-	DeltaRotation.Pitch = CurrentSpeed_Roll * _DeltaTime;
-	DeltaRotation.Pitch = CurrentSpeed_Pitch * _DeltaTime;
-	DeltaRotation.Yaw = CurrentSpeed_Yaw * _DeltaTime;
-	AddActorLocalRotation(DeltaRotation);
 
-	Super::Tick(_DeltaTime);
+	FRotator DeltaRotation(0,0,0);
+	DeltaRotation.Pitch = CurrentSpeed_Pitch * _DeltaTime; // 위/아래!
+	DeltaRotation.Yaw = CurrentSpeed_Yaw * _DeltaTime; // 양 옆!
+	DeltaRotation.Roll = CurrentSpeed_Roll * _DeltaTime;
+
+	AddActorLocalRotation(DeltaRotation,true);
 }
 
 // Called to bind functionality to input
@@ -119,9 +117,9 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 
 	_pPlayerInputComponent->BindAxis(TEXT("BackNForth"), this, &AAB_Pawn::PlaneMove_Forward);
 	_pPlayerInputComponent->BindAxis(TEXT("LeftNRight"), this, &AAB_Pawn::PlaneMove_Right);
-	
-	_pPlayerInputComponent->BindAxis(TEXT("Turn"), this, &AAB_Pawn::ProcessMouseInputZ);
-	_pPlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AAB_Pawn::ProcessMouseInputY);
+
+	_pPlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AAB_Pawn::ProcessPitch);
+	_pPlayerInputComponent->BindAxis(TEXT("Turn"), this, &AAB_Pawn::ProcessYaw);
 
 	_pPlayerInputComponent->BindAction(TEXT("PreHoldCube"), EInputEvent::IE_Pressed, this, &AAB_Pawn::PrePushSoundCube);
 	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
@@ -130,31 +128,49 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 
 void AAB_Pawn::PrePushSoundCube()
 {
+	/*
 	bIsEKeyDown = true;
+	
+	Hit_pressed = SweepInRange();
+	if (!Hit_pressed.IsEmpty())
+	{
+		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
+		AB2CHECK(nullptr != pAB_SoundCube);
+
+		if (pAB_SoundCube)
+		{
+			for (auto& hitResult : Hit_pressed)
+			{
+				if (IsGrounded(hitResult.GetComponent()))
+				{
+					hitResult.GetComponent()->SetVisibility(true);
+					hitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+				}
+			}
+		}
+	}
+	*/
 }
 
 void AAB_Pawn::PushSoundCube()
 {
 	bIsEKeyDown = false;
 
-	HitResults = SweepInRange();
-	if (!HitResults.IsEmpty())
+	Hit_released = SweepInRange();
+	if (!Hit_released.IsEmpty())
 	{
-		pAB_SoundCube = Cast<AAB_SoundCube_2>(HitResults.GetData()->GetActor());
+		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_released.GetData()->GetActor());
 		AB2CHECK(nullptr != pAB_SoundCube);
 
 		if (pAB_SoundCube)
 		{
-			for (auto& hitResult : HitResults)
+			for (auto& hitResult : Hit_released)
 			{
 				if (IsGrounded(hitResult.GetComponent()))
 				{
 					hitResult.GetComponent()->SetVisibility(true);
 					hitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-					AB2LOG(Warning, TEXT("Push Sweeping has hit: (%s)"), *(hitResult.GetComponent()->GetName()));
 				}
-
-				AB2LOG(Warning, TEXT("Push Sweeping has hit: (%s)"), *(hitResult.GetComponent()->GetName()));
 			}
 		}
 	}
@@ -167,19 +183,22 @@ TArray<FHitResult> AAB_Pawn::SweepInRange()
 	SweepStartPt = PlayerViewPtLoc + 100.f * PlayerViewPtRot.Vector();
 	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 500.f;
 
-	//DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
+	DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
 
 	const FCollisionQueryParams TraceParams(FName(TEXT("")), true, GetOwner());
-	GetWorld()->SweepMultiByChannel(HitResults, SweepStartPt, SweepEndPt, FQuat::Identity, ECC_Visibility,
+	GetWorld()->SweepMultiByChannel(Hit_released, SweepStartPt, SweepEndPt, FQuat::Identity, ECC_Visibility,
 	                                FCollisionShape::MakeSphere(0.5f), TraceParams);
 
-	return HitResults;
+	return Hit_released;
 }
 
 bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 {
 	_pCubeComponent->GetName().ParseIntoArray(CubeNames_Hit, TEXT(" "));
 
+	if (CubeNames_Hit.Num() < 3)
+		return false;
+	
 	if (CubeNames_Hit[2] != "0")
 	{
 		for (auto It = pAB_SoundCube->GetComponents().CreateConstIterator(); It; ++It)
