@@ -12,7 +12,7 @@ void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	auto Pawn = TryGetPawnOwner();
+	const auto Pawn = TryGetPawnOwner();
 	if (::IsValid(Pawn))
 	{
 		// 스윕을 해서 컴포넌트가 SetVisibility(true)가 되려는 컴포넌트의 FVevtor값을 가져와서 SoundCubeTransform에 넣는다.

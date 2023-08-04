@@ -114,6 +114,7 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
 	_pPlayerInputComponent->BindAction(TEXT("MusicStart"), EInputEvent::IE_Pressed, this, &AAB_Pawn::MusicStart);
 }
+
 void AAB_Pawn::PrePushSoundCube()
 {
 	bIsEKeyDown = true;
