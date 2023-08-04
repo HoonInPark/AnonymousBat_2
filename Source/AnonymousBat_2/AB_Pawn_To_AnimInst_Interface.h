@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "AnonymousBat_2.h"
 #include "UObject/Interface.h"
 #include "AB_Pawn_To_AnimInst_Interface.generated.h"
 
@@ -22,4 +22,8 @@ class ANONYMOUSBAT_2_API IAB_Pawn_To_AnimInst_Interface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interface")
+	void PushSoundCube();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interface")
+	void PrePushSoundCube();
 };

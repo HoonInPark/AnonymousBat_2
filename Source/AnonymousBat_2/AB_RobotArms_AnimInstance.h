@@ -15,8 +15,11 @@ class ANONYMOUSBAT_2_API UAB_RobotArms_AnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pawn")
+	class AAB_Pawn* OwningPawn;
+
 	UAB_RobotArms_AnimInstance();
-	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	virtual void NativeUpdateAnimation(float _DeltaSeconds) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Pawn, meta=(AllowPrivateAccess=true))
