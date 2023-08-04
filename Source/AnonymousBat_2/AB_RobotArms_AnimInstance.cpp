@@ -2,7 +2,6 @@
 
 
 #include "AB_RobotArms_AnimInstance.h"
-
 #include "AB_Pawn.h"
 
 UAB_RobotArms_AnimInstance::UAB_RobotArms_AnimInstance()
@@ -14,15 +13,30 @@ void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(_DeltaSeconds);
 
-
-	// 스윕을 해서 컴포넌트가 SetVisibility(true)가 되려는 컴포넌트의 FVevtor값을 가져와서 SoundCubeTransform에 넣는다.
+	OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner());
 	
+	// 스윕을 해서 컴포넌트가 SetVisibility(true)가 되려는 컴포넌트의 FVevtor값을 가져와서 SoundCubeTransform에 넣는다.
+	// SoundCubeTransform = PushSoundCube_Implementation()->GetActorTransform();
 }
 
-void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation()
+AAB_SoundCube_2* UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation()
 {
+	if (OwningPawn)
+	{
+		AB2LOG(Warning, TEXT("%s"), *OwningPawn->PushSoundCube()->GetName())
+		return OwningPawn->PrePushSoundCube();
+	}
+
+	return nullptr;
 }
 
-void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation()
+AAB_SoundCube_2* UAB_RobotArms_AnimInstance::PushSoundCube_Implementation()
 {
+	if (OwningPawn)
+	{
+		AB2LOG(Warning, TEXT("%s"), *OwningPawn->PushSoundCube()->GetName())
+		return OwningPawn->PushSoundCube();
+	}
+
+	return nullptr;
 }

@@ -35,7 +35,7 @@ AAB_Pawn::AAB_Pawn()
 
 // Called when the game starts or when spawned
 void AAB_Pawn::BeginPlay() { Super::BeginPlay(); }
-void AAB_Pawn::PostInitializeComponents() {	Super::PostInitializeComponents(); }
+void AAB_Pawn::PostInitializeComponents() { Super::PostInitializeComponents(); }
 void AAB_Pawn::PossessedBy(AController* _NewController) { Super::PossessedBy(_NewController); }
 
 void AAB_Pawn::PlaneMove_Forward(float _Value)
@@ -91,12 +91,12 @@ void AAB_Pawn::Tick(float _DeltaTime)
 	const float targetSpeedRoll = -currentRollAngle * RateMultiplierRoll; // RateMultiplierRoll은 설정에 따라 조절 가능한 보간 속도.
 	CurrentSpeed_Roll = FMath::FInterpTo(CurrentSpeed_Roll, targetSpeedRoll, _DeltaTime, 2.f);
 
-	FRotator DeltaRotation(0,0,0);
+	FRotator DeltaRotation(0, 0, 0);
 	DeltaRotation.Pitch = CurrentSpeed_Pitch * _DeltaTime; // 위/아래!
 	DeltaRotation.Yaw = CurrentSpeed_Yaw * _DeltaTime; // 양 옆!
 	DeltaRotation.Roll = CurrentSpeed_Roll * _DeltaTime;
 
-	AddActorLocalRotation(DeltaRotation,true);
+	AddActorLocalRotation(DeltaRotation, true);
 }
 
 // Called to bind functionality to input
@@ -110,12 +110,17 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 	_pPlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AAB_Pawn::ProcessPitch);
 	_pPlayerInputComponent->BindAxis(TEXT("Turn"), this, &AAB_Pawn::ProcessYaw);
 
-	_pPlayerInputComponent->BindAction(TEXT("PreHoldCube"), EInputEvent::IE_Pressed, this, &AAB_Pawn::PrePushSoundCube_Implementation);
-	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube_Implementation);
+	_pPlayerInputComponent->BindAction(TEXT("PreHoldCube"), EInputEvent::IE_Pressed, this,
+	                                   &AAB_Pawn::CallPrePushSoundCube_Implementation);
+	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this,
+	                                   &AAB_Pawn::CallPushSoundCube_Implementation);
 	_pPlayerInputComponent->BindAction(TEXT("MusicStart"), EInputEvent::IE_Pressed, this, &AAB_Pawn::MusicStart);
 }
 
-void AAB_Pawn::PrePushSoundCube_Implementation()
+void AAB_Pawn::CallPrePushSoundCube_Implementation() { PrePushSoundCube_Implementation(); }
+void AAB_Pawn::CallPushSoundCube_Implementation() { PushSoundCube_Implementation(); }
+
+AAB_SoundCube_2* AAB_Pawn::PrePushSoundCube_Implementation()
 {
 	IAB_Pawn_To_AnimInst_Interface::PrePushSoundCube_Implementation();
 
@@ -147,16 +152,19 @@ void AAB_Pawn::PrePushSoundCube_Implementation()
 			{
 				ClosestHitResult.GetComponent()->SetVisibility(true);
 				ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
+				return pAB_SoundCube;
+
 			}
 		}
 	}
 	*/
+	return nullptr;
 }
 
-void AAB_Pawn::PushSoundCube_Implementation()
+AAB_SoundCube_2* AAB_Pawn::PushSoundCube_Implementation()
 {
 	IAB_Pawn_To_AnimInst_Interface::PushSoundCube_Implementation();
-	
+
 	bIsEKeyDown = false;
 
 	Hit_released = SweepInRange();
@@ -176,7 +184,6 @@ void AAB_Pawn::PushSoundCube_Implementation()
 		}
 
 		pAB_SoundCube = Cast<AAB_SoundCube_2>(ClosestHitResult.GetActor());
-		AB2CHECK(nullptr != pAB_SoundCube);
 
 		if (pAB_SoundCube)
 		{
@@ -184,9 +191,12 @@ void AAB_Pawn::PushSoundCube_Implementation()
 			{
 				ClosestHitResult.GetComponent()->SetVisibility(true);
 				ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+				return pAB_SoundCube;
 			}
 		}
 	}
+
+	return nullptr;
 }
 
 TArray<FHitResult> AAB_Pawn::SweepInRange()
@@ -211,7 +221,7 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 
 	if (CubeNames_Hit.Num() < 3)
 		return false;
-	
+
 	if (CubeNames_Hit[2] != "0")
 	{
 		for (auto It = pAB_SoundCube->GetComponents().CreateConstIterator(); It; ++It)
@@ -223,11 +233,7 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 				{
 					if (FCString::Atoi(*CubeNames_Hit[2]) > FCString::Atoi(*CubeNames_Actor[2]) && Cast<
 						UStaticMeshComponent>(*It)->IsVisible() == false)
-					{
-						AB2LOG(Warning, TEXT("'Cause (%s) is empty, (%s) IS NOT GROUNDED!!!"), *pCube_Actor->GetName(),
-						       *_pCubeComponent->GetName());
 						return false;
-					}
 				}
 			}
 		}
@@ -241,6 +247,7 @@ void AAB_Pawn::MusicStart()
 {
 	AB2LOG_S(Warning);
 }
+
 
 ///
 ///	<구현해야 하는 기능들>
