@@ -2,7 +2,6 @@
 
 
 #include "AB_Pawn.h"
-
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values

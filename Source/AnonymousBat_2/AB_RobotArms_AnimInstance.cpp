@@ -23,7 +23,6 @@ AAB_SoundCube_2* UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation()
 {
 	if (OwningPawn)
 	{
-		AB2LOG(Warning, TEXT("%s"), *OwningPawn->PushSoundCube()->GetName())
 		return OwningPawn->PrePushSoundCube();
 	}
 
@@ -34,7 +33,7 @@ AAB_SoundCube_2* UAB_RobotArms_AnimInstance::PushSoundCube_Implementation()
 {
 	if (OwningPawn)
 	{
-		AB2LOG(Warning, TEXT("%s"), *OwningPawn->PushSoundCube()->GetName())
+		AB2LOG(Warning, TEXT("%s"), *OwningPawn->PushSoundCube()->GetName());
 		return OwningPawn->PushSoundCube();
 	}
 
