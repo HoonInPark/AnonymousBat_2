@@ -70,8 +70,8 @@ private:
 	TArray<FString> CubeNames_Hit;
 	TArray<FString> CubeNames_Actor;
 
-	virtual void PushSoundCube_Implementation() override;
 	virtual void PrePushSoundCube_Implementation() override;
+	virtual void PushSoundCube_Implementation() override;
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
 	void MusicStart();

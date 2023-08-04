@@ -117,6 +117,9 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 
 void AAB_Pawn::PrePushSoundCube_Implementation()
 {
+	IAB_Pawn_To_AnimInst_Interface::PrePushSoundCube_Implementation();
+
+	/*
 	bIsEKeyDown = true;
     
 	Hit_pressed = SweepInRange();
@@ -147,10 +150,13 @@ void AAB_Pawn::PrePushSoundCube_Implementation()
 			}
 		}
 	}
+	*/
 }
 
 void AAB_Pawn::PushSoundCube_Implementation()
 {
+	IAB_Pawn_To_AnimInst_Interface::PushSoundCube_Implementation();
+	
 	bIsEKeyDown = false;
 
 	Hit_released = SweepInRange();
