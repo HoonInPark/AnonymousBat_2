@@ -34,20 +34,9 @@ AAB_Pawn::AAB_Pawn()
 }
 
 // Called when the game starts or when spawned
-void AAB_Pawn::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-void AAB_Pawn::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-}
-
-void AAB_Pawn::PossessedBy(AController* _NewController)
-{
-	Super::PossessedBy(_NewController);
-}
+void AAB_Pawn::BeginPlay() { Super::BeginPlay(); }
+void AAB_Pawn::PostInitializeComponents() {	Super::PostInitializeComponents(); }
+void AAB_Pawn::PossessedBy(AController* _NewController) { Super::PossessedBy(_NewController); }
 
 void AAB_Pawn::PlaneMove_Forward(float _Value)
 {
@@ -99,7 +88,7 @@ void AAB_Pawn::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	const float currentRollAngle = GetActorRotation().Roll;
-	const float targetSpeedRoll = -currentRollAngle * RateMultiplierRoll; // RateMultiplierRoll은 설정에 따라 조절 가능한 보간 속도입니다.
+	const float targetSpeedRoll = -currentRollAngle * RateMultiplierRoll; // RateMultiplierRoll은 설정에 따라 조절 가능한 보간 속도.
 	CurrentSpeed_Roll = FMath::FInterpTo(CurrentSpeed_Roll, targetSpeedRoll, _DeltaTime, 2.f);
 
 	FRotator DeltaRotation(0,0,0);
@@ -125,31 +114,38 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this, &AAB_Pawn::PushSoundCube);
 	_pPlayerInputComponent->BindAction(TEXT("MusicStart"), EInputEvent::IE_Pressed, this, &AAB_Pawn::MusicStart);
 }
-
 void AAB_Pawn::PrePushSoundCube()
 {
-	/*
 	bIsEKeyDown = true;
-	
+    
 	Hit_pressed = SweepInRange();
 	if (!Hit_pressed.IsEmpty())
 	{
-		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
+		FHitResult ClosestHitResult;
+		float MinDistance = FLT_MAX;
+
+		for (const auto& hitResult : Hit_pressed)
+		{
+			float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
+			if (Distance < MinDistance)
+			{
+				MinDistance = Distance;
+				ClosestHitResult = hitResult;
+			}
+		}
+
+		pAB_SoundCube = Cast<AAB_SoundCube_2>(ClosestHitResult.GetActor());
 		AB2CHECK(nullptr != pAB_SoundCube);
 
 		if (pAB_SoundCube)
 		{
-			for (auto& hitResult : Hit_pressed)
+			if (IsGrounded(ClosestHitResult.GetComponent()))
 			{
-				if (IsGrounded(hitResult.GetComponent()))
-				{
-					hitResult.GetComponent()->SetVisibility(true);
-					hitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-				}
+				ClosestHitResult.GetComponent()->SetVisibility(true);
+				ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
 			}
 		}
 	}
-	*/
 }
 
 void AAB_Pawn::PushSoundCube()
@@ -159,18 +155,28 @@ void AAB_Pawn::PushSoundCube()
 	Hit_released = SweepInRange();
 	if (!Hit_released.IsEmpty())
 	{
-		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_released.GetData()->GetActor());
+		FHitResult ClosestHitResult;
+		float MinDistance = FLT_MAX;
+
+		for (const auto& hitResult : Hit_released)
+		{
+			float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
+			if (Distance < MinDistance)
+			{
+				MinDistance = Distance;
+				ClosestHitResult = hitResult;
+			}
+		}
+
+		pAB_SoundCube = Cast<AAB_SoundCube_2>(ClosestHitResult.GetActor());
 		AB2CHECK(nullptr != pAB_SoundCube);
 
 		if (pAB_SoundCube)
 		{
-			for (auto& hitResult : Hit_released)
+			if (IsGrounded(ClosestHitResult.GetComponent()))
 			{
-				if (IsGrounded(hitResult.GetComponent()))
-				{
-					hitResult.GetComponent()->SetVisibility(true);
-					hitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-				}
+				ClosestHitResult.GetComponent()->SetVisibility(true);
+				ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
 			}
 		}
 	}
