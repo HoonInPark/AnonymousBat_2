@@ -138,13 +138,12 @@ void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 			}
 		}
 
-		_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
-		pAB_SoundCube = _SoundCube;
+		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
 		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
 			ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
-			IAB_Pawn_To_AnimInst_Interface::PrePushSoundCube(_SoundCube);
+			IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAB_SoundCube, _SoundCube);
 		}
 	}
 }
@@ -168,13 +167,12 @@ void AAB_Pawn::PushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 			}
 		}
 
-		_SoundCube = Cast<AAB_SoundCube_2>(Hit_released.GetData()->GetActor());
-		pAB_SoundCube = _SoundCube;
+		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_released.GetData()->GetActor());
 		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
 			ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-			IAB_Pawn_To_AnimInst_Interface::PrePushSoundCube(_SoundCube);
+			IAB_Pawn_To_AnimInst_Interface::Execute_PushSoundCube(pAB_SoundCube, _SoundCube);
 		}
 	}
 }
@@ -191,7 +189,7 @@ TArray<FHitResult> AAB_Pawn::SweepInRange()
 	const FCollisionQueryParams TraceParams(FName(TEXT("")), true, GetOwner());
 	GetWorld()->SweepMultiByChannel(Hit_released, SweepStartPt, SweepEndPt, FQuat::Identity, ECC_Visibility,
 	                                FCollisionShape::MakeSphere(0.5f), TraceParams);
-	
+
 	return Hit_released;
 }
 
