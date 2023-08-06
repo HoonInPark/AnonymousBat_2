@@ -139,6 +139,7 @@ void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 		}
 
 		_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
+		pAB_SoundCube = _SoundCube;
 		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
@@ -168,6 +169,7 @@ void AAB_Pawn::PushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 		}
 
 		_SoundCube = Cast<AAB_SoundCube_2>(Hit_released.GetData()->GetActor());
+		pAB_SoundCube = _SoundCube;
 		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
