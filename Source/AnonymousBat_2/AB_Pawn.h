@@ -8,6 +8,8 @@
 #include "AB_Pawn_To_AnimInst_Interface.h"
 #include "AB_Pawn.generated.h"
 
+class AAB_SoundCube_2;
+
 UCLASS()
 class ANONYMOUSBAT_2_API AAB_Pawn : public APawn, public IAB_Pawn_To_AnimInst_Interface
 {
@@ -73,8 +75,8 @@ private:
 	void CallPrePushSoundCube_Implementation();
 	void CallPushSoundCube_Implementation();
 	
-	virtual AAB_SoundCube_2* PrePushSoundCube_Implementation() override;
-	virtual AAB_SoundCube_2* PushSoundCube_Implementation() override;
+	virtual void PrePushSoundCube_Implementation(AAB_SoundCube_2* SoundCube) override;
+	virtual void PushSoundCube_Implementation(AAB_SoundCube_2* SoundCube) override;
 
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);

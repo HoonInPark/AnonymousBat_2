@@ -21,8 +21,8 @@ public:
 
 	UAB_RobotArms_AnimInstance();
 	virtual void NativeUpdateAnimation(float _DeltaSeconds) override;
-	virtual AAB_SoundCube_2* PrePushSoundCube_Implementation() override;
-	virtual AAB_SoundCube_2* PushSoundCube_Implementation() override;
+	virtual void PrePushSoundCube_Implementation(AAB_SoundCube_2* SoundCube) override;
+	virtual void PushSoundCube_Implementation(AAB_SoundCube_2* SoundCube) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Pawn, meta=(AllowPrivateAccess=true))

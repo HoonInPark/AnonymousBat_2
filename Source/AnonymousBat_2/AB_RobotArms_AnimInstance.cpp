@@ -19,24 +19,16 @@ void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
 	// SoundCubeTransform = PushSoundCube_Implementation()->GetActorTransform();
 }
 
-AAB_SoundCube_2* UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation()
+void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(AAB_SoundCube_2* SoundCube)
 {
 	if (OwningPawn)
 	{
-		AB2LOG(Warning, TEXT("%s"), *OwningPawn->PrePushSoundCube()->GetName())
-		return OwningPawn->PrePushSoundCube();
 	}
-
-	return nullptr;
 }
 
-AAB_SoundCube_2* UAB_RobotArms_AnimInstance::PushSoundCube_Implementation()
+void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(AAB_SoundCube_2* SoundCube)
 {
 	if (OwningPawn)
 	{
-		AB2LOG(Warning, TEXT("%s"), *OwningPawn->PushSoundCube()->GetName())
-		return OwningPawn->PrePushSoundCube();
 	}
-
-	return nullptr;
 }
