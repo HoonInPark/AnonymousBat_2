@@ -119,7 +119,7 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 void AAB_Pawn::CallPrePushSoundCube_Implementation() { PrePushSoundCube_Implementation(nullptr); }
 void AAB_Pawn::CallPushSoundCube_Implementation() { PushSoundCube_Implementation(nullptr); }
 
-void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* SoundCube)
+void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 {
 	bIsEKeyDown = true;
 
@@ -139,17 +139,17 @@ void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* SoundCube)
 			}
 		}
 
-		AAB_SoundCube_2* SoundCube = Cast<AAB_SoundCube_2>(ClosestHitResult.GetActor());
-		if (SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
+		_SoundCube = Cast<AAB_SoundCube_2>(ClosestHitResult.GetActor());
+		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
 			ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
-			IAB_Pawn_To_AnimInst_Interface::PrePushSoundCube(SoundCube);
+			IAB_Pawn_To_AnimInst_Interface::PrePushSoundCube(_SoundCube);
 		}
 	}
 }
 
-void AAB_Pawn::PushSoundCube_Implementation(AAB_SoundCube_2* SoundCube)
+void AAB_Pawn::PushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 {
 	bIsEKeyDown = false;
 
@@ -169,12 +169,12 @@ void AAB_Pawn::PushSoundCube_Implementation(AAB_SoundCube_2* SoundCube)
 			}
 		}
 
-		AAB_SoundCube_2* SoundCube = Cast<AAB_SoundCube_2>(ClosestHitResult.GetActor());
-		if (SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
+		_SoundCube = Cast<AAB_SoundCube_2>(ClosestHitResult.GetActor());
+		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
 			ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-			IAB_Pawn_To_AnimInst_Interface::PushSoundCube(SoundCube);
+			IAB_Pawn_To_AnimInst_Interface::PrePushSoundCube(_SoundCube);
 		}
 	}
 }

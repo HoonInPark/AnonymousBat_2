@@ -40,7 +40,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
 	TArray<UStaticMesh*> pCubeMeshes;
-	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube)
 	float CubeSize;
 	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
 	int32 NumCubes;

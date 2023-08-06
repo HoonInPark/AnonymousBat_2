@@ -71,7 +71,7 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 
 					pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
 					// pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
-					pCubeComponent->SetVisibility(false);
+					pCubeComponent->SetVisibility(true);
 				}
 			}
 		}
