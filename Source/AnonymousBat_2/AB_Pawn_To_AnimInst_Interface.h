@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "AB_Pawn_To_AnimInst_Interface.generated.h"
 
+class AAB_SoundCube_2;
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UAB_Pawn_To_AnimInst_Interface : public UInterface

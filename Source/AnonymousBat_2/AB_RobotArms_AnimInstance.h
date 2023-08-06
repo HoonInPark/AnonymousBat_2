@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "AB_Pawn_To_AnimInst_Interface.h"
 #include "AnonymousBat_2.h"
+#include "AB_Pawn_To_AnimInst_Interface.h"
 #include "Animation/AnimInstance.h"
 #include "AB_RobotArms_AnimInstance.generated.h"
 
@@ -17,9 +17,7 @@ class ANONYMOUSBAT_2_API UAB_RobotArms_AnimInstance : public UAnimInstance, publ
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pawn")
-	class APawn* OwningPawn;
-	UPROPERTY()
-	AAB_Pawn* pAB_Pawn;
+	class AAB_Pawn* OwningPawn;
 
 	UAB_RobotArms_AnimInstance();
 	virtual void NativeUpdateAnimation(float _DeltaSeconds) override;
