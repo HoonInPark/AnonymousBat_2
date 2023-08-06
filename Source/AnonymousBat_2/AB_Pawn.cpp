@@ -110,14 +110,14 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 	_pPlayerInputComponent->BindAxis(TEXT("Turn"), this, &AAB_Pawn::ProcessYaw);
 
 	_pPlayerInputComponent->BindAction(TEXT("PreHoldCube"), EInputEvent::IE_Pressed, this,
-	                                   &AAB_Pawn::CallPrePushSoundCube_Implementation);
+	                                   &AAB_Pawn::CallPrePushSoundCube);
 	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this,
-	                                   &AAB_Pawn::CallPushSoundCube_Implementation);
+	                                   &AAB_Pawn::CallPushSoundCube);
 	_pPlayerInputComponent->BindAction(TEXT("MusicStart"), EInputEvent::IE_Pressed, this, &AAB_Pawn::MusicStart);
 }
 
-void AAB_Pawn::CallPrePushSoundCube_Implementation() { PrePushSoundCube_Implementation(nullptr); }
-void AAB_Pawn::CallPushSoundCube_Implementation() { PushSoundCube_Implementation(nullptr); }
+void AAB_Pawn::CallPrePushSoundCube() { PrePushSoundCube_Implementation(nullptr); }
+void AAB_Pawn::CallPushSoundCube() { PushSoundCube_Implementation(nullptr); }
 
 void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 {

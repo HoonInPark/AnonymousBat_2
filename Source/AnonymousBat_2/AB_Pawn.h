@@ -73,8 +73,8 @@ private:
 	TArray<FString> CubeNames_Hit;
 	TArray<FString> CubeNames_Actor;
 
-	void CallPrePushSoundCube_Implementation();
-	void CallPushSoundCube_Implementation();
+	void CallPrePushSoundCube();
+	void CallPushSoundCube();
 	
 	virtual void PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube) override;
 	virtual void PushSoundCube_Implementation(AAB_SoundCube_2* SoundCube) override;
