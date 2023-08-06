@@ -68,7 +68,8 @@ private:
 	FVector SweepEndPt;
 	TArray<FHitResult> Hit_pressed;
 	TArray<FHitResult> Hit_released;
-
+	FHitResult ClosestHitResult;
+	
 	TArray<FString> CubeNames_Hit;
 	TArray<FString> CubeNames_Actor;
 
@@ -76,7 +77,7 @@ private:
 	void CallPushSoundCube_Implementation();
 	
 	virtual void PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube) override;
-	virtual void PushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube) override;
+	virtual void PushSoundCube_Implementation(AAB_SoundCube_2* SoundCube) override;
 
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);

@@ -126,12 +126,11 @@ void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 	Hit_pressed = SweepInRange();
 	if (!Hit_pressed.IsEmpty())
 	{
-		FHitResult ClosestHitResult;
 		float MinDistance = FLT_MAX;
 
 		for (const auto& hitResult : Hit_pressed)
 		{
-			float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
+			const float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
 			if (Distance < MinDistance)
 			{
 				MinDistance = Distance;
@@ -139,7 +138,7 @@ void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 			}
 		}
 
-		_SoundCube = Cast<AAB_SoundCube_2>(ClosestHitResult.GetActor());
+		_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
 		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
@@ -156,12 +155,11 @@ void AAB_Pawn::PushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 	Hit_released = SweepInRange();
 	if (!Hit_released.IsEmpty())
 	{
-		FHitResult ClosestHitResult;
 		float MinDistance = FLT_MAX;
 
 		for (const auto& hitResult : Hit_released)
 		{
-			float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
+			const float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
 			if (Distance < MinDistance)
 			{
 				MinDistance = Distance;
@@ -169,7 +167,7 @@ void AAB_Pawn::PushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 			}
 		}
 
-		_SoundCube = Cast<AAB_SoundCube_2>(ClosestHitResult.GetActor());
+		_SoundCube = Cast<AAB_SoundCube_2>(Hit_released.GetData()->GetActor());
 		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
