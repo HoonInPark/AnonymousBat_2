@@ -2,7 +2,10 @@
 
 
 #include "AB_Pawn.h"
+
+#include "AB_RobotArms_AnimInstance.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/SkeletalMeshComponent.h"
 
 // Sets default values
 AAB_Pawn::AAB_Pawn()
@@ -12,29 +15,52 @@ AAB_Pawn::AAB_Pawn()
 
 	bIsEKeyDown = false;
 
-	pMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
+	pBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
+	pSkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SKELETAL"));
 	pCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 
-	RootComponent = pMesh;
+	RootComponent = pBodyMesh;
 
-	pCamera->SetupAttachment(pMesh);
+	pCamera->SetupAttachment(pBodyMesh);
+	pSkeletalMesh->SetupAttachment(pBodyMesh);
 
-	pMesh->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, -90.f, 0.f));
+	pBodyMesh->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, -90.f, 0.f));
+	pSkeletalMesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 	pCamera->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 
 	// static ConstructorHelpers::FObjectFinder<UMeshComponent> AB_SUBMARINE(TEXT(""));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> AB_SUBMARINE(TEXT(
 		"/Script/Engine.StaticMesh'/Game/_03_BuildingSoundBlock/Meshes/AB_SM_Shape_SoundBlock.AB_SM_Shape_SoundBlock'"));
-	if (AB_SUBMARINE.Succeeded())
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS(TEXT(
+		"/Game/_04_RobotArms/Rigs/RobotArm_v04.RobotArm_v04"));
+	if (AB_SUBMARINE.Succeeded() && AB_ROBOTARMS.Succeeded())
 	{
-		pMesh->SetStaticMesh(AB_SUBMARINE.Object);
-		pMesh->SetCollisionProfileName(TEXT("ABPawn"));
+		pBodyMesh->SetStaticMesh(AB_SUBMARINE.Object);
+		pBodyMesh->SetCollisionProfileName(TEXT("ABPawn"));
+
+		pSkeletalMesh->SetSkeletalMesh(AB_ROBOTARMS.Object);
+		pSkeletalMesh->SetCollisionProfileName(TEXT("ABPawn"));
 	}
 }
 
 // Called when the game starts or when spawned
-void AAB_Pawn::BeginPlay() { Super::BeginPlay(); }
-void AAB_Pawn::PostInitializeComponents() { Super::PostInitializeComponents(); }
+void AAB_Pawn::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AAB_Pawn::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh->GetAnimInstance());
+	if (!pAnimInstance)
+	{
+		pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh, UAB_RobotArms_AnimInstance::StaticClass());
+		pSkeletalMesh->SetAnimInstanceClass(pAnimInstance->GetClass());
+	}
+}
+
 void AAB_Pawn::PossessedBy(AController* _NewController) { Super::PossessedBy(_NewController); }
 
 void AAB_Pawn::PlaneMove_Forward(float _Value)
@@ -119,7 +145,7 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 void AAB_Pawn::CallPrePushSoundCube() { PrePushSoundCube_Implementation(nullptr); }
 void AAB_Pawn::CallPushSoundCube() { PushSoundCube_Implementation(nullptr); }
 
-void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
+void AAB_Pawn::PrePushSoundCube_Implementation(UPrimitiveComponent* pComponent)
 {
 	bIsEKeyDown = true;
 
@@ -139,16 +165,17 @@ void AAB_Pawn::PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 		}
 
 		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
-		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
+		if (pAB_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
 			ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
-			IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAB_SoundCube, _SoundCube);
+			// if (pAnimInstance->GetClass()->ImplementsInterface(UInterface_Pre))
+			IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, ClosestHitResult.GetComponent());
 		}
 	}
 }
 
-void AAB_Pawn::PushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
+void AAB_Pawn::PushSoundCube_Implementation(UPrimitiveComponent* pComponent)
 {
 	bIsEKeyDown = false;
 
@@ -168,11 +195,11 @@ void AAB_Pawn::PushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube)
 		}
 
 		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_released.GetData()->GetActor());
-		if (_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
+		if (pAB_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
 		{
 			ClosestHitResult.GetComponent()->SetVisibility(true);
 			ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-			IAB_Pawn_To_AnimInst_Interface::Execute_PushSoundCube(pAB_SoundCube, _SoundCube);
+			IAB_Pawn_To_AnimInst_Interface::Execute_PushSoundCube(pAnimInstance, ClosestHitResult.GetComponent());
 		}
 	}
 }

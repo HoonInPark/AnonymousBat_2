@@ -15,18 +15,17 @@ void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
 
 	OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner());
 	
-	// 스윕을 해서 컴포넌트가 SetVisibility(true)가 되려는 컴포넌트의 FVevtor값을 가져와서 SoundCubeTransform에 넣는다.
-	// SoundCubeTransform = PushSoundCube_Implementation()->GetActorTransform();
 }
 
-void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(AAB_SoundCube_2* SoundCube)
+void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(UPrimitiveComponent* pComponent)
 {
 	if (OwningPawn)
 	{
+		AB2LOG(Warning, TEXT("%s"), *pComponent->GetName());
 	}
 }
 
-void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(AAB_SoundCube_2* SoundCube)
+void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(UPrimitiveComponent* pComponent)
 {
 	if (OwningPawn)
 	{

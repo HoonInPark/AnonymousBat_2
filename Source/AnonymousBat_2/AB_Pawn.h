@@ -51,12 +51,14 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere, Category=Collision)
-	UCapsuleComponent* pCapsule;
-	UPROPERTY(EditAnywhere, Category=Collision)
-	UStaticMeshComponent* pMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Collision)
+	UStaticMeshComponent* pBodyMesh;
 	UPROPERTY(EditAnywhere, Category=Collision)
 	UCameraComponent* pCamera;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Mesh)
+	USkeletalMeshComponent* pSkeletalMesh;
+	UPROPERTY(EditAnywhere, Category=Mesh)
+	UAnimInstance* pAnimInstance;
 
 private:
 	bool bIsEKeyDown;
@@ -76,8 +78,8 @@ private:
 	void CallPrePushSoundCube();
 	void CallPushSoundCube();
 	
-	virtual void PrePushSoundCube_Implementation(AAB_SoundCube_2* _SoundCube) override;
-	virtual void PushSoundCube_Implementation(AAB_SoundCube_2* SoundCube) override;
+	virtual void PrePushSoundCube_Implementation(UPrimitiveComponent* pComponent) override;
+	virtual void PushSoundCube_Implementation(UPrimitiveComponent* pComponent) override;
 
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
