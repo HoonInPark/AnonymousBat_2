@@ -78,8 +78,8 @@ private:
 	void CallPrePushSoundCube();
 	void CallPushSoundCube();
 	
-	virtual void PrePushSoundCube_Implementation(UPrimitiveComponent* pComponent) override;
-	virtual void PushSoundCube_Implementation(UPrimitiveComponent* pComponent) override;
+	virtual void PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent) override;
+	virtual void PushSoundCube_Implementation(UPrimitiveComponent* _pComponent) override;
 
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);

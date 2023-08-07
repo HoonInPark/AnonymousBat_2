@@ -43,12 +43,6 @@ AAB_Pawn::AAB_Pawn()
 	}
 }
 
-// Called when the game starts or when spawned
-void AAB_Pawn::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void AAB_Pawn::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -61,9 +55,12 @@ void AAB_Pawn::PostInitializeComponents()
 		pSkeletalMesh->SetAnimInstanceClass(pAnimInstance->GetClass());
 	}
 	else
-	{
 		pAnimInstance = Cast<UAB_RobotArms_AnimInstance>(CurrentAnimInstance);
-	}
+}
+// Called when the game starts or when spawned
+void AAB_Pawn::BeginPlay()
+{
+	Super::BeginPlay();
 }
 
 void AAB_Pawn::PossessedBy(AController* _NewController) { Super::PossessedBy(_NewController); }
@@ -150,7 +147,7 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 void AAB_Pawn::CallPrePushSoundCube() { PrePushSoundCube_Implementation(nullptr); }
 void AAB_Pawn::CallPushSoundCube() { PushSoundCube_Implementation(nullptr); }
 
-void AAB_Pawn::PrePushSoundCube_Implementation(UPrimitiveComponent* pComponent)
+void AAB_Pawn::PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
 {
 	bIsEKeyDown = true;
 
@@ -180,7 +177,7 @@ void AAB_Pawn::PrePushSoundCube_Implementation(UPrimitiveComponent* pComponent)
 	}
 }
 
-void AAB_Pawn::PushSoundCube_Implementation(UPrimitiveComponent* pComponent)
+void AAB_Pawn::PushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
 {
 	bIsEKeyDown = false;
 

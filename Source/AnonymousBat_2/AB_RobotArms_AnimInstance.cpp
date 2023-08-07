@@ -13,21 +13,21 @@ void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(_DeltaSeconds);
 
-	OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner());
+	auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner());
 	
 }
 
-void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(UPrimitiveComponent* pComponent)
+void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
 {
-	if (OwningPawn)
+	if (auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner()))
 	{
-		AB2LOG(Warning, TEXT("%s"), *pComponent->GetName());
+		AB2LOG(Warning, TEXT("%s"), *_pComponent->GetName());
 	}
 }
 
-void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(UPrimitiveComponent* pComponent)
+void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
 {
-	if (OwningPawn)
+	if (auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner()))
 	{
 	}
 }
