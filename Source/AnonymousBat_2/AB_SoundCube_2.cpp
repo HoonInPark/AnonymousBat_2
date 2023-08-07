@@ -71,7 +71,7 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 
 					pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
 					// pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
-					pCubeComponent->SetVisibility(true);
+					pCubeComponent->SetVisibility(false);
 				}
 			}
 		}
@@ -95,21 +95,3 @@ void AAB_SoundCube_2::Tick(float DeltaTime)
 
 }
 
-void AAB_SoundCube_2::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-									 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-									 const FHitResult& SweepResult)
-{
-	if (OtherActor && OtherActor != this && OtherComp && OtherComp->IsA<UPrimitiveComponent>())
-	{
-		
-	}
-}
-
-void AAB_SoundCube_2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-								   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if (OtherActor && OtherActor != this && OtherComp && OtherComp->IsA<UPrimitiveComponent>())
-	{
-		
-	}
-}

@@ -24,4 +24,6 @@ public:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Pawn, meta=(AllowPrivateAccess=true))
 	FVector SoundCubeTransform;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Pawn, meta=(AllowPrivateAccess=true))
+	bool bIsGonnaPush;
 };

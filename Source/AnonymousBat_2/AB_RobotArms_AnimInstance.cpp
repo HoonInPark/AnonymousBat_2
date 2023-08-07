@@ -6,7 +6,7 @@
 
 UAB_RobotArms_AnimInstance::UAB_RobotArms_AnimInstance()
 {
-	SoundCubeTransform = FVector(0.f, 0.f, 50.f);
+	bIsGonnaPush = false;
 }
 
 void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
@@ -14,14 +14,20 @@ void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
 	Super::NativeUpdateAnimation(_DeltaSeconds);
 
 	auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner());
-	
+	if (SoundCubeTransform.X != NULL)
+	{
+		if(FVector::Dist(OwningPawn->GetActorLocation(), SoundCubeTransform) < 250.f)
+			bIsGonnaPush = true;
+		else
+			bIsGonnaPush = false;
+	}
 }
 
 void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
 {
 	if (auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner()))
 	{
-		AB2LOG(Warning, TEXT("%s"), *_pComponent->GetName());
+		
 	}
 }
 
@@ -29,5 +35,6 @@ void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(UPrimitiveComponen
 {
 	if (auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner()))
 	{
+		SoundCubeTransform = _pComponent->GetComponentLocation();
 	}
 }

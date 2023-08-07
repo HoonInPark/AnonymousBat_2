@@ -211,7 +211,7 @@ TArray<FHitResult> AAB_Pawn::SweepInRange()
 	Controller->GetPlayerViewPoint(OUT PlayerViewPtLoc, OUT PlayerViewPtRot);
 
 	SweepStartPt = PlayerViewPtLoc + 100.f * PlayerViewPtRot.Vector();
-	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 500.f;
+	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 250.f;
 
 	DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
 
