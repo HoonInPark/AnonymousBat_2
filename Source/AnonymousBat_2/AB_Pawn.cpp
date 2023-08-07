@@ -53,11 +53,16 @@ void AAB_Pawn::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh->GetAnimInstance());
-	if (!pAnimInstance)
+	UAnimInstance* CurrentAnimInstance = pSkeletalMesh->GetAnimInstance();
+    
+	if (!CurrentAnimInstance)
 	{
 		pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh, UAB_RobotArms_AnimInstance::StaticClass());
 		pSkeletalMesh->SetAnimInstanceClass(pAnimInstance->GetClass());
+	}
+	else
+	{
+		pAnimInstance = Cast<UAB_RobotArms_AnimInstance>(CurrentAnimInstance);
 	}
 }
 
