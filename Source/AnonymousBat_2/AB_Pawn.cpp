@@ -24,13 +24,13 @@ AAB_Pawn::AAB_Pawn()
 	pCamera->SetupAttachment(pBodyMesh);
 	pSkeletalMesh->SetupAttachment(pBodyMesh);
 
-	pBodyMesh->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, -90.f, 0.f));
-	pSkeletalMesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
-	pCamera->SetRelativeLocationAndRotation(FVector(50.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
+	pBodyMesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
+	pSkeletalMesh->SetRelativeLocationAndRotation(FVector(50.f, 75.f, -100.f), FRotator(0.f, -90.f, 0.f));
+	pCamera->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 
 	// static ConstructorHelpers::FObjectFinder<UMeshComponent> AB_SUBMARINE(TEXT(""));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> AB_SUBMARINE(TEXT(
-		"/Script/Engine.StaticMesh'/Game/_03_BuildingSoundBlock/Meshes/AB_SM_Shape_SoundBlock.AB_SM_Shape_SoundBlock'"));
+		"/Script/Engine.StaticMesh'/Game/_04_RobotArms/Meshes/submarine_complete3.submarine_complete3'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS(TEXT(
 		"/Game/_04_RobotArms/Rigs/RobotArm_v04.RobotArm_v04"));
 	if (AB_SUBMARINE.Succeeded() && AB_ROBOTARMS.Succeeded())
@@ -40,6 +40,7 @@ AAB_Pawn::AAB_Pawn()
 
 		pSkeletalMesh->SetSkeletalMesh(AB_ROBOTARMS.Object);
 		pSkeletalMesh->SetCollisionProfileName(TEXT("ABPawn"));
+		pSkeletalMesh->SetWorldScale3D(FVector(4.f, 4.f, 4.f));
 	}
 }
 
@@ -57,6 +58,7 @@ void AAB_Pawn::PostInitializeComponents()
 	else
 		pAnimInstance = Cast<UAB_RobotArms_AnimInstance>(CurrentAnimInstance);
 }
+
 // Called when the game starts or when spawned
 void AAB_Pawn::BeginPlay()
 {

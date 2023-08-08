@@ -51,13 +51,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Collision)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn)
 	UStaticMeshComponent* pBodyMesh;
-	UPROPERTY(EditAnywhere, Category=Collision)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn)
 	UCameraComponent* pCamera;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Mesh)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn)
 	USkeletalMeshComponent* pSkeletalMesh;
-	UPROPERTY(EditAnywhere, Category=Mesh)
+	UPROPERTY(EditAnywhere, Category=Pawn)
 	UAnimInstance* pAnimInstance;
 
 private:
