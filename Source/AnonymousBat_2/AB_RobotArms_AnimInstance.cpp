@@ -23,7 +23,7 @@ void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(UPrimitiveCompo
 		if(FVector::Dist(OwningPawn->GetActorLocation(), SoundCubeTransform) < 250.f)
 			bIsGonnaPush = true;
 		else
-			bIsGonnaPush = false;
+			bIsGonnaPush = false;	
 		
 	}
 }
