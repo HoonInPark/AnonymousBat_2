@@ -64,7 +64,7 @@ public:
 	UAnimInstance* pAnimInstance;
 
 private:
-	bool bIsEKeyDown;
+	bool bIsMouseButtonDown;
 	FVector PlayerViewPtLoc;
 	FRotator PlayerViewPtRot;
 	float Reach;
@@ -93,8 +93,8 @@ public:
 	AAB_SoundCube_2* pAB_SoundCube;
 	UPROPERTY()
 	UMaterialInstanceDynamic* SoundCubeMatInstDynamic;
-	// UPROPERTY(EditAnywhere)
-	// class UStaticMeshComponent* DynamicMaterialMesh;
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* DynamicMaterialMesh;
 
 private:
 	UPROPERTY()

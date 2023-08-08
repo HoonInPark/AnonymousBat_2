@@ -12,7 +12,7 @@ AAB_Pawn::AAB_Pawn()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	bIsEKeyDown = false;
+	bIsMouseButtonDown = false;
 
 	pBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	pSkeletalMesh_R = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SKELETAL_R"));
@@ -30,14 +30,13 @@ AAB_Pawn::AAB_Pawn()
 	pSkeletalMesh_L->SetRelativeLocationAndRotation(FVector(0.f, -50.f, -35.f), FRotator(0.f, -90.f, 0.f));
 	pCamera->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 
-	// static ConstructorHelpers::FObjectFinder<UMeshComponent> AB_SUBMARINE(TEXT(""));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> AB_SUBMARINE(TEXT(
 		"/Script/Engine.StaticMesh'/Game/_04_RobotArms/Meshes/submarine_complete3.submarine_complete3'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS_R(TEXT(
 		"/Script/Engine.SkeletalMesh'/Game/_04_RobotArms/Rigs/RobotArm_v07_R.RobotArm_v07_R'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS_L(TEXT(
 		"/Script/Engine.SkeletalMesh'/Game/_04_RobotArms/Rigs/RobotArm_v07_L.RobotArm_v07_L'"));
-	
+
 	if (AB_SUBMARINE.Succeeded() && AB_ROBOTARMS_R.Succeeded() && AB_ROBOTARMS_L.Succeeded())
 	{
 		pBodyMesh->SetStaticMesh(AB_SUBMARINE.Object);
@@ -58,7 +57,8 @@ void AAB_Pawn::PostInitializeComponents()
 
 	if (!CurrentAnimInstance)
 	{
-		pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh_R, UAB_RobotArms_AnimInstance::StaticClass());
+		pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh_R,
+		                                                      UAB_RobotArms_AnimInstance::StaticClass());
 		pSkeletalMesh_R->SetAnimInstanceClass(pAnimInstance->GetClass());
 	}
 	else
@@ -66,11 +66,7 @@ void AAB_Pawn::PostInitializeComponents()
 }
 
 // Called when the game starts or when spawned
-void AAB_Pawn::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
+void AAB_Pawn::BeginPlay() { Super::BeginPlay(); }
 void AAB_Pawn::PossessedBy(AController* _NewController) { Super::PossessedBy(_NewController); }
 
 void AAB_Pawn::PlaneMove_Forward(float _Value)
@@ -132,6 +128,33 @@ void AAB_Pawn::Tick(float _DeltaTime)
 	DeltaRotation.Roll = CurrentSpeed_Roll * _DeltaTime;
 
 	AddActorLocalRotation(DeltaRotation, true);
+
+	if (bIsMouseButtonDown)
+	{
+		Hit_pressed = SweepInRange();
+
+		if (!Hit_pressed.IsEmpty())
+		{
+			float MinDistance = FLT_MAX;
+
+			for (const auto& hitResult : Hit_pressed)
+			{
+				const float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
+				if (Distance < MinDistance)
+				{
+					MinDistance = Distance;
+					ClosestHitResult = hitResult;
+				}
+			}
+
+			pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
+			if (pAB_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
+			{
+				ClosestHitResult.GetComponent()->SetVisibility(true);
+				ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -156,39 +179,11 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 void AAB_Pawn::CallPrePushSoundCube() { PrePushSoundCube_Implementation(nullptr); }
 void AAB_Pawn::CallPushSoundCube() { PushSoundCube_Implementation(nullptr); }
 
-void AAB_Pawn::PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
-{
-	bIsEKeyDown = true;
-
-	Hit_pressed = SweepInRange();
-	if (!Hit_pressed.IsEmpty())
-	{
-		float MinDistance = FLT_MAX;
-
-		for (const auto& hitResult : Hit_pressed)
-		{
-			const float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
-			if (Distance < MinDistance)
-			{
-				MinDistance = Distance;
-				ClosestHitResult = hitResult;
-			}
-		}
-
-		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
-		if (pAB_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
-		{
-			ClosestHitResult.GetComponent()->SetVisibility(true);
-			ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
-			// if (pAnimInstance->GetClass()->ImplementsInterface(UInterface_Pre))
-			IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, ClosestHitResult.GetComponent());
-		}
-	}
-}
+void AAB_Pawn::PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent) { bIsMouseButtonDown = true; }
 
 void AAB_Pawn::PushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
 {
-	bIsEKeyDown = false;
+	bIsMouseButtonDown = false;
 
 	Hit_released = SweepInRange();
 	if (!Hit_released.IsEmpty())
@@ -261,13 +256,13 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 
 void AAB_Pawn::MusicStart_Implementation()
 {
-	IAB_Pawn_To_SoundCube_Interface::Execute_MusicStart(UGameplayStatics::GetActorOfClass(GetWorld(), AAB_SoundCube_2::StaticClass()));
+	IAB_Pawn_To_SoundCube_Interface::Execute_MusicStart(
+		UGameplayStatics::GetActorOfClass(GetWorld(), AAB_SoundCube_2::StaticClass()));
 }
 
 ///
 ///	<구현해야 하는 기능들>
 ///이미 큐브가 놓여져 있으면 거기에 스윕이 닿았을때 사라지도록. 큐브를 집는 것이다.
-///큐브가 없는데 큐브를 놓아야할 자리이거나 큐브가 있는 경우 스윕이 닿으면 (Visibility가 true인 상태에서)거기에 머티리얼의 색이 변하도록!
+///큐브가 없는데 큐브를 놓아야할 자리이거나 큐브가 있는 경우 스윕이 닿으면 (Visibility가 true인 상태에서)거기에 머티리얼의 색이 변하도록! -> 이거 일단 하고 있자.
 ///스페이스바를 누르면 모든 사운드큐브의 크기가 커지면서 각 큐브에 할당된 음악이 종합되어 하나의 선율이 되도록
-///테마를 선택하고 장면이 전환될 수 있도록.
 ///

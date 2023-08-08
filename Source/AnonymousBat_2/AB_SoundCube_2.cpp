@@ -69,7 +69,7 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 
 					pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
 					// pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
-					pCubeComponent->SetVisibility(true);
+					pCubeComponent->SetVisibility(false);
 				}
 			}
 		}
@@ -80,9 +80,7 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 
 // Called when the game starts or when spawned
 void AAB_SoundCube_2::BeginPlay() {	Super::BeginPlay(); }
-
 // Called every frame
 void AAB_SoundCube_2::Tick(float DeltaTime) { Super::Tick(DeltaTime); }
-
 void AAB_SoundCube_2::MusicStart_Implementation() {}
 
