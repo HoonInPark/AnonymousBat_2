@@ -57,7 +57,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	UCameraComponent* pCamera;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
-	USkeletalMeshComponent* pSkeletalMesh;
+	USkeletalMeshComponent* pSkeletalMesh_R;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
+	USkeletalMeshComponent* pSkeletalMesh_L;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	UAnimInstance* pAnimInstance;
 

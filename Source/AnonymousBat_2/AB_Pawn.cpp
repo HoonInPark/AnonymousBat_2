@@ -15,30 +15,38 @@ AAB_Pawn::AAB_Pawn()
 	bIsEKeyDown = false;
 
 	pBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
-	pSkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SKELETAL"));
+	pSkeletalMesh_R = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SKELETAL_R"));
+	pSkeletalMesh_L = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SKELETAL_L"));
 	pCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 
 	RootComponent = pBodyMesh;
 
 	pCamera->SetupAttachment(pBodyMesh);
-	pSkeletalMesh->SetupAttachment(pBodyMesh);
+	pSkeletalMesh_R->SetupAttachment(pBodyMesh);
+	pSkeletalMesh_L->SetupAttachment(pBodyMesh);
 
 	pBodyMesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
-	pSkeletalMesh->SetRelativeLocationAndRotation(FVector(50.f, 75.f, -100.f), FRotator(0.f, -90.f, 0.f));
+	pSkeletalMesh_R->SetRelativeLocationAndRotation(FVector(0.f, 50.f, -35.f), FRotator(0.f, -90.f, 0.f));
+	pSkeletalMesh_L->SetRelativeLocationAndRotation(FVector(0.f, -50.f, -35.f), FRotator(0.f, -90.f, 0.f));
 	pCamera->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 
 	// static ConstructorHelpers::FObjectFinder<UMeshComponent> AB_SUBMARINE(TEXT(""));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> AB_SUBMARINE(TEXT(
 		"/Script/Engine.StaticMesh'/Game/_04_RobotArms/Meshes/submarine_complete3.submarine_complete3'"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS(TEXT(
-		"/Game/_04_RobotArms/Rigs/RobotArm_v04.RobotArm_v04"));
-	if (AB_SUBMARINE.Succeeded() && AB_ROBOTARMS.Succeeded())
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS_R(TEXT(
+		"/Script/Engine.SkeletalMesh'/Game/_04_RobotArms/Rigs/RobotArm_v07_R.RobotArm_v07_R'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS_L(TEXT(
+		"/Script/Engine.SkeletalMesh'/Game/_04_RobotArms/Rigs/RobotArm_v07_L.RobotArm_v07_L'"));
+	
+	if (AB_SUBMARINE.Succeeded() && AB_ROBOTARMS_R.Succeeded() && AB_ROBOTARMS_L.Succeeded())
 	{
 		pBodyMesh->SetStaticMesh(AB_SUBMARINE.Object);
 		pBodyMesh->SetCollisionProfileName(TEXT("ABPawn"));
 
-		pSkeletalMesh->SetSkeletalMesh(AB_ROBOTARMS.Object);
-		pSkeletalMesh->SetWorldScale3D(FVector(4.f, 4.f, 4.f));
+		pSkeletalMesh_R->SetSkeletalMesh(AB_ROBOTARMS_R.Object);
+		pSkeletalMesh_R->SetWorldScale3D(FVector(4.f, 4.f, 4.f));
+		pSkeletalMesh_L->SetSkeletalMesh(AB_ROBOTARMS_L.Object);
+		pSkeletalMesh_L->SetWorldScale3D(FVector(4.f, 4.f, 4.f));
 	}
 }
 
@@ -46,12 +54,12 @@ void AAB_Pawn::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	UAnimInstance* CurrentAnimInstance = pSkeletalMesh->GetAnimInstance();
+	UAnimInstance* CurrentAnimInstance = pSkeletalMesh_R->GetAnimInstance();
 
 	if (!CurrentAnimInstance)
 	{
-		pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh, UAB_RobotArms_AnimInstance::StaticClass());
-		pSkeletalMesh->SetAnimInstanceClass(pAnimInstance->GetClass());
+		pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh_R, UAB_RobotArms_AnimInstance::StaticClass());
+		pSkeletalMesh_R->SetAnimInstanceClass(pAnimInstance->GetClass());
 	}
 	else
 		pAnimInstance = Cast<UAB_RobotArms_AnimInstance>(CurrentAnimInstance);
