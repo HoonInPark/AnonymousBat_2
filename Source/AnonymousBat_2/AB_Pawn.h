@@ -81,12 +81,10 @@ private:
 	
 	virtual void PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent) override;
 	virtual void PushSoundCube_Implementation(UPrimitiveComponent* _pComponent) override;
+	virtual void MusicStart_Implementation() override;
 
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
-	
-	void CallMusicStart();
-	virtual void MusicStart_Implementation() override;
 	
 public:
 	UPROPERTY()

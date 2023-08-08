@@ -47,7 +47,7 @@ void AAB_Pawn::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	UAnimInstance* CurrentAnimInstance = pSkeletalMesh->GetAnimInstance();
-    
+
 	if (!CurrentAnimInstance)
 	{
 		pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh, UAB_RobotArms_AnimInstance::StaticClass());
@@ -141,7 +141,8 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 	                                   &AAB_Pawn::CallPrePushSoundCube);
 	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this,
 	                                   &AAB_Pawn::CallPushSoundCube);
-	_pPlayerInputComponent->BindAction(TEXT("MusicStart"), EInputEvent::IE_Pressed, this, &AAB_Pawn::CallMusicStart);
+	_pPlayerInputComponent->BindAction(TEXT("MusicStart"), EInputEvent::IE_Pressed, this,
+	                                   &AAB_Pawn::MusicStart_Implementation);
 }
 
 void AAB_Pawn::CallPrePushSoundCube() { PrePushSoundCube_Implementation(nullptr); }
@@ -250,12 +251,9 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 	return true;
 }
 
-void AAB_Pawn::CallMusicStart()
-{
-}
-
 void AAB_Pawn::MusicStart_Implementation()
 {
+	IAB_Pawn_To_SoundCube_Interface::Execute_MusicStart(UGameplayStatics::GetActorOfClass(GetWorld(), AAB_SoundCube_2::StaticClass()));
 }
 
 ///
