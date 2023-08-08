@@ -5,8 +5,6 @@
 ///
 
 #include "AB_SoundCube_2.h"
-#include "AB_Pawn.h"
-#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AAB_SoundCube_2::AAB_SoundCube_2()
@@ -81,17 +79,8 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 }
 
 // Called when the game starts or when spawned
-void AAB_SoundCube_2::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// UpdateCubesScale(100.f);
-}
+void AAB_SoundCube_2::BeginPlay() {	Super::BeginPlay(); }
 
 // Called every frame
-void AAB_SoundCube_2::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
+void AAB_SoundCube_2::Tick(float DeltaTime) { Super::Tick(DeltaTime); }
 

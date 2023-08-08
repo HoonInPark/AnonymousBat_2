@@ -24,7 +24,6 @@ void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(UPrimitiveCompo
 			bIsGonnaPush = true;
 		else
 			bIsGonnaPush = false;	
-		
 	}
 }
 
