@@ -22,4 +22,6 @@ class ANONYMOUSBAT_2_API IAB_Pawn_To_SoundCube_Interface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface")
+	void MusicStart();
 };

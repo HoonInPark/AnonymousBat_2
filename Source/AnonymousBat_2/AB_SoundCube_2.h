@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "AB_Pawn_To_SoundCube_Interface.h"
 #include "AB_SoundCube_2.generated.h"
 
 
@@ -15,7 +16,7 @@
 /// </summary>
 
 UCLASS()
-class ANONYMOUSBAT_2_API AAB_SoundCube_2 : public AActor
+class ANONYMOUSBAT_2_API AAB_SoundCube_2 : public AActor, public IAB_Pawn_To_SoundCube_Interface
 {
 	GENERATED_BODY()
 	
@@ -44,4 +45,5 @@ public:
 
 	// void UpdateCubesScale(float _scaleMultipier); // _scaleMultipier는 1.xf와 같은 형식임!
 
+	virtual void MusicStart_Implementation() override;
 };

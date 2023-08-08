@@ -6,12 +6,13 @@
 #include "GameFramework/Pawn.h"
 #include "AB_SoundCube_2.h"
 #include "AB_Pawn_To_AnimInst_Interface.h"
+#include "AB_Pawn_To_SoundCube_Interface.h"
 #include "AB_Pawn.generated.h"
 
 class AAB_SoundCube_2;
 
 UCLASS()
-class ANONYMOUSBAT_2_API AAB_Pawn : public APawn, public IAB_Pawn_To_AnimInst_Interface
+class ANONYMOUSBAT_2_API AAB_Pawn : public APawn, public IAB_Pawn_To_AnimInst_Interface, public IAB_Pawn_To_SoundCube_Interface
 {
 	GENERATED_BODY()
 
@@ -83,8 +84,10 @@ private:
 
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
-	void MusicStart();
-
+	
+	void CallMusicStart();
+	virtual void MusicStart_Implementation() override;
+	
 public:
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
@@ -97,5 +100,3 @@ private:
 	UPROPERTY()
 	class AAB_PlayerController* AB_PlayerController;
 };
-
-

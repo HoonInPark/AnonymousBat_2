@@ -84,3 +84,8 @@ void AAB_SoundCube_2::BeginPlay() {	Super::BeginPlay(); }
 // Called every frame
 void AAB_SoundCube_2::Tick(float DeltaTime) { Super::Tick(DeltaTime); }
 
+void AAB_SoundCube_2::MusicStart_Implementation()
+{
+	
+}
+

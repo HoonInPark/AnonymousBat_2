@@ -2,7 +2,6 @@
 
 
 #include "AB_Pawn.h"
-
 #include "AB_RobotArms_AnimInstance.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -142,7 +141,7 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 	                                   &AAB_Pawn::CallPrePushSoundCube);
 	_pPlayerInputComponent->BindAction(TEXT("HoldCube"), EInputEvent::IE_Released, this,
 	                                   &AAB_Pawn::CallPushSoundCube);
-	_pPlayerInputComponent->BindAction(TEXT("MusicStart"), EInputEvent::IE_Pressed, this, &AAB_Pawn::MusicStart);
+	_pPlayerInputComponent->BindAction(TEXT("MusicStart"), EInputEvent::IE_Pressed, this, &AAB_Pawn::CallMusicStart);
 }
 
 void AAB_Pawn::CallPrePushSoundCube() { PrePushSoundCube_Implementation(nullptr); }
@@ -251,11 +250,13 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 	return true;
 }
 
-void AAB_Pawn::MusicStart()
+void AAB_Pawn::CallMusicStart()
 {
-	AB2LOG_S(Warning);
 }
 
+void AAB_Pawn::MusicStart_Implementation()
+{
+}
 
 ///
 ///	<구현해야 하는 기능들>
