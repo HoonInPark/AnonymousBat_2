@@ -39,7 +39,6 @@ AAB_Pawn::AAB_Pawn()
 		pBodyMesh->SetCollisionProfileName(TEXT("ABPawn"));
 
 		pSkeletalMesh->SetSkeletalMesh(AB_ROBOTARMS.Object);
-		pSkeletalMesh->SetCollisionProfileName(TEXT("ABPawn"));
 		pSkeletalMesh->SetWorldScale3D(FVector(4.f, 4.f, 4.f));
 	}
 }
