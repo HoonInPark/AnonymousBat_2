@@ -32,15 +32,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube)
 	TArray<UStaticMesh*> pCubeMeshes;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube)
 	float CubeSize;
-	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube)
 	int32 NumCubes;
-	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube)
 	UStaticMeshComponent* pCubeComponent;
-	UPROPERTY(EditAnywhere, Category=AB_SoundCube)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube)
 	UStaticMeshComponent* _pSoundCube;
 
 	// void UpdateCubesScale(float _scaleMultipier); // _scaleMultipier는 1.xf와 같은 형식임!
