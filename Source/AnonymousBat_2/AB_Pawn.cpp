@@ -13,6 +13,7 @@ AAB_Pawn::AAB_Pawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	bIsMouseButtonDown = false;
+	bIsPawnHoldingCube = false;
 
 	pBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	pSkeletalMesh_R = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SKELETAL_R"));
@@ -129,7 +130,7 @@ void AAB_Pawn::Tick(float _DeltaTime)
 
 	AddActorLocalRotation(DeltaRotation, true);
 
-	if (bIsMouseButtonDown)
+	if (bIsMouseButtonDown && bIsPawnHoldingCube)
 	{
 		Hit_pressed = SweepInRange();
 
@@ -186,7 +187,8 @@ void AAB_Pawn::PrePushSoundCube_Implementation(const UPrimitiveComponent* _pComp
 void AAB_Pawn::PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
 	bIsMouseButtonDown = false;
-
+	bIsPawnHoldingCube = false;
+	
 	Hit_released = SweepInRange();
 	if (!Hit_released.IsEmpty())
 	{
@@ -284,11 +286,13 @@ void AAB_Pawn::MusicStart_Implementation()
 ///Tick으로 간 다음 큐브 클래스의 인터페이스 호출->
 ///현재 Sweep이 되는 것 이외의 큐브를 SetVisibile(false)로 설정]
 ///
+///큐브를 집으면 그 놓여있던 큐브가 사라져야 함
 ///
-///큐브를 집으면 그 큐브가 사라져야 함
-///집은 상태가 되면 pawn의 SkeletalMesh에 큐브 컴포넌트를 attach한다. => 인터페이스!
-///실제로 그 큐브에서 음악이 흘러나오는 것은 아니고, 런타임 동안 그 큐브의 번호와 사운드 모듈이 대응된 배열이 있으면 된다.
+///큐브를 잡고있지 않을땐?
+///SetVisibile(true)인 녀석들만 스윕에 닿아야 함. SetVisibile(false)인 녀석이 닿으면 무시.
+///스윕에 닿으면 그 컴포넌트는 SetVisibile(false)가 되고 pawn의 SkeletalMesh에 큐브 컴포넌트를 attach => 인터페이스!
+///이 때 실제로 그 큐브에서 음악이 흘러나오는 것은 아니고, 런타임 동안 그 큐브의 번호와 사운드 모듈이 대응된 배열이 있으면 된다.
 ///큐브를 집었을 때 사운드 모듈을 로드하여 재생한다.
+///큐브 자체에 음악을 할당하는게 아니라, 재생 때마다 음악 모듈을 불러오는 식으로.
 ///2. 큐브를 쌓고 스페이스바를 누르면 때 모든 모듈이 재생돼야 함.
-///
 ///

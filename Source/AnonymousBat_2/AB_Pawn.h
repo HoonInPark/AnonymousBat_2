@@ -72,6 +72,8 @@ public:
 
 private:
 	bool bIsMouseButtonDown;
+	bool bIsPawnHoldingCube;
+
 	FVector PlayerViewPtLoc;
 	FRotator PlayerViewPtRot;
 	float Reach;
