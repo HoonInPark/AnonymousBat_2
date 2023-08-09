@@ -137,21 +137,22 @@ void AAB_Pawn::Tick(float _DeltaTime)
 		{
 			float MinDistance = FLT_MAX;
 
-			for (const auto& hitResult : Hit_pressed)
+			for (const auto& pHitResult : Hit_pressed)
 			{
-				const float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
+				const float Distance = FVector::Dist(SweepStartPt, pHitResult.ImpactPoint);
 				if (Distance < MinDistance)
 				{
 					MinDistance = Distance;
-					ClosestHitResult = hitResult;
+					ClosestHitResult = pHitResult;
 				}
 			}
 
 			pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
-			if (pAB_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
+			pClosestHitCube =  ClosestHitResult.GetComponent();
+			if (pAB_SoundCube && IsGrounded(pClosestHitCube))
 			{
-				ClosestHitResult.GetComponent()->SetVisibility(true);
-				ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
+				IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(pAB_SoundCube, pClosestHitCube);
+				// IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
 			}
 		}
 	}
@@ -179,9 +180,9 @@ void AAB_Pawn::SetupPlayerInputComponent(UInputComponent* _pPlayerInputComponent
 void AAB_Pawn::CallPrePushSoundCube() { PrePushSoundCube_Implementation(nullptr); }
 void AAB_Pawn::CallPushSoundCube() { PushSoundCube_Implementation(nullptr); }
 
-void AAB_Pawn::PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent) { bIsMouseButtonDown = true; }
+void AAB_Pawn::PrePushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) { bIsMouseButtonDown = true; }
 
-void AAB_Pawn::PushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
+void AAB_Pawn::PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
 	bIsMouseButtonDown = false;
 
@@ -190,25 +191,28 @@ void AAB_Pawn::PushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
 	{
 		float MinDistance = FLT_MAX;
 
-		for (const auto& hitResult : Hit_released)
+		for (const auto& pHitResult : Hit_released)
 		{
-			const float Distance = FVector::Dist(SweepStartPt, hitResult.ImpactPoint);
+			const float Distance = FVector::Dist(SweepStartPt, pHitResult.ImpactPoint);
 			if (Distance < MinDistance)
 			{
 				MinDistance = Distance;
-				ClosestHitResult = hitResult;
+				ClosestHitResult = pHitResult;
 			}
 		}
 
 		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_released.GetData()->GetActor());
-		if (pAB_SoundCube && IsGrounded(ClosestHitResult.GetComponent()))
+		pClosestHitCube =  ClosestHitResult.GetComponent();
+		if (pAB_SoundCube && IsGrounded(pClosestHitCube))
 		{
-			ClosestHitResult.GetComponent()->SetVisibility(true);
-			ClosestHitResult.GetComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-			IAB_Pawn_To_AnimInst_Interface::Execute_PushSoundCube(pAnimInstance, ClosestHitResult.GetComponent());
+			IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonUp(pAB_SoundCube, pClosestHitCube);
+			IAB_Pawn_To_AnimInst_Interface::Execute_PushSoundCube(pAnimInstance, pClosestHitCube);
 		}
 	}
 }
+
+void AAB_Pawn::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) {}
+void AAB_Pawn::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) {}
 
 TArray<FHitResult> AAB_Pawn::SweepInRange()
 {
@@ -259,6 +263,8 @@ void AAB_Pawn::MusicStart_Implementation()
 	IAB_Pawn_To_SoundCube_Interface::Execute_MusicStart(
 		UGameplayStatics::GetActorOfClass(GetWorld(), AAB_SoundCube_2::StaticClass()));
 }
+
+
 
 ///
 ///	<구현해야 하는 기능들>

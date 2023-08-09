@@ -24,4 +24,8 @@ class ANONYMOUSBAT_2_API IAB_Pawn_To_SoundCube_Interface
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface")
 	void MusicStart();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface")
+	void SoundCubeVisualizer_MouseButtonDown(UPrimitiveComponent* _ClosestHit);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface")
+	void SoundCubeVisualizer_MouseButtonUp(UPrimitiveComponent* _ClosestHit);
 };

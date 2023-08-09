@@ -41,7 +41,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube)
 	UStaticMeshComponent* pCubeComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube)
-	UStaticMeshComponent* _pSoundCube;
+	UStaticMeshComponent* pEachCube_SM;
 	
 	virtual void MusicStart_Implementation() override;
+	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) override;
+	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) override;
 };

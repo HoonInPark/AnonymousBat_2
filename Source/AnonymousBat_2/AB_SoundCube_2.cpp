@@ -84,3 +84,21 @@ void AAB_SoundCube_2::BeginPlay() {	Super::BeginPlay(); }
 void AAB_SoundCube_2::Tick(float DeltaTime) { Super::Tick(DeltaTime); }
 void AAB_SoundCube_2::MusicStart_Implementation() {}
 
+void AAB_SoundCube_2::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit)
+{
+	_ClosestHit->SetVisibility(true);
+	_ClosestHit->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
+
+	for (const auto pEachCube : this->GetComponents())
+	{
+		pEachCube_SM = Cast<UStaticMeshComponent>(pEachCube);
+		if (pEachCube_SM && pEachCube_SM != _ClosestHit && pEachCube_SM->GetCollisionObjectType() != ECC_WorldStatic)
+			pEachCube_SM->SetVisibility(false);
+	}
+}
+
+void AAB_SoundCube_2::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit)
+{
+	_ClosestHit->SetVisibility(true);
+	_ClosestHit->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+}

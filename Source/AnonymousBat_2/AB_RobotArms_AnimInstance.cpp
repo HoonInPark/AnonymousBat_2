@@ -16,9 +16,9 @@ void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
 	auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner());
 }
 
-void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
+void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
-	if (auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner()))
+	if (const auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner()))
 	{
 		if(FVector::Dist(OwningPawn->GetActorLocation(), SoundCubeTransform) < 250.f)
 			bIsGonnaPush = true;
@@ -27,7 +27,7 @@ void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(UPrimitiveCompo
 	}
 }
 
-void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(UPrimitiveComponent* _pComponent)
+void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
 	if (auto OwningPawn = Cast<AAB_Pawn>(TryGetPawnOwner()))
 	{

@@ -81,8 +81,11 @@ private:
 	void CallPrePushSoundCube();
 	void CallPushSoundCube();
 	
-	virtual void PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent) override;
-	virtual void PushSoundCube_Implementation(UPrimitiveComponent* _pComponent) override;
+	virtual void PrePushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) override;
+	virtual void PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) override;
+	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) override;
+	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) override;
+	
 	virtual void MusicStart_Implementation() override;
 
 	TArray<FHitResult> SweepInRange();
@@ -92,9 +95,7 @@ public:
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
 	UPROPERTY()
-	UMaterialInstanceDynamic* SoundCubeMatInstDynamic;
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* DynamicMaterialMesh;
+	UPrimitiveComponent* pClosestHitCube;
 
 private:
 	UPROPERTY()

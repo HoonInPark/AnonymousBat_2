@@ -18,8 +18,8 @@ class ANONYMOUSBAT_2_API UAB_RobotArms_AnimInstance : public UAnimInstance, publ
 public:
 	UAB_RobotArms_AnimInstance();
 	virtual void NativeUpdateAnimation(float _DeltaSeconds) override;
-	virtual void PrePushSoundCube_Implementation(UPrimitiveComponent* _pComponent) override;
-	virtual void PushSoundCube_Implementation(UPrimitiveComponent* _pComponent) override;
+	virtual void PrePushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) override;
+	virtual void PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Pawn, meta=(AllowPrivateAccess=true))
