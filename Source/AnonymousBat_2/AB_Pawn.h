@@ -11,6 +11,12 @@
 
 class AAB_SoundCube_2;
 
+USTRUCT(BlueprintType)
+struct FCubeInfo_Pawn
+{
+	GENERATED_BODY()
+};
+
 UCLASS()
 class ANONYMOUSBAT_2_API AAB_Pawn : public APawn, public IAB_Pawn_To_AnimInst_Interface,
                                     public IAB_Pawn_To_SoundCube_Interface

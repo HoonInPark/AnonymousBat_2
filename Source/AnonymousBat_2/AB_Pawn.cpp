@@ -148,10 +148,11 @@ void AAB_Pawn::Tick(float _DeltaTime)
 			}
 
 			pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
-			pClosestHitCube =  ClosestHitResult.GetComponent();
+			pClosestHitCube = ClosestHitResult.GetComponent();
 			if (pAB_SoundCube && IsGrounded(pClosestHitCube))
 			{
-				IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(pAB_SoundCube, pClosestHitCube);
+				IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
+					pAB_SoundCube, pClosestHitCube);
 				// IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
 			}
 		}
@@ -202,7 +203,7 @@ void AAB_Pawn::PushSoundCube_Implementation(const UPrimitiveComponent* _pCompone
 		}
 
 		pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_released.GetData()->GetActor());
-		pClosestHitCube =  ClosestHitResult.GetComponent();
+		pClosestHitCube = ClosestHitResult.GetComponent();
 		if (pAB_SoundCube && IsGrounded(pClosestHitCube))
 		{
 			IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonUp(pAB_SoundCube, pClosestHitCube);
@@ -211,8 +212,13 @@ void AAB_Pawn::PushSoundCube_Implementation(const UPrimitiveComponent* _pCompone
 	}
 }
 
-void AAB_Pawn::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) {}
-void AAB_Pawn::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) {}
+void AAB_Pawn::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit)
+{
+}
+
+void AAB_Pawn::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit)
+{
+}
 
 TArray<FHitResult> AAB_Pawn::SweepInRange()
 {
@@ -265,10 +271,24 @@ void AAB_Pawn::MusicStart_Implementation()
 }
 
 
-
 ///
 ///	<구현해야 하는 기능들>
 ///이미 큐브가 놓여져 있으면 거기에 스윕이 닿았을때 사라지도록. 큐브를 집는 것이다.
-///큐브가 없는데 큐브를 놓아야할 자리이거나 큐브가 있는 경우 스윕이 닿으면 (Visibility가 true인 상태에서)거기에 머티리얼의 색이 변하도록! -> 이거 일단 하고 있자.
 ///스페이스바를 누르면 모든 사운드큐브의 크기가 커지면서 각 큐브에 할당된 음악이 종합되어 하나의 선율이 되도록
+///
+///<널브러져 있는 큐브에 사운드 모듈을 할당하고 이것이 합쳐졌을 때 하나의 음악으로 되도록 하려면>
+///1. 큐브를 집은 상태에서는 사운드 모듈이 재생돼야 함. => 현재 구현된 마우스가 눌릴때의 이벤트는
+///큐브를 이미 집고 있다는 가정 하에 만듦.
+///
+///[바인딩된 지점에서 bIsMouseButtonDown을 true로 만듦->
+///Tick으로 간 다음 큐브 클래스의 인터페이스 호출->
+///현재 Sweep이 되는 것 이외의 큐브를 SetVisibile(false)로 설정]
+///
+///
+///큐브를 집으면 그 큐브가 사라져야 함
+///집은 상태가 되면 pawn의 SkeletalMesh에 큐브 컴포넌트를 attach한다. => 인터페이스!
+///실제로 그 큐브에서 음악이 흘러나오는 것은 아니고, 런타임 동안 그 큐브의 번호와 사운드 모듈이 대응된 배열이 있으면 된다.
+///큐브를 집었을 때 사운드 모듈을 로드하여 재생한다.
+///2. 큐브를 쌓고 스페이스바를 누르면 때 모든 모듈이 재생돼야 함.
+///
 ///
