@@ -12,7 +12,8 @@
 class AAB_SoundCube_2;
 
 UCLASS()
-class ANONYMOUSBAT_2_API AAB_Pawn : public APawn, public IAB_Pawn_To_AnimInst_Interface, public IAB_Pawn_To_SoundCube_Interface
+class ANONYMOUSBAT_2_API AAB_Pawn : public APawn, public IAB_Pawn_To_AnimInst_Interface,
+                                    public IAB_Pawn_To_SoundCube_Interface
 {
 	GENERATED_BODY()
 
@@ -39,7 +40,7 @@ protected:
 
 	void PlaneMove_Forward(float _Value);
 	void PlaneMove_Right(float _Value);
-	
+
 	void ProcessYaw(float _Value);
 	void ProcessPitch(float _Value);
 
@@ -74,23 +75,23 @@ private:
 	TArray<FHitResult> Hit_pressed;
 	TArray<FHitResult> Hit_released;
 	FHitResult ClosestHitResult;
-	
+
 	TArray<FString> CubeNames_Hit;
 	TArray<FString> CubeNames_Actor;
 
 	void CallPrePushSoundCube();
 	void CallPushSoundCube();
-	
+
 	virtual void PrePushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) override;
 	virtual void PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) override;
 	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) override;
 	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) override;
-	
+
 	virtual void MusicStart_Implementation() override;
 
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
-	
+
 public:
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
