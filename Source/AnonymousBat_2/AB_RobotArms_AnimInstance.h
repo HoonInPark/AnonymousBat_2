@@ -22,8 +22,8 @@ public:
 	virtual void PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) override;
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Pawn, meta=(AllowPrivateAccess=true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn, meta=(AllowPrivateAccess=true))
 	FVector SoundCubeTransform;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Pawn, meta=(AllowPrivateAccess=true))
-	bool bIsGonnaPush;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn, meta=(AllowPrivateAccess=true))
+	bool bIsMouseButtonDown_AnimInst;
 };

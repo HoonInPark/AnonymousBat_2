@@ -11,10 +11,18 @@
 
 class AAB_SoundCube_2;
 
-USTRUCT(BlueprintType)
-struct FCubeInfo_Pawn
+/*
+ *<현재 들고 있는 큐브에 할당된 정보들>
+ *메시의 형태
+ *할당된 사운드 모듈
+ *붙어있는 나이아가라
+ */
+USTRUCT()
+struct FSoundCubeHeld
 {
 	GENERATED_BODY()
+
+	
 };
 
 UCLASS()
@@ -67,12 +75,20 @@ public:
 	USkeletalMeshComponent* pSkeletalMesh_R;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	USkeletalMeshComponent* pSkeletalMesh_L;
+
+	UPROPERTY(VisibleAnywhere, Category=SoundCubeHeld)
+	USkeletalMeshComponent* pSoundCubeHeld_1;
+	UPROPERTY(VisibleAnywhere, Category=SoundCubeHeld)
+	USkeletalMeshComponent* pSoundCubeHeld_2;
+	UPROPERTY(VisibleAnywhere, Category=SoundCubeHeld)
+	USkeletalMeshComponent* pSoundCubeHeld_3;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	UAnimInstance* pAnimInstance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
+	bool bIsMouseButtonDown;
 
 private:
-	bool bIsMouseButtonDown;
-	bool bIsPawnHoldingCube;
 
 	FVector PlayerViewPtLoc;
 	FRotator PlayerViewPtRot;

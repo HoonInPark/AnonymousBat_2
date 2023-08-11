@@ -9,6 +9,13 @@
 #include "AB_Pawn_To_SoundCube_Interface.h"
 #include "AB_SoundCube_2.generated.h"
 
+USTRUCT()
+struct FSoundCubePushed
+{
+	GENERATED_BODY()
+
+	
+};
 
 /// <summary>
 /// 이 클래스는 사운드큐브를 일렬로 객체화한다.

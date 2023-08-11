@@ -13,7 +13,6 @@ AAB_Pawn::AAB_Pawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	bIsMouseButtonDown = false;
-	bIsPawnHoldingCube = false;
 
 	pBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	pSkeletalMesh_R = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SKELETAL_R"));
@@ -53,13 +52,13 @@ AAB_Pawn::AAB_Pawn()
 void AAB_Pawn::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
+	
 	UAnimInstance* CurrentAnimInstance = pSkeletalMesh_R->GetAnimInstance();
 
 	if (!CurrentAnimInstance)
 	{
 		pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh_R,
-		                                                      UAB_RobotArms_AnimInstance::StaticClass());
+															  UAB_RobotArms_AnimInstance::StaticClass());
 		pSkeletalMesh_R->SetAnimInstanceClass(pAnimInstance->GetClass());
 	}
 	else
@@ -123,14 +122,14 @@ void AAB_Pawn::Tick(float _DeltaTime)
 	const float targetSpeedRoll = -currentRollAngle * RateMultiplierRoll; // RateMultiplierRoll은 설정에 따라 조절 가능한 보간 속도.
 	CurrentSpeed_Roll = FMath::FInterpTo(CurrentSpeed_Roll, targetSpeedRoll, _DeltaTime, 2.f);
 
-	FRotator DeltaRotation(0, 0, 0);
+	FRotator DeltaRotation;
 	DeltaRotation.Pitch = CurrentSpeed_Pitch * _DeltaTime; // 위/아래!
 	DeltaRotation.Yaw = CurrentSpeed_Yaw * _DeltaTime; // 양 옆!
 	DeltaRotation.Roll = CurrentSpeed_Roll * _DeltaTime;
 
 	AddActorLocalRotation(DeltaRotation, true);
-
-	if (bIsMouseButtonDown && bIsPawnHoldingCube)
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	if (bIsMouseButtonDown) // 마우스가 눌려 있는 상태에서 큐브를 들고 있으면...
 	{
 		Hit_pressed = SweepInRange();
 
@@ -152,12 +151,19 @@ void AAB_Pawn::Tick(float _DeltaTime)
 			pClosestHitCube = ClosestHitResult.GetComponent();
 			if (pAB_SoundCube && IsGrounded(pClosestHitCube))
 			{
-				IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
-					pAB_SoundCube, pClosestHitCube);
-				// IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
+				if (pClosestHitCube->GetCollisionObjectType() != ECC_WorldStatic)
+				{
+					IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
+						pAB_SoundCube, pClosestHitCube);
+					IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
+				}
+				// else 
+				// 	AB2LOG(Warning, TEXT("You are trying to push cube in a wrong place! it already pushed!"));
+				
 			}
 		}
 	}
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 
 // Called to bind functionality to input
@@ -184,11 +190,11 @@ void AAB_Pawn::CallPushSoundCube() { PushSoundCube_Implementation(nullptr); }
 
 void AAB_Pawn::PrePushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) { bIsMouseButtonDown = true; }
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void AAB_Pawn::PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
 	bIsMouseButtonDown = false;
-	bIsPawnHoldingCube = false;
-	
+
 	Hit_released = SweepInRange();
 	if (!Hit_released.IsEmpty())
 	{
@@ -213,6 +219,7 @@ void AAB_Pawn::PushSoundCube_Implementation(const UPrimitiveComponent* _pCompone
 		}
 	}
 }
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 void AAB_Pawn::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit)
 {
@@ -229,7 +236,7 @@ TArray<FHitResult> AAB_Pawn::SweepInRange()
 	SweepStartPt = PlayerViewPtLoc + 100.f * PlayerViewPtRot.Vector();
 	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 250.f;
 
-	DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
+	// DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
 
 	const FCollisionQueryParams TraceParams(FName(TEXT("")), true, GetOwner());
 	GetWorld()->SweepMultiByChannel(Hit_released, SweepStartPt, SweepEndPt, FQuat::Identity, ECC_Visibility,
@@ -255,7 +262,7 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 				if (CubeNames_Hit[0] == CubeNames_Actor[0] && CubeNames_Hit[1] == CubeNames_Actor[1])
 				{
 					if (FCString::Atoi(*CubeNames_Hit[2]) > FCString::Atoi(*CubeNames_Actor[2]) && Cast<
-						UStaticMeshComponent>(*It)->IsVisible() == false)
+						UStaticMeshComponent>(*It)->GetCollisionObjectType() != ECC_WorldStatic)
 						return false;
 				}
 			}
