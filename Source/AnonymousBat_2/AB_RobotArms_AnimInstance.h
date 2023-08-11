@@ -25,5 +25,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn, meta=(AllowPrivateAccess=true))
 	FVector SoundCubeTransform;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn, meta=(AllowPrivateAccess=true))
-	bool bIsMouseButtonDown_AnimInst;
+	bool bIsIdle;
+
+	bool bDoOnce;
+	bool bFlipFlop;
+
+	void StretchHand();
+
 };
