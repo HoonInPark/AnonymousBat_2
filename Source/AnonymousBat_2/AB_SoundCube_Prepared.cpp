@@ -81,7 +81,6 @@ void AAB_SoundCube_Prepared::Tick(float DeltaSeconds)
 void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit)
 {
 	_ClosestHit->SetVisibility(false);
-	_ClosestHit->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
 
 	for (const auto pEachCube : this->GetComponents())
 	{

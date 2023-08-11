@@ -150,23 +150,24 @@ void AAB_Pawn::Tick(float _DeltaTime)
 			// 여기서 분기가 필요. 닿은 녀석이 어떤 클래스인지 구분해야!
 			if (AActor* pHitActor = Hit_pressed.GetData()->GetActor())
 			{
-				pAB_SoundCube = Cast<AAB_SoundCube_2>(pHitActor);
-				pAB_SoundCube_Prepared = Cast<AAB_SoundCube_Prepared>(pHitActor);
 				pClosestHitCube = ClosestHitResult.GetComponent();
-				if (IsGrounded(pClosestHitCube))
+				if (pHitActor->GetClass() == AAB_SoundCube_2::StaticClass() && pClosestHitCube->GetCollisionObjectType()
+					!= ECC_WorldDynamic)
 				{
-					if (pAB_SoundCube && pClosestHitCube->GetCollisionObjectType() != ECC_WorldStatic)
+					pAB_SoundCube = Cast<AAB_SoundCube_2>(pHitActor);
+					if (IsGrounded(pClosestHitCube))
 					{
 						IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
 							pAB_SoundCube, pClosestHitCube);
 						IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
 					}
-					else if (pAB_SoundCube_Prepared && pClosestHitCube->GetCollisionObjectType() == ECC_WorldStatic)
-					{
-						IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
-							pAB_SoundCube_Prepared, pClosestHitCube);
-						IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
-					}
+				}
+				else if (pHitActor->GetClass() == AAB_SoundCube_Prepared::StaticClass() && pClosestHitCube->IsVisible())
+				{
+					pAB_SoundCube_Prepared = Cast<AAB_SoundCube_Prepared>(pHitActor);
+					IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
+						pAB_SoundCube_Prepared, pClosestHitCube);
+					IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
 				}
 			}
 		}
@@ -245,7 +246,7 @@ TArray<FHitResult> AAB_Pawn::SweepInRange()
 	SweepStartPt = PlayerViewPtLoc + 100.f * PlayerViewPtRot.Vector();
 	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 250.f;
 
-	// DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
+	DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
 
 	const FCollisionQueryParams TraceParams(FName(TEXT("")), true, GetOwner());
 	GetWorld()->SweepMultiByChannel(Hit_released, SweepStartPt, SweepEndPt, FQuat::Identity, ECC_Visibility,
