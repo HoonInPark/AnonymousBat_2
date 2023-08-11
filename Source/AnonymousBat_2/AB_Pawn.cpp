@@ -52,13 +52,13 @@ AAB_Pawn::AAB_Pawn()
 void AAB_Pawn::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	
+
 	UAnimInstance* CurrentAnimInstance = pSkeletalMesh_R->GetAnimInstance();
 
 	if (!CurrentAnimInstance)
 	{
 		pAnimInstance = NewObject<UAB_RobotArms_AnimInstance>(pSkeletalMesh_R,
-															  UAB_RobotArms_AnimInstance::StaticClass());
+		                                                      UAB_RobotArms_AnimInstance::StaticClass());
 		pSkeletalMesh_R->SetAnimInstanceClass(pAnimInstance->GetClass());
 	}
 	else
@@ -128,7 +128,7 @@ void AAB_Pawn::Tick(float _DeltaTime)
 	DeltaRotation.Roll = CurrentSpeed_Roll * _DeltaTime;
 
 	AddActorLocalRotation(DeltaRotation, true);
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	if (bIsMouseButtonDown) // 마우스가 눌려 있는 상태에서 큐브를 들고 있으면...
 	{
 		Hit_pressed = SweepInRange();
@@ -147,23 +147,31 @@ void AAB_Pawn::Tick(float _DeltaTime)
 				}
 			}
 
-			pAB_SoundCube = Cast<AAB_SoundCube_2>(Hit_pressed.GetData()->GetActor());
-			pClosestHitCube = ClosestHitResult.GetComponent();
-			if (pAB_SoundCube && IsGrounded(pClosestHitCube))
+			// 여기서 분기가 필요. 닿은 녀석이 어떤 클래스인지 구분해야!
+			if (AActor* pHitActor = Hit_pressed.GetData()->GetActor())
 			{
-				if (pClosestHitCube->GetCollisionObjectType() != ECC_WorldStatic)
+				pAB_SoundCube = Cast<AAB_SoundCube_2>(pHitActor);
+				pAB_SoundCube_Prepared = Cast<AAB_SoundCube_Prepared>(pHitActor);
+				pClosestHitCube = ClosestHitResult.GetComponent();
+				if (IsGrounded(pClosestHitCube))
 				{
-					IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
-						pAB_SoundCube, pClosestHitCube);
-					IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
+					if (pAB_SoundCube && pClosestHitCube->GetCollisionObjectType() != ECC_WorldStatic)
+					{
+						IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
+							pAB_SoundCube, pClosestHitCube);
+						IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
+					}
+					else if (pAB_SoundCube_Prepared && pClosestHitCube->GetCollisionObjectType() == ECC_WorldStatic)
+					{
+						IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
+							pAB_SoundCube_Prepared, pClosestHitCube);
+						IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
+					}
 				}
-				// else 
-				// 	AB2LOG(Warning, TEXT("You are trying to push cube in a wrong place! it already pushed!"));
-				
 			}
 		}
 	}
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 
 // Called to bind functionality to input
@@ -219,6 +227,7 @@ void AAB_Pawn::PushSoundCube_Implementation(const UPrimitiveComponent* _pCompone
 		}
 	}
 }
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 void AAB_Pawn::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit)

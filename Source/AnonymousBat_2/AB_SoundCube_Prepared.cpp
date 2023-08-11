@@ -87,7 +87,10 @@ void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonDown_Implementation(
 	{
 		pEachCube_SM = Cast<UStaticMeshComponent>(pEachCube);
 		if (pEachCube_SM && pEachCube_SM != _ClosestHit && pEachCube_SM->GetCollisionObjectType() != ECC_WorldStatic)
+		{
 			pEachCube_SM->SetVisibility(true);
+			AB2LOG(Warning, TEXT("%s"), *pEachCube_SM->GetName());
+		}
 	}
 }
 

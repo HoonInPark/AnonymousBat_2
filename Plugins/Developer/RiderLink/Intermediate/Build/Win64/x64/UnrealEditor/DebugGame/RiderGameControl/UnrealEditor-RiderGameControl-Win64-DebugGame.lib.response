@@ -6,6 +6,6 @@
 /NAME:"UnrealEditor-RiderGameControl-Win64-DebugGame.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"D:\Unreal\Workspace\Client_Side\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RiderGameControl\RiderGameControl.cpp.obj"
-"D:\Unreal\Workspace\Client_Side\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RiderGameControl\Default.rc2.res"
-/OUT:"D:\Unreal\Workspace\Client_Side\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RiderGameControl\UnrealEditor-RiderGameControl-Win64-DebugGame.lib"
+"D:\Unreal\Workspace\Client_Side\Final\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RiderGameControl\RiderGameControl.cpp.obj"
+"D:\Unreal\Workspace\Client_Side\Final\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RiderGameControl\Default.rc2.res"
+/OUT:"D:\Unreal\Workspace\Client_Side\Final\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RiderGameControl\UnrealEditor-RiderGameControl-Win64-DebugGame.lib"

@@ -5,6 +5,7 @@
 #include "AnonymousBat_2.h"
 #include "GameFramework/Pawn.h"
 #include "AB_SoundCube_2.h"
+#include "AB_SoundCube_Prepared.h"
 #include "AB_Pawn_To_AnimInst_Interface.h"
 #include "AB_Pawn_To_SoundCube_Interface.h"
 #include "AB_Pawn.generated.h"
@@ -119,6 +120,8 @@ private:
 public:
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
+	UPROPERTY()
+	AAB_SoundCube_Prepared* pAB_SoundCube_Prepared;
 	UPROPERTY()
 	UPrimitiveComponent* pClosestHitCube;
 
