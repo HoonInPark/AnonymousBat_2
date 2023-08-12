@@ -47,6 +47,25 @@ AAB_Pawn::AAB_Pawn()
 		pSkeletalMesh_L->SetSkeletalMesh(AB_ROBOTARMS_L.Object);
 		pSkeletalMesh_L->SetWorldScale3D(FVector(4.f, 4.f, 4.f));
 	}
+
+	FName SoundCubeHeldSocket(TEXT("Joint_3Socket"));
+
+	if (pSkeletalMesh_R->DoesSocketExist(SoundCubeHeldSocket))
+	{
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_1(
+			TEXT(
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor01_3_Actor01_3.Actor01_3_Actor01_3'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_2(
+			TEXT(
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor02_3_Actor02_3.Actor02_3_Actor02_3'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_3(
+			TEXT(
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor03_3_Actor03_3.Actor03_3_Actor03_3'"));
+
+		if (SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded() && SoundCubeHeldFinder_3.Succeeded())
+		{
+		}
+	}
 }
 
 void AAB_Pawn::PostInitializeComponents()
@@ -304,3 +323,14 @@ void AAB_Pawn::MusicStart_Implementation()
 ///큐브 자체에 음악을 할당하는게 아니라, 재생 때마다 음악 모듈을 불러오는 식으로.
 ///2. 큐브를 쌓고 스페이스바를 누르면 때 모든 모듈이 재생돼야 함.
 ///
+///<큐브에 대한 사운드 할당 로직>
+/// aucoustic 4
+/// bass 10
+/// cymbol 3
+/// drum 5
+/// elec 3
+/// guitar 4
+/// percussioin 5
+/// piano 5
+/// 
+/// 

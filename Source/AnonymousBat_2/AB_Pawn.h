@@ -76,6 +76,8 @@ public:
 	USkeletalMeshComponent* pSkeletalMesh_R;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	USkeletalMeshComponent* pSkeletalMesh_L;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
+	USkeletalMeshComponent* pSoundCubeHeld;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	UAnimInstance* pAnimInstance;
