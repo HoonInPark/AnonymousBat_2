@@ -7,7 +7,7 @@ AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	CubeSize = 30.0f;
+		CubeSize = 30.0f;
 	NumCubes = 10;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
@@ -58,8 +58,7 @@ AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 				pCubeComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 				pCubeComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
-				// pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
-				// pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
+				pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
 				pCubeComponent->SetVisibility(true);
 			}
 		}
