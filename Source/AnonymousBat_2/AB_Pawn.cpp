@@ -162,13 +162,16 @@ void AAB_Pawn::Tick(float _DeltaTime)
 						IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
 					}
 				}
-				else if (pHitActor->GetClass() == AAB_SoundCube_Prepared::StaticClass() && pClosestHitCube->IsVisible())
+				else if (Cast<AAB_SoundCube_Prepared>(pHitActor) && pClosestHitCube->IsVisible())
 				{
 					pAB_SoundCube_Prepared = Cast<AAB_SoundCube_Prepared>(pHitActor);
 					IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
 						pAB_SoundCube_Prepared, pClosestHitCube);
 					IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
 				}
+
+				AB2LOG(Warning, TEXT("%s"), *pHitActor->GetClass()->GetName());
+				AB2LOG(Warning, TEXT("%s"), *AAB_SoundCube_Prepared::StaticClass()->GetName());
 			}
 		}
 	}
@@ -244,7 +247,7 @@ TArray<FHitResult> AAB_Pawn::SweepInRange()
 	Controller->GetPlayerViewPoint(OUT PlayerViewPtLoc, OUT PlayerViewPtRot);
 
 	SweepStartPt = PlayerViewPtLoc + 100.f * PlayerViewPtRot.Vector();
-	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 250.f;
+	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 200.f;
 
 	DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
 

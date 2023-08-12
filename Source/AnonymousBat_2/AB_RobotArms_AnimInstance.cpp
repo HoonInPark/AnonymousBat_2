@@ -6,8 +6,9 @@
 UAB_RobotArms_AnimInstance::UAB_RobotArms_AnimInstance()
 {
 	bDoOnce = true;
-	bFlipFlop = true;
+	
 	bIsIdle = true;
+	bIsGrab = false;
 }
 
 void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
@@ -22,29 +23,17 @@ void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(const UPrimitiv
 
 	if (bDoOnce)
 	{
-		// 손을 뻗어서 가져오라는 명령 실행.
-		StretchHand();
+		bIsIdle = false;
+		bIsGrab = true;
+
 		bDoOnce = false;
 	}
 }
 
 void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
-	// 손을 뻗어서 내려놓으라는 명령을 실행.
-	StretchHand();
+	bIsIdle = true;
+	bIsGrab = false;
+	
 	bDoOnce = true;
-}
-
-void UAB_RobotArms_AnimInstance::StretchHand()
-{
-	if (bFlipFlop)
-	{
-		bIsIdle = false;
-		bFlipFlop = false;
-	}
-	else
-	{
-		bIsIdle = true;
-		bFlipFlop = true;
-	}
 }
