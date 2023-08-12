@@ -118,10 +118,11 @@ public:
 	USkeletalMeshComponent* pSoundCubeHeld;
 
 private:
+	FName SoundCubeHeldSocket;
 	float AttachDelay;
 	FTimerHandle TimerHandle_AttachDelay;
 	bool bShouldAttach;
+	
 	void AttachMeshToSocket();
-
 	void AttachMeshWithDelay();
 };

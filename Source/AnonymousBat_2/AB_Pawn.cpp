@@ -50,8 +50,29 @@ AAB_Pawn::AAB_Pawn()
 		pSkeletalMesh_L->SetWorldScale3D(FVector(4.f, 4.f, 4.f));
 	}
 
+	SoundCubeHeldSocket = TEXT("Joint_3Socket");
 
+	if (pSkeletalMesh_R->DoesSocketExist(SoundCubeHeldSocket))
+	{
+		pSoundCubeHeld = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SOUNDCUBEHELD"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_0(
+			TEXT(
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/AB_Cube.AB_Cube_UCX_AB_Cube'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_1(
+			TEXT(
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor01_3_Actor01_3.Actor01_3_Actor01_3'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_2(
+			TEXT(
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor02_3_Actor02_3.Actor02_3_Actor02_3'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_3(
+			TEXT(
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor03_3_Actor03_3.Actor03_3_Actor03_3'"));
 
+		if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded() && SoundCubeHeldFinder_3.Succeeded())
+		{
+			pSoundCubeHeld->SetSkeletalMesh(SoundCubeHeldFinder_0.Object);
+		}
+	}
 }
 
 void AAB_Pawn::PostInitializeComponents()
@@ -304,36 +325,8 @@ void AAB_Pawn::AttachMeshWithDelay()
 
 void AAB_Pawn::AttachMeshToSocket()
 {
-	if (bShouldAttach)
-	{
-		// 원하는 SkeletalMesh를 원하는 소켓에 부착하기 위한 코드 (예제: pSkeletalMesh_R)
-		// 이 부분을 자신의 스켈레탈 메시 컴포넌트와 소켓 이름으로 수정해야 함
-		const FName SoundCubeHeldSocket(TEXT("Joint_3Socket"));
-
-		if (pSkeletalMesh_R->DoesSocketExist(SoundCubeHeldSocket))
-		{
-			pSoundCubeHeld = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SOUNDCUBEHELD"));
-			static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_0(
-				TEXT(
-					"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/AB_Cube.AB_Cube_UCX_AB_Cube'"));
-			static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_1(
-				TEXT(
-					"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor01_3_Actor01_3.Actor01_3_Actor01_3'"));
-			static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_2(
-				TEXT(
-					"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor02_3_Actor02_3.Actor02_3_Actor02_3'"));
-			static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_3(
-				TEXT(
-					"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor03_3_Actor03_3.Actor03_3_Actor03_3'"));
-
-			if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded() && SoundCubeHeldFinder_3.Succeeded())
-			{
-				pSoundCubeHeld->SetSkeletalMesh(SoundCubeHeldFinder_0.Object);
-				pSoundCubeHeld->AttachToComponent(pSkeletalMesh_R, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SoundCubeHeldSocket);
-				bShouldAttach = false;
-			}
-		}
-	}
+	pSoundCubeHeld->AttachToComponent(pSkeletalMesh_R, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SoundCubeHeldSocket);
+	bShouldAttach = false;
 }
 
 void AAB_Pawn::MusicStart_Implementation()
