@@ -21,19 +21,15 @@ void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(const UPrimitiv
 {
 	SoundCubeTransform = _pComponent->GetComponentLocation();
 
-	if (bDoOnce)
+	// if (bDoOnce)
 	{
-		bIsIdle = false;
 		bIsGrab = true;
-
 		bDoOnce = false;
 	}
 }
 
 void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
-	bIsIdle = true;
 	bIsGrab = false;
-	
 	bDoOnce = true;
 }

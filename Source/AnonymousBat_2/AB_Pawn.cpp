@@ -3,7 +3,6 @@
 
 #include "AB_Pawn.h"
 #include "AB_RobotArms_AnimInstance.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "Components/SkeletalMeshComponent.h"
 
 // Sets default values
@@ -12,6 +11,9 @@ AAB_Pawn::AAB_Pawn()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	AttachDelay = 0.f;
+	bShouldAttach = false;
+	
 	bIsMouseButtonDown = false;
 
 	pBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
@@ -31,11 +33,11 @@ AAB_Pawn::AAB_Pawn()
 	pCamera->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> AB_SUBMARINE(TEXT(
-		"/Script/Engine.StaticMesh'/Game/_04_RobotArms/Meshes/submarine_complete3.submarine_complete3'"));
+		"/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/submarine_complete3.submarine_complete3'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS_R(TEXT(
-		"/Script/Engine.SkeletalMesh'/Game/_04_RobotArms/Rigs/RobotArm_v07_R.RobotArm_v07_R'"));
+		"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Animations/Full/R/RobotArm_v08_R_Anim.RobotArm_v08_R_Anim'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS_L(TEXT(
-		"/Script/Engine.SkeletalMesh'/Game/_04_RobotArms/Rigs/RobotArm_v07_L.RobotArm_v07_L'"));
+		"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Rigs/SkeletalMeshes/RobotArm_v08_L_Anim02_Reverse_New.RobotArm_v08_L_Anim02_Reverse_New'"));
 
 	if (AB_SUBMARINE.Succeeded() && AB_ROBOTARMS_R.Succeeded() && AB_ROBOTARMS_L.Succeeded())
 	{
@@ -48,24 +50,8 @@ AAB_Pawn::AAB_Pawn()
 		pSkeletalMesh_L->SetWorldScale3D(FVector(4.f, 4.f, 4.f));
 	}
 
-	FName SoundCubeHeldSocket(TEXT("Joint_3Socket"));
 
-	if (pSkeletalMesh_R->DoesSocketExist(SoundCubeHeldSocket))
-	{
-		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_1(
-			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor01_3_Actor01_3.Actor01_3_Actor01_3'"));
-		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_2(
-			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor02_3_Actor02_3.Actor02_3_Actor02_3'"));
-		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_3(
-			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor03_3_Actor03_3.Actor03_3_Actor03_3'"));
 
-		if (SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded() && SoundCubeHeldFinder_3.Succeeded())
-		{
-		}
-	}
 }
 
 void AAB_Pawn::PostInitializeComponents()
@@ -179,14 +165,16 @@ void AAB_Pawn::Tick(float _DeltaTime)
 						IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
 							pAB_SoundCube, pClosestHitCube);
 						IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
+						AttachMeshWithDelay();
 					}
 				}
 				else if (Cast<AAB_SoundCube_Prepared>(pHitActor) && pClosestHitCube->IsVisible())
 				{
-					pAB_SoundCube_Prepared = Cast<AAB_SoundCube_Prepared>(pHitActor);
+					AAB_SoundCube_Prepared* pAB_SoundCube_Prepared = Cast<AAB_SoundCube_Prepared>(pHitActor);
 					IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
 						pAB_SoundCube_Prepared, pClosestHitCube);
 					IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
+					AttachMeshWithDelay();
 				}
 
 				AB2LOG(Warning, TEXT("%s"), *pHitActor->GetClass()->GetName());
@@ -305,11 +293,55 @@ bool AAB_Pawn::IsGrounded(const UPrimitiveComponent* _pCubeComponent)
 	return true;
 }
 
+void AAB_Pawn::AttachMeshWithDelay()
+{
+	if (!bShouldAttach)
+	{
+		bShouldAttach = true;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttachDelay, this, &AAB_Pawn::AttachMeshToSocket, 0.6f, false);
+	}
+}
+
+void AAB_Pawn::AttachMeshToSocket()
+{
+	if (bShouldAttach)
+	{
+		// 원하는 SkeletalMesh를 원하는 소켓에 부착하기 위한 코드 (예제: pSkeletalMesh_R)
+		// 이 부분을 자신의 스켈레탈 메시 컴포넌트와 소켓 이름으로 수정해야 함
+		const FName SoundCubeHeldSocket(TEXT("Joint_3Socket"));
+
+		if (pSkeletalMesh_R->DoesSocketExist(SoundCubeHeldSocket))
+		{
+			pSoundCubeHeld = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SOUNDCUBEHELD"));
+			static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_0(
+				TEXT(
+					"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/AB_Cube.AB_Cube_UCX_AB_Cube'"));
+			static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_1(
+				TEXT(
+					"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor01_3_Actor01_3.Actor01_3_Actor01_3'"));
+			static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_2(
+				TEXT(
+					"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor02_3_Actor02_3.Actor02_3_Actor02_3'"));
+			static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_3(
+				TEXT(
+					"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor03_3_Actor03_3.Actor03_3_Actor03_3'"));
+
+			if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded() && SoundCubeHeldFinder_3.Succeeded())
+			{
+				pSoundCubeHeld->SetSkeletalMesh(SoundCubeHeldFinder_0.Object);
+				pSoundCubeHeld->AttachToComponent(pSkeletalMesh_R, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SoundCubeHeldSocket);
+				bShouldAttach = false;
+			}
+		}
+	}
+}
+
 void AAB_Pawn::MusicStart_Implementation()
 {
 	IAB_Pawn_To_SoundCube_Interface::Execute_MusicStart(
 		UGameplayStatics::GetActorOfClass(GetWorld(), AAB_SoundCube_2::StaticClass()));
 }
+
 
 
 ///

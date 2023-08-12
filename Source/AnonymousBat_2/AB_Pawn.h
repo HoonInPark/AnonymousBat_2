@@ -69,8 +69,6 @@ public:
 	USkeletalMeshComponent* pSkeletalMesh_R;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	USkeletalMeshComponent* pSkeletalMesh_L;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
-	USkeletalMeshComponent* pSoundCubeHeld;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	UAnimInstance* pAnimInstance;
@@ -109,11 +107,21 @@ public:
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
 	UPROPERTY()
-	AAB_SoundCube_Prepared* pAB_SoundCube_Prepared;
-	UPROPERTY()
 	UPrimitiveComponent* pClosestHitCube;
 
 private:
 	UPROPERTY()
 	class AAB_PlayerController* AB_PlayerController;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
+	USkeletalMeshComponent* pSoundCubeHeld;
+
+private:
+	float AttachDelay;
+	FTimerHandle TimerHandle_AttachDelay;
+	bool bShouldAttach;
+	void AttachMeshToSocket();
+
+	void AttachMeshWithDelay();
 };
