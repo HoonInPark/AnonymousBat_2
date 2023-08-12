@@ -58,7 +58,7 @@ AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 				pCubeComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 				pCubeComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
-				pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
+				// pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
 				// pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
 				pCubeComponent->SetVisibility(true);
 			}

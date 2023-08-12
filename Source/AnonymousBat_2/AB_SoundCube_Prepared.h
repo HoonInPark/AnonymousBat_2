@@ -20,6 +20,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	enum class ESoundCubeType { GUITAR = 0, PIANO, DRUM, BEAT };
+
 public:
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -33,7 +35,7 @@ public:
 	UStaticMeshComponent* pCubeComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube_Prepared)
 	UStaticMeshComponent* pEachCube_SM;
-	
+
 	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) override;
 	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) override;
 };
