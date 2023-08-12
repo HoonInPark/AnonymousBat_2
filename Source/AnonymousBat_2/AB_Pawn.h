@@ -77,13 +77,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	USkeletalMeshComponent* pSkeletalMesh_L;
 
-	UPROPERTY(VisibleAnywhere, Category=SoundCubeHeld)
-	USkeletalMeshComponent* pSoundCubeHeld_1;
-	UPROPERTY(VisibleAnywhere, Category=SoundCubeHeld)
-	USkeletalMeshComponent* pSoundCubeHeld_2;
-	UPROPERTY(VisibleAnywhere, Category=SoundCubeHeld)
-	USkeletalMeshComponent* pSoundCubeHeld_3;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	UAnimInstance* pAnimInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)

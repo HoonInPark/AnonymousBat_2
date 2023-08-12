@@ -6,6 +6,14 @@
 #include "AB_Pawn_To_SoundCube_Interface.h"
 #include "AB_SoundCube_Prepared.generated.h"
 
+USTRUCT()
+struct FSoundCubeSet
+{
+	GENERATED_BODY()
+
+	
+};
+
 /**
  * 
  */
