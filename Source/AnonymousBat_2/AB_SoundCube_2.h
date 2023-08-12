@@ -9,13 +9,7 @@
 #include "AB_Pawn_To_SoundCube_Interface.h"
 #include "AB_SoundCube_2.generated.h"
 
-USTRUCT()
-struct FSoundCubePushed
-{
-	GENERATED_BODY()
-
-	
-};
+class USoundCue;
 
 /// <summary>
 /// 이 클래스는 사운드큐브를 일렬로 객체화한다.
@@ -26,8 +20,8 @@ UCLASS()
 class ANONYMOUSBAT_2_API AAB_SoundCube_2 : public AActor, public IAB_Pawn_To_SoundCube_Interface
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AAB_SoundCube_2();
 
@@ -35,7 +29,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -49,7 +43,7 @@ public:
 	UStaticMeshComponent* pCubeComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube)
 	UStaticMeshComponent* pEachCube_SM;
-	
+
 	virtual void MusicStart_Implementation() override;
 	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) override;
 	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) override;

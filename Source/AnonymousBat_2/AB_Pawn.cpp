@@ -324,13 +324,12 @@ void AAB_Pawn::MusicStart_Implementation()
 ///2. 큐브를 쌓고 스페이스바를 누르면 때 모든 모듈이 재생돼야 함.
 ///
 ///<큐브에 대한 사운드 할당 로직>
-/// aucoustic 4
 /// bass 10
-/// cymbol 3
 /// drum 5
 /// elec 3
-/// guitar 4
-/// percussioin 5
+/// guitar, aucoustic 4
 /// piano 5
-/// 
+///
+/// AAB_Pawn 클래스에선 현재 들고 있는 큐브에 해당된 음악이 나오고
+/// AAB_SoundCube_2 클래스에선 놓았던 녀석들이 가지고 있던게 합쳐져서 나온다.
 /// 

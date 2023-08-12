@@ -10,21 +10,14 @@
 #include "AB_Pawn_To_SoundCube_Interface.h"
 #include "AB_Pawn.generated.h"
 
+class USoundCue;
 class AAB_SoundCube_2;
 
 /*
  *<현재 들고 있는 큐브에 할당된 정보들>
  *메시의 형태
  *할당된 사운드 모듈
- *붙어있는 나이아가라
  */
-USTRUCT()
-struct FSoundCubeHeld
-{
-	GENERATED_BODY()
-
-	
-};
 
 UCLASS()
 class ANONYMOUSBAT_2_API AAB_Pawn : public APawn, public IAB_Pawn_To_AnimInst_Interface,
