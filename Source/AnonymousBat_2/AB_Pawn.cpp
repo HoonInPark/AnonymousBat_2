@@ -70,7 +70,7 @@ AAB_Pawn::AAB_Pawn()
 
 		if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded() && SoundCubeHeldFinder_3.Succeeded())
 		{
-			pSoundCubeHeld->SetSkeletalMesh(SoundCubeHeldFinder_0.Object);
+			pSoundCubeHeld->SetSkeletalMesh(SoundCubeHeldFinder_1.Object);
 		}
 	}
 }
