@@ -21,13 +21,13 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 
 	// Find and assign cube meshes
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_Default(
-		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/AB_Cube.AB_Cube'"));
+		TEXT("/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/AB_Cube.AB_Cube_AB_Cube"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_1(
-		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor01_3.Actor01_3'"));
+		TEXT("/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor01_3.Actor01_3_Actor01_3"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_2(
-		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor02_3.Actor02_3'"));
+		TEXT("/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor02_3.Actor02_3_Actor02_3"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_3(
-		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor03_3.Actor03_3'"));
+		TEXT("/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor03_3.Actor03_3_Actor03_3"));
 
 	if (CubeMeshFinder_Default.Succeeded() && CubeMeshFinder_1.Succeeded() && CubeMeshFinder_2.Succeeded() &&
 		CubeMeshFinder_3.Succeeded())
@@ -68,7 +68,7 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 					pCubeComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
 					pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(1, pCubeMeshes.Num() - 1)]);
-					// pCubeComponent->SetStaticMesh(pCubeMeshes[0]);
+					// pCubeComponent->SetStaticMesh(pCubeMeshes[0]);	
 					pCubeComponent->SetVisibility(false);
 				}
 			}
