@@ -114,7 +114,7 @@ private:
 	class AAB_PlayerController* AB_PlayerController;
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	USkeletalMeshComponent* pSoundCubeHeld;
 
 private:

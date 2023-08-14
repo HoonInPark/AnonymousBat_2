@@ -57,16 +57,16 @@ AAB_Pawn::AAB_Pawn()
 		pSoundCubeHeld = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SOUNDCUBEHELD"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_0(
 			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/AB_Cube.AB_Cube_UCX_AB_Cube'"));
+				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/AB_Cube.AB_Cube_AB_Cube"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_1(
 			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor01_3_Actor01_3.Actor01_3_Actor01_3'"));
+				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor01_3.Actor01_3_Actor01_3"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_2(
 			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor02_3_Actor02_3.Actor02_3_Actor02_3'"));
+				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor02_3.Actor02_3_Actor02_3"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_3(
 			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor03_3_Actor03_3.Actor03_3_Actor03_3'"));
+				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor03_3.Actor03_3_Actor03_3"));
 
 		if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded() && SoundCubeHeldFinder_3.Succeeded())
 		{
@@ -349,12 +349,6 @@ void AAB_Pawn::MusicStart_Implementation()
 ///2. 큐브를 쌓고 스페이스바를 누르면 때 모든 모듈이 재생돼야 함.
 ///
 ///<큐브에 대한 사운드 할당 로직>
-/// bass 10
-/// drum 5
-/// elec 3
-/// guitar, aucoustic 4
-/// piano 5
-///
 /// AAB_Pawn 클래스에선 현재 들고 있는 큐브에 해당된 음악이 나오고
 /// AAB_SoundCube_2 클래스에선 놓았던 녀석들이 가지고 있던게 합쳐져서 나온다.
 /// 버그 발견... 땅에 스윕하면 땅이 사라짐...
