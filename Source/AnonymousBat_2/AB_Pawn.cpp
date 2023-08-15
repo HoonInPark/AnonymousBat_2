@@ -35,9 +35,9 @@ AAB_Pawn::AAB_Pawn()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> AB_SUBMARINE(TEXT(
 		"/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/submarine_complete3.submarine_complete3'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS_R(TEXT(
-		"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Animations/Full/R/RobotArm_v08_R_Anim.RobotArm_v08_R_Anim'"));
+		"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Animations/R/SkeletalMeshes/RobotArm_v08_R_Stretch.RobotArm_v08_R_Stretch'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AB_ROBOTARMS_L(TEXT(
-		"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Rigs/SkeletalMeshes/RobotArm_v08_L_Anim02_Reverse_New.RobotArm_v08_L_Anim02_Reverse_New'"));
+		"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Animations/L/SkeletalMeshes/RobotArm_v08_L_Stretch.RobotArm_v08_L_Stretch'"));
 
 	if (AB_SUBMARINE.Succeeded() && AB_ROBOTARMS_R.Succeeded() && AB_ROBOTARMS_L.Succeeded())
 	{
@@ -159,7 +159,7 @@ void AAB_Pawn::Tick(float _DeltaTime)
 	{
 		Hit_pressed = SweepInRange();
 
-		if (!Hit_pressed.IsEmpty())
+		if (!Hit_pressed.IsEmpty()) // 만약 스윕에 닿은 게 비어있지 않다면...
 		{
 			float MinDistance = FLT_MAX;
 
@@ -169,18 +169,17 @@ void AAB_Pawn::Tick(float _DeltaTime)
 				if (Distance < MinDistance)
 				{
 					MinDistance = Distance;
-					ClosestHitResult = pHitResult;
+					ClosestHitResult = pHitResult; // 그 중 가장 가까운 녀석을 구하고...
 				}
 			}
 
-			// 여기서 분기가 필요. 닿은 녀석이 어떤 클래스인지 구분해야!
+			// 닿은 녀석이 어떤 클래스인지 구분하고자...
 			if (AActor* pHitActor = Hit_pressed.GetData()->GetActor())
 			{
-				pClosestHitCube = ClosestHitResult.GetComponent();
-				if (pHitActor->GetClass() == AAB_SoundCube_2::StaticClass() && pClosestHitCube->GetCollisionObjectType()
-					!= ECC_WorldDynamic)
+				pAB_SoundCube = Cast<AAB_SoundCube_2>(pHitActor);
+				pClosestHitCube = ClosestHitResult.GetComponent(); // 닿은 녀석의 컴포넌트를 구하고...
+				if (pAB_SoundCube && pClosestHitCube->GetCollisionObjectType() != ECC_WorldStatic) // 클래스의 종류를 판별 & 가장 가까이 닿은 녀석이 Visible이 꺼져있는지 판별
 				{
-					pAB_SoundCube = Cast<AAB_SoundCube_2>(pHitActor);
 					if (IsGrounded(pClosestHitCube))
 					{
 						IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
@@ -197,9 +196,6 @@ void AAB_Pawn::Tick(float _DeltaTime)
 					IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
 					AttachMeshWithDelay();
 				}
-
-				AB2LOG(Warning, TEXT("%s"), *pHitActor->GetClass()->GetName());
-				AB2LOG(Warning, TEXT("%s"), *AAB_SoundCube_Prepared::StaticClass()->GetName());
 			}
 		}
 	}

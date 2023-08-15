@@ -5,10 +5,11 @@
 
 UAB_RobotArms_AnimInstance::UAB_RobotArms_AnimInstance()
 {
+	SoundCubeTransform = FVector::Zero();
 	bDoOnce = true;
-	
-	bIsIdle = true;
-	bIsGrab = false;
+
+	bIsStretch1 = false;
+	bIsStretch2 = false;
 }
 
 void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
@@ -20,16 +21,17 @@ void UAB_RobotArms_AnimInstance::NativeUpdateAnimation(float _DeltaSeconds)
 void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
 	SoundCubeTransform = _pComponent->GetComponentLocation();
-
-	// if (bDoOnce)
+	if (bDoOnce)
 	{
-		bIsGrab = true;
+		bIsStretch1 = true;
+		bIsStretch2 = false;
 		bDoOnce = false;
 	}
 }
 
 void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
-	bIsGrab = false;
+	bIsStretch1 = false;
+	bIsStretch2 = true;
 	bDoOnce = true;
 }

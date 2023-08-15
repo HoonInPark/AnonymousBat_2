@@ -7,7 +7,7 @@ AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-		CubeSize = 30.0f;
+	CubeSize = 30.0f;
 	NumCubes = 10;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
@@ -84,10 +84,13 @@ void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonDown_Implementation(
 	for (const auto pEachCube : this->GetComponents())
 	{
 		pEachCube_SM = Cast<UStaticMeshComponent>(pEachCube);
-		if (pEachCube_SM && pEachCube_SM != _ClosestHit && pEachCube_SM->GetCollisionObjectType() != ECC_WorldStatic)
+		if (pEachCube_SM)
 		{
-			pEachCube_SM->SetVisibility(true);
-			AB2LOG(Warning, TEXT("%s"), *pEachCube_SM->GetName());
+			if ((pEachCube_SM != _ClosestHit) && (pEachCube_SM->GetCollisionObjectType() != ECC_WorldStatic))
+			{
+				pEachCube_SM->SetVisibility(true);
+				AB2LOG(Warning, TEXT("%s"), *pEachCube_SM->GetName());
+			}
 		}
 	}
 }

@@ -24,10 +24,11 @@ public:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn, meta=(AllowPrivateAccess=true))
 	FVector SoundCubeTransform;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn, meta=(AllowPrivateAccess=true))
-	bool bIsIdle;
+	bool bIsStretch1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Pawn, meta=(AllowPrivateAccess=true))
-	bool bIsGrab;
+	bool bIsStretch2;
 
 	bool bDoOnce;
 
