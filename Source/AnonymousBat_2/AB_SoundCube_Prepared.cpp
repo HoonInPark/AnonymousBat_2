@@ -72,7 +72,6 @@ AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 void AAB_SoundCube_Prepared::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AAB_SoundCube_Prepared::Tick(float DeltaSeconds)
@@ -102,4 +101,20 @@ void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonUp_Implementation(UP
 {
 	_ClosestHit->SetVisibility(true);
 	_ClosestHit->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+}
+
+void AAB_SoundCube_Prepared::SetStaticMeshNum(int32 NewStaticMeshNum)
+{
+	if (pCubeMeshes.Num() > NewStaticMeshNum)
+	{
+		StaticMeshNum = NewStaticMeshNum;
+		for (const auto CubeComponent : GetComponentsByClass(UStaticMeshComponent::StaticClass()))
+		{
+			UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(CubeComponent);
+			if (StaticMeshComponent && StaticMeshComponent != RootComponent)
+			{
+				StaticMeshComponent->SetStaticMesh(pCubeMeshes[StaticMeshNum]);
+			}
+		}
+	}
 }

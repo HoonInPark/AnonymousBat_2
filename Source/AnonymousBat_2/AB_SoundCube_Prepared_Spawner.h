@@ -35,6 +35,6 @@ public:
 
 private:
 	TArray<FTransform> SpawnTransforms;
-	void SpawnSoundCubes(int32 _SpawnStaticMeshNum, FTransform _SpawnTransform);
+	void SpawnSoundCubes(int32 _SpawnStaticMeshNum, const FTransform& _SpawnTransform);
 	
 };

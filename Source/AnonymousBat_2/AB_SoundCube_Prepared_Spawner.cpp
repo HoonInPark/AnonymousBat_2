@@ -44,7 +44,7 @@ void AAB_SoundCube_Prepared_Spawner::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AAB_SoundCube_Prepared_Spawner::SpawnSoundCubes(int32 _SpawnStaticMeshNum, FTransform _SpawnTransform)
+void AAB_SoundCube_Prepared_Spawner::SpawnSoundCubes(int32 _SpawnStaticMeshNum, const FTransform& _SpawnTransform)
 {
 	if (GetWorld())
 	{
@@ -55,7 +55,7 @@ void AAB_SoundCube_Prepared_Spawner::SpawnSoundCubes(int32 _SpawnStaticMeshNum, 
 		if (AAB_SoundCube_Prepared* pAB_SoundCube_Prepared = GetWorld()->SpawnActor<AAB_SoundCube_Prepared>(
 			AAB_SoundCube_Prepared::StaticClass(), _SpawnTransform, SpawnParams))
 		{
-			pAB_SoundCube_Prepared->StaticMeshNum = _SpawnStaticMeshNum; // 원하는 값으로 변경하세요.
+			pAB_SoundCube_Prepared->SetStaticMeshNum(_SpawnStaticMeshNum);
 		}
 	}
 }
