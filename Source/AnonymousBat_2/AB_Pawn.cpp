@@ -13,7 +13,7 @@ AAB_Pawn::AAB_Pawn()
 
 	AttachDelay = 0.f;
 	bShouldAttach = false;
-	
+
 	bIsMouseButtonDown = false;
 
 	pBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
@@ -57,18 +57,19 @@ AAB_Pawn::AAB_Pawn()
 		pSoundCubeHeld = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SOUNDCUBEHELD"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_0(
 			TEXT(
-				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/AB_Cube.AB_Cube_AB_Cube"));
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor01.Actor01_Actor01'"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_1(
 			TEXT(
-				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor01_3.Actor01_3_Actor01_3"));
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor02.Actor02_Actor02'"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_2(
 			TEXT(
-				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor02_3.Actor02_3_Actor02_3"));
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor03.Actor03_Actor03'"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_3(
 			TEXT(
-				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/SkeletalMesh/Actor03_3.Actor03_3_Actor03_3"));
+				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor04.Actor04_Actor04'"));
 
-		if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded() && SoundCubeHeldFinder_3.Succeeded())
+		if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded()
+			&& SoundCubeHeldFinder_3.Succeeded())
 		{
 			pSoundCubeHeld->SetSkeletalMesh(SoundCubeHeldFinder_1.Object);
 		}
@@ -178,7 +179,8 @@ void AAB_Pawn::Tick(float _DeltaTime)
 			{
 				pAB_SoundCube = Cast<AAB_SoundCube_2>(pHitActor);
 				pClosestHitCube = ClosestHitResult.GetComponent(); // 닿은 녀석의 컴포넌트를 구하고...
-				if (pAB_SoundCube && pClosestHitCube->GetCollisionObjectType() != ECC_WorldStatic) // 클래스의 종류를 판별 & 가장 가까이 닿은 녀석이 Visible이 꺼져있는지 판별
+				if (pAB_SoundCube && pClosestHitCube->GetCollisionObjectType() != ECC_WorldStatic)
+				// 클래스의 종류를 판별 & 가장 가까이 닿은 녀석이 Visible이 꺼져있는지 판별
 				{
 					if (IsGrounded(pClosestHitCube))
 					{
@@ -315,13 +317,15 @@ void AAB_Pawn::AttachMeshWithDelay()
 	if (!bShouldAttach)
 	{
 		bShouldAttach = true;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttachDelay, this, &AAB_Pawn::AttachMeshToSocket, 0.6f, false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttachDelay, this, &AAB_Pawn::AttachMeshToSocket, 0.6f,
+		                                       false);
 	}
 }
 
 void AAB_Pawn::AttachMeshToSocket()
 {
-	pSoundCubeHeld->AttachToComponent(pSkeletalMesh_R, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SoundCubeHeldSocket);
+	pSoundCubeHeld->AttachToComponent(pSkeletalMesh_R, FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+	                                  SoundCubeHeldSocket);
 	bShouldAttach = false;
 }
 
@@ -330,7 +334,6 @@ void AAB_Pawn::MusicStart_Implementation()
 	IAB_Pawn_To_SoundCube_Interface::Execute_MusicStart(
 		UGameplayStatics::GetActorOfClass(GetWorld(), AAB_SoundCube_2::StaticClass()));
 }
-
 
 
 ///

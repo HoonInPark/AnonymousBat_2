@@ -6,6 +6,6 @@
 /NAME:"UnrealEditor-RiderLC-0005.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"C:\Users\kelvi\Desktop\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\RiderLC\RiderLC.cpp.obj"
-"C:\Users\kelvi\Desktop\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\RiderLC\Default.rc2.res"
-/OUT:"C:\Users\kelvi\Desktop\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\RiderLC\UnrealEditor-RiderLC-0005.lib"
+"D:\Unreal\Workspace\Client_Side\Final\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\RiderLC\RiderLC.cpp.obj"
+"D:\Unreal\Workspace\Client_Side\Final\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\RiderLC\Default.rc2.res"
+/OUT:"D:\Unreal\Workspace\Client_Side\Final\AnonymousBat_2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\RiderLC\UnrealEditor-RiderLC-0005.lib"

@@ -15,19 +15,19 @@ AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 	SetRootComponent(RootComponent);
 
 	// Find and assign cube meshes
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_Default(
-		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/AB_Cube.AB_Cube'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_0(
+		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor01.Actor01'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_1(
-		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor01_3.Actor01_3'"));
+		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor02.Actor02'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_2(
-		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor02_3.Actor02_3'"));
+		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor03.Actor03'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_3(
-		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor03_3.Actor03_3'"));
+		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor04.Actor04'"));
 
-	if (CubeMeshFinder_Default.Succeeded() && CubeMeshFinder_1.Succeeded() && CubeMeshFinder_2.Succeeded() &&
+	if (CubeMeshFinder_0.Succeeded() && CubeMeshFinder_1.Succeeded() && CubeMeshFinder_2.Succeeded() &&
 		CubeMeshFinder_3.Succeeded())
 	{
-		pCubeMeshes.Add(CubeMeshFinder_Default.Object);
+		pCubeMeshes.Add(CubeMeshFinder_0.Object);
 		pCubeMeshes.Add(CubeMeshFinder_1.Object);
 		pCubeMeshes.Add(CubeMeshFinder_2.Object);
 		pCubeMeshes.Add(CubeMeshFinder_3.Object);
@@ -86,7 +86,7 @@ void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonDown_Implementation(
 		pEachCube_SM = Cast<UStaticMeshComponent>(pEachCube);
 		if (pEachCube_SM)
 		{
-			if ((pEachCube_SM != _ClosestHit) && (pEachCube_SM->GetCollisionObjectType() != ECC_WorldStatic))
+			if (pEachCube_SM != _ClosestHit && pEachCube_SM->GetCollisionObjectType() != ECC_WorldStatic)
 			{
 				pEachCube_SM->SetVisibility(true);
 				AB2LOG(Warning, TEXT("%s"), *pEachCube_SM->GetName());
