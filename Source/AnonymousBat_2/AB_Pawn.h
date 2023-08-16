@@ -107,6 +107,8 @@ public:
 	UPROPERTY()
 	AAB_SoundCube_2* pAB_SoundCube;
 	UPROPERTY()
+	AAB_SoundCube_Prepared* pAB_SoundCube_Prepared;
+	UPROPERTY()
 	UPrimitiveComponent* pClosestHitCube;
 	UPROPERTY()
 	TMap<UPrimitiveComponent*, UStaticMesh*> CubeMeshMap;
@@ -116,9 +118,11 @@ private:
 	class AAB_PlayerController* AB_PlayerController;
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=AnonymousBat)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
 	USkeletalMeshComponent* pSoundCubeHeld;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AnonymousBat)
+	TArray<USkeletalMesh*> pCubeMeshesHeld;
+	
 private:
 	FName SoundCubeHeldSocket;
 	float AttachDelay;
@@ -127,4 +131,5 @@ private:
 	
 	void AttachMeshToSocket();
 	void AttachMeshWithDelay();
+	
 };

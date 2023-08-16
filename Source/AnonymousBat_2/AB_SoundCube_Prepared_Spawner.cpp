@@ -30,7 +30,7 @@ void AAB_SoundCube_Prepared_Spawner::BeginPlay()
 {
 	Super::BeginPlay();
 
-	int32 SpawnStaticMeshNum = 0;
+	SpawnStaticMeshNum = 0;
 	for (const auto SpawnTransform : SpawnTransforms)
 	{
 		SpawnSoundCubes(SpawnStaticMeshNum, SpawnTransform);

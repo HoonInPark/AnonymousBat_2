@@ -19,7 +19,6 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 	RootComponent->SetMobility(EComponentMobility::Static);
 	SetRootComponent(RootComponent);
 
-	// Find and assign cube meshes
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_0(
 		TEXT("/Script/Engine.StaticMesh'/Game/_05_DancingCubes/Meshes/Actor01.Actor01'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshFinder_1(
@@ -90,6 +89,7 @@ void AAB_SoundCube_2::MusicStart_Implementation()
 void AAB_SoundCube_2::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit)
 {
 	_ClosestHit->SetVisibility(true);
+	_ClosestHit->SetHoldout(true);
 	_ClosestHit->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
 
 	for (const auto pEachCube : this->GetComponents())
@@ -100,7 +100,7 @@ void AAB_SoundCube_2::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimit
 			if (pEachCube_SM != _ClosestHit && pEachCube_SM->GetCollisionObjectType() != ECC_WorldStatic)
 			{
 				pEachCube_SM->SetVisibility(false);
-				AB2LOG(Warning, TEXT("%s"), *pEachCube_SM->GetName());
+				pEachCube_SM->SetHoldout(false);
 			}
 		}
 	}

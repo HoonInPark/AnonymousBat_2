@@ -13,7 +13,6 @@ AAB_Pawn::AAB_Pawn()
 
 	AttachDelay = 0.f;
 	bShouldAttach = false;
-
 	bIsMouseButtonDown = false;
 
 	pBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
@@ -67,11 +66,13 @@ AAB_Pawn::AAB_Pawn()
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_3(
 			TEXT(
 				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor04.Actor04_Actor04"));
-
 		if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded()
-			&& SoundCubeHeldFinder_3.Succeeded())
+		&& SoundCubeHeldFinder_3.Succeeded())
 		{
-			pSoundCubeHeld->SetSkeletalMesh(SoundCubeHeldFinder_1.Object);
+			pCubeMeshesHeld.Add(SoundCubeHeldFinder_0.Object);
+			pCubeMeshesHeld.Add(SoundCubeHeldFinder_1.Object);
+			pCubeMeshesHeld.Add(SoundCubeHeldFinder_2.Object);
+			pCubeMeshesHeld.Add(SoundCubeHeldFinder_3.Object);
 		}
 	}
 }
@@ -192,7 +193,7 @@ void AAB_Pawn::Tick(float _DeltaTime)
 				}
 				else if (Cast<AAB_SoundCube_Prepared>(pHitActor) && pClosestHitCube->IsVisible())
 				{
-					AAB_SoundCube_Prepared* pAB_SoundCube_Prepared = Cast<AAB_SoundCube_Prepared>(pHitActor);
+					pAB_SoundCube_Prepared = Cast<AAB_SoundCube_Prepared>(pHitActor);
 					IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
 						pAB_SoundCube_Prepared, pClosestHitCube);
 					IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
@@ -317,15 +318,16 @@ void AAB_Pawn::AttachMeshWithDelay()
 	if (!bShouldAttach)
 	{
 		bShouldAttach = true;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttachDelay, this, &AAB_Pawn::AttachMeshToSocket, 1.33f,
-											   false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttachDelay, this, &AAB_Pawn::AttachMeshToSocket, 1.f,
+		                                       false);
 	}
 }
 
 void AAB_Pawn::AttachMeshToSocket()
 {
+	pSoundCubeHeld->SetSkeletalMesh(pCubeMeshesHeld[pAB_SoundCube_Prepared->StaticMeshNum]);
 	pSoundCubeHeld->AttachToComponent(pSkeletalMesh_R, FAttachmentTransformRules::SnapToTargetNotIncludingScale,
-									  SoundCubeHeldSocket);
+	                                  SoundCubeHeldSocket);
 	bShouldAttach = false;
 }
 
