@@ -2,9 +2,19 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "AnonymousBat_2.h"
 #include "GameFramework/Actor.h"
+#include "AB_SoundCube_Prepared.h"
 #include "AB_SoundCube_Prepared_Spawner.generated.h"
+
+USTRUCT()
+struct FSpawnTransform
+{
+	GENERATED_BODY()
+	
+	FVector Location;
+	FRotator Rotation;
+};
 
 UCLASS()
 class ANONYMOUSBAT_2_API AAB_SoundCube_Prepared_Spawner : public AActor
@@ -23,4 +33,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	TArray<FTransform> SpawnTransforms;
+	void SpawnSoundCubes(int32 _SpawnStaticMeshNum, FTransform _SpawnTransform);
+	
 };
