@@ -95,10 +95,11 @@ private:
 
 	virtual void PrePushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) override;
 	virtual void PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent) override;
-	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) override;
-	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) override;
+	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller) override;
+	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller) override;
 
 	virtual void MusicStart_Implementation() override;
+	void PlayRandomSoundFromCategory(int32 _CategoryNum);
 
 	TArray<FHitResult> SweepInRange();
 	bool IsGrounded(const UPrimitiveComponent* _pCubeComponent);
@@ -128,8 +129,26 @@ private:
 	float AttachDelay;
 	FTimerHandle TimerHandle_AttachDelay;
 	bool bShouldAttach;
+
+	TArray<FString> SoundPaths_Bass;
+	TArray<FString> SoundPaths_Drum;
+	TArray<FString> SoundPaths_Guitar;
+	TArray<FString> SoundPaths_Piano;
+
+	TArray<TArray<FString>*> ArrOfArr;
 	
 	void AttachMeshToSocket();
 	void AttachMeshWithDelay();
+
+	
+	UPROPERTY()
+	UAudioComponent* CurrentAudioComponent;
+
+	UFUNCTION(BlueprintCallable)
+	void PlayMusic(USoundWave* SoundWave);
+	UFUNCTION(BlueprintCallable)
+	void StopMusic();
+	UFUNCTION(BlueprintCallable)
+	void OnAudioFinished();
 	
 };

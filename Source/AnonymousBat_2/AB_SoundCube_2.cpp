@@ -6,6 +6,8 @@
 
 #include "AB_SoundCube_2.h"
 
+#include "AB_Pawn.h"
+
 // Sets default values
 AAB_SoundCube_2::AAB_SoundCube_2()
 {
@@ -60,14 +62,13 @@ AAB_SoundCube_2::AAB_SoundCube_2()
 					pCubeComponent->SetRelativeRotation(
 						FRotator(FMath::FRandRange(-30.0f, 30.0f), FMath::FRandRange(-30.0f, 30.0f), 0.0f));
 					pCubeComponent->SetRelativeScale3D(FVector(CubeSize / 250.0f));
-					pCubeComponent->SetMobility(EComponentMobility::Static);
+					pCubeComponent->SetMobility(EComponentMobility::Movable);
 
 					pCubeComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 					pCubeComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 					pCubeComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
-					pCubeComponent->SetStaticMesh(pCubeMeshes[FMath::RandRange(0, pCubeMeshes.Num() - 1)]);
-					// pCubeComponent->SetStaticMesh(pCubeMeshes[0]);	
+					pCubeComponent->SetStaticMesh(pCubeMeshes[0]);	
 					pCubeComponent->SetVisibility(false);
 				}
 			}
@@ -86,12 +87,14 @@ void AAB_SoundCube_2::MusicStart_Implementation()
 {
 }
 
-void AAB_SoundCube_2::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit)
+void AAB_SoundCube_2::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller)
 {
 	_ClosestHit->SetVisibility(true);
-	_ClosestHit->SetHoldout(true);
 	_ClosestHit->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
-
+	
+	if (const auto ClosestCube = Cast<UStaticMeshComponent>(_ClosestHit))
+		ClosestCube->SetStaticMesh(pCubeMeshes[_pCaller->pAB_SoundCube_Prepared->StaticMeshNum]);
+	
 	for (const auto pEachCube : this->GetComponents())
 	{
 		pEachCube_SM = Cast<UStaticMeshComponent>(pEachCube);
@@ -100,13 +103,12 @@ void AAB_SoundCube_2::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimit
 			if (pEachCube_SM != _ClosestHit && pEachCube_SM->GetCollisionObjectType() != ECC_WorldStatic)
 			{
 				pEachCube_SM->SetVisibility(false);
-				pEachCube_SM->SetHoldout(false);
 			}
 		}
 	}
 }
 
-void AAB_SoundCube_2::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit)
+void AAB_SoundCube_2::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller)
 {
 	_ClosestHit->SetVisibility(true);
 	_ClosestHit->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);

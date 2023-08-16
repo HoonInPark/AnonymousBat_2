@@ -25,7 +25,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface")
 	void MusicStart();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface")
-	void SoundCubeVisualizer_MouseButtonDown(UPrimitiveComponent* _ClosestHit);
+	void SoundCubeVisualizer_MouseButtonDown(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface")
-	void SoundCubeVisualizer_MouseButtonUp(UPrimitiveComponent* _ClosestHit);
+	void SoundCubeVisualizer_MouseButtonUp(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller);
 };

@@ -36,8 +36,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube_Prepared)
 	int32 StaticMeshNum;
 
-	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) override;
-	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) override;
+	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller) override;
+	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller) override;
 
 	void SetStaticMeshNum(int32 NewStaticMeshNum);
 };

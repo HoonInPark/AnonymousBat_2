@@ -31,6 +31,7 @@ void UAB_RobotArms_AnimInstance::PrePushSoundCube_Implementation(const UPrimitiv
 
 void UAB_RobotArms_AnimInstance::PushSoundCube_Implementation(const UPrimitiveComponent* _pComponent)
 {
+	SoundCubeTransform = _pComponent->GetComponentLocation();
 	bIsStretch1 = false;
 	bIsStretch2 = true;
 	bDoOnce = true;

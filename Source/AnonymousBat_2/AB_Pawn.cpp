@@ -14,6 +14,7 @@ AAB_Pawn::AAB_Pawn()
 	AttachDelay = 0.f;
 	bShouldAttach = false;
 	bIsMouseButtonDown = false;
+	CurrentAudioComponent = nullptr;
 
 	pBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	pSkeletalMesh_R = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SKELETAL_R"));
@@ -67,7 +68,7 @@ AAB_Pawn::AAB_Pawn()
 			TEXT(
 				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor04.Actor04_Actor04"));
 		if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded()
-		&& SoundCubeHeldFinder_3.Succeeded())
+			&& SoundCubeHeldFinder_3.Succeeded())
 		{
 			pCubeMeshesHeld.Add(SoundCubeHeldFinder_0.Object);
 			pCubeMeshesHeld.Add(SoundCubeHeldFinder_1.Object);
@@ -75,6 +76,37 @@ AAB_Pawn::AAB_Pawn()
 			pCubeMeshesHeld.Add(SoundCubeHeldFinder_3.Object);
 		}
 	}
+
+	SoundPaths_Bass = {
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Bass/436506__red19official__bd_knocky_c.436506__red19official__bd_knocky_c'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Bass/463930__alienxxx__mean_bass_loop_130bpm_dminfinal.463930__alienxxx__mean_bass_loop_130bpm_dminfinal'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Bass/464443__prime45__bass-sound.464443__prime45__bass-sound'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Bass/500259__matrixxx__european-fashion-background-bass-rhythm-04-rep.500259__matrixxx__european-fashion-background-bass-rhythm-04-rep'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Bass/500260__matrixxx__european-fashion-background-bass-rhythm-32-rep.500260__matrixxx__european-fashion-background-bass-rhythm-32-rep'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Bass/529808__logicogonist__bass-loop-and-drums-130-bpm.529808__logicogonist__bass-loop-and-drums-130-bpm'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Bass/621799__tkky__electric-bass-guitar-loop.621799__tkky__electric-bass-guitar-loop'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Bass/623189__deadrobotmusic__web-crawler-bass.623189__deadrobotmusic__web-crawler-bass'"
+	};
+	SoundPaths_Drum = {
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Drum/381353__waveplaysfx__drumloop-120-bpm-edm-drum-loop-022.381353__waveplaysfx__drumloop-120-bpm-edm-drum-loop-022'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Drum/439688__inspectorj__ocean-drum-rolling-felt-a.439688__inspectorj__ocean-drum-rolling-felt-a'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Drum/610823__paraplex__fresh-drum-loop.610823__paraplex__fresh-drum-loop'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Drum/629134__holizna__76-bpm-lofi-drum-loop.629134__holizna__76-bpm-lofi-drum-loop'"
+	};
+	SoundPaths_Guitar = {
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Guitar/370934__karolist__guitar-solo.370934__karolist__guitar-solo'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Guitar/533847__tosha73__distortion-guitar-power-chord-e.533847__tosha73__distortion-guitar-power-chord-e'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Guitar/629150__holizna__lofi-guitar-loop-em-119-bpm3.629150__holizna__lofi-guitar-loop-em-119-bpm3'"
+	};
+	SoundPaths_Piano = {
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Piano/645979__timouse__piano-composition-1.645979__timouse__piano-composition-1'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Piano/648259__timouse__piano-composition-3.648259__timouse__piano-composition-3'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Piano/648438__timouse__piano-loop-22.648438__timouse__piano-loop-22'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Piano/651877__timouse__piano-loop-25.651877__timouse__piano-loop-25'",
+		"/Script/Engine.SoundWave'/Game/_05_DancingCubes/Sources/Sounds/Piano/680316__turkis__mallets-on-piano-114bpm.680316__turkis__mallets-on-piano-114bpm'"
+	};
+
+	ArrOfArr = {&SoundPaths_Bass, &SoundPaths_Drum, &SoundPaths_Guitar, &SoundPaths_Piano};
 }
 
 void AAB_Pawn::PostInitializeComponents()
@@ -186,7 +218,7 @@ void AAB_Pawn::Tick(float _DeltaTime)
 					if (IsGrounded(pClosestHitCube))
 					{
 						IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
-							pAB_SoundCube, pClosestHitCube);
+							pAB_SoundCube, pClosestHitCube, this);
 						IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
 						AttachMeshWithDelay();
 					}
@@ -195,7 +227,7 @@ void AAB_Pawn::Tick(float _DeltaTime)
 				{
 					pAB_SoundCube_Prepared = Cast<AAB_SoundCube_Prepared>(pHitActor);
 					IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonDown(
-						pAB_SoundCube_Prepared, pClosestHitCube);
+						pAB_SoundCube_Prepared, pClosestHitCube, this);
 					IAB_Pawn_To_AnimInst_Interface::Execute_PrePushSoundCube(pAnimInstance, pClosestHitCube);
 					AttachMeshWithDelay();
 				}
@@ -253,20 +285,28 @@ void AAB_Pawn::PushSoundCube_Implementation(const UPrimitiveComponent* _pCompone
 		pClosestHitCube = ClosestHitResult.GetComponent();
 		if (pAB_SoundCube && IsGrounded(pClosestHitCube))
 		{
-			IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonUp(pAB_SoundCube, pClosestHitCube);
+			IAB_Pawn_To_SoundCube_Interface::Execute_SoundCubeVisualizer_MouseButtonUp(
+				pAB_SoundCube, pClosestHitCube, this);
 			IAB_Pawn_To_AnimInst_Interface::Execute_PushSoundCube(pAnimInstance, pClosestHitCube);
+
+			if (pSoundCubeHeld)
+			{
+				pSoundCubeHeld->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+				pSoundCubeHeld->SetSkeletalMesh(nullptr); 
+			}
 		}
 	}
 }
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-void AAB_Pawn::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit)
+void AAB_Pawn::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller)
 {
 }
 
-void AAB_Pawn::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit)
+void AAB_Pawn::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller)
 {
+	StopMusic();
 }
 
 TArray<FHitResult> AAB_Pawn::SweepInRange()
@@ -276,7 +316,7 @@ TArray<FHitResult> AAB_Pawn::SweepInRange()
 	SweepStartPt = PlayerViewPtLoc + 100.f * PlayerViewPtRot.Vector();
 	SweepEndPt = PlayerViewPtLoc + PlayerViewPtRot.Vector() * 200.f;
 
-	DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
+	// DrawDebugLine(GetWorld(), SweepStartPt, SweepEndPt, FColor::Red, true, 0.0f);
 
 	const FCollisionQueryParams TraceParams(FName(TEXT("")), true, GetOwner());
 	GetWorld()->SweepMultiByChannel(Hit_released, SweepStartPt, SweepEndPt, FQuat::Identity, ECC_Visibility,
@@ -323,11 +363,40 @@ void AAB_Pawn::AttachMeshWithDelay()
 	}
 }
 
+void AAB_Pawn::PlayMusic(USoundWave* SoundWave)
+{
+	StopMusic(); // Stop any music currently playing
+
+	CurrentAudioComponent = UGameplayStatics::SpawnSound2D(this, SoundWave);
+	if (CurrentAudioComponent)
+	{
+		CurrentAudioComponent->OnAudioFinished.AddDynamic(this, &AAB_Pawn::OnAudioFinished);
+	}
+}
+
+void AAB_Pawn::StopMusic()
+{
+	if (CurrentAudioComponent)
+	{
+		CurrentAudioComponent->Stop();
+		CurrentAudioComponent = nullptr;
+	}
+}
+
+void AAB_Pawn::OnAudioFinished()
+{
+	// This function can be used to handle any logic that should happen when a sound finishes playing
+	// ...
+	CurrentAudioComponent = nullptr;
+}
+
 void AAB_Pawn::AttachMeshToSocket()
 {
 	pSoundCubeHeld->SetSkeletalMesh(pCubeMeshesHeld[pAB_SoundCube_Prepared->StaticMeshNum]);
 	pSoundCubeHeld->AttachToComponent(pSkeletalMesh_R, FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 	                                  SoundCubeHeldSocket);
+
+	PlayRandomSoundFromCategory(pAB_SoundCube_Prepared->StaticMeshNum);
 	bShouldAttach = false;
 }
 
@@ -335,4 +404,17 @@ void AAB_Pawn::MusicStart_Implementation()
 {
 	IAB_Pawn_To_SoundCube_Interface::Execute_MusicStart(
 		UGameplayStatics::GetActorOfClass(GetWorld(), AAB_SoundCube_2::StaticClass()));
+}
+
+void AAB_Pawn::PlayRandomSoundFromCategory(int32 _CategoryNum)
+{
+	const int32 RandomIndex = FMath::RandRange(0, ArrOfArr[_CategoryNum]->Num() - 1);
+	const FString& RandomSoundPath = ArrOfArr[_CategoryNum]->Pop(true);
+
+	USoundWave* SoundWave = LoadObject<USoundWave>(nullptr, *RandomSoundPath);
+
+	if (!SoundWave)
+		return;
+
+	PlayMusic(SoundWave);
 }

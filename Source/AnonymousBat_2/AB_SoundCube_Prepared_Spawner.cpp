@@ -3,6 +3,8 @@
 
 #include "AB_SoundCube_Prepared_Spawner.h"
 
+#include "Kismet/KismetMathLibrary.h"
+
 // Sets default values
 AAB_SoundCube_Prepared_Spawner::AAB_SoundCube_Prepared_Spawner()
 {
@@ -14,7 +16,7 @@ AAB_SoundCube_Prepared_Spawner::AAB_SoundCube_Prepared_Spawner()
 			{FVector(-1000.0f, 1800.0f, 1180.0f), FRotator(-90.0f, -90.0f, 65.0f)},
 			{FVector(-680.0f, 2700.0f, 1250.0f), FRotator(-90.0f, 0.0f, -89.999999f)},
 			{FVector(-910.0f, 940.0f, 1450.0f), FRotator(-85.0f, 90.0f, 250.0f)},
-			{FVector(2120.0f, -160.0f, 1310.0f), FRotator(-59.442661f, 234.962055f, 268.112969f)}
+			{FVector(830.f,2800.f,830.f), FRotator(0.f,0.f,-84.999999f)}
 		}
 	};
 	
@@ -56,6 +58,26 @@ void AAB_SoundCube_Prepared_Spawner::SpawnSoundCubes(int32 _SpawnStaticMeshNum, 
 			AAB_SoundCube_Prepared::StaticClass(), _SpawnTransform, SpawnParams))
 		{
 			pAB_SoundCube_Prepared->SetStaticMeshNum(_SpawnStaticMeshNum);
+
+			for (int32 i = 0; i < 60; i++)
+			{
+				TArray<UStaticMeshComponent*> StaticMeshComponents;
+				for (UActorComponent* Component : pAB_SoundCube_Prepared->GetComponents())
+				{
+					UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(Component);
+					if (StaticMeshComponent != nullptr && StaticMeshComponent != RootComponent)
+					{
+						StaticMeshComponents.Add(StaticMeshComponent);
+					}
+				}
+
+				if (StaticMeshComponents.Num() > 0)
+				{
+					const int32 RandomIndex = UKismetMathLibrary::RandomInteger(StaticMeshComponents.Num());
+					UActorComponent* ComponentToDestroy = StaticMeshComponents[RandomIndex];
+					ComponentToDestroy->DestroyComponent();
+				}
+			}
 		}
 	}
 }

@@ -3,6 +3,8 @@
 
 #include "AB_SoundCube_Prepared.h"
 
+#include "Kismet/KismetMathLibrary.h"
+
 AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -72,6 +74,7 @@ AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 void AAB_SoundCube_Prepared::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
 void AAB_SoundCube_Prepared::Tick(float DeltaSeconds)
@@ -79,7 +82,7 @@ void AAB_SoundCube_Prepared::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 }
 
-void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit)
+void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller)
 {
 	_ClosestHit->SetVisibility(false);
 
@@ -97,7 +100,7 @@ void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonDown_Implementation(
 	}
 }
 
-void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit)
+void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller)
 {
 	_ClosestHit->SetVisibility(true);
 	_ClosestHit->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
