@@ -16,7 +16,6 @@ class ANONYMOUSBAT_2_API AAB_SoundCube_Prepared : public AActor, public IAB_Pawn
 
 public:
 	AAB_SoundCube_Prepared();
-	virtual void PostInitializeComponents() override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -34,10 +33,9 @@ public:
 	UStaticMeshComponent* pCubeComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube_Prepared)
 	UStaticMeshComponent* pEachCube_SM;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AB_SoundCube_Prepared)
+	int32 StaticMeshNum;
 	
 	virtual void SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit) override;
 	virtual void SoundCubeVisualizer_MouseButtonUp_Implementation(UPrimitiveComponent* _ClosestHit) override;
-
-protected:
-	void SpawnCubes(int _StaticMeshNum);
 };

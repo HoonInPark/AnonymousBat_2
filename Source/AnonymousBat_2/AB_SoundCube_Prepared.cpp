@@ -7,6 +7,8 @@ AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	StaticMeshNum = 0;
+	
 	CubeSize = 30.0f;
 	NumCubes = 10;
 
@@ -32,13 +34,39 @@ AAB_SoundCube_Prepared::AAB_SoundCube_Prepared()
 		pCubeMeshes.Add(CubeMeshFinder_2.Object);
 		pCubeMeshes.Add(CubeMeshFinder_3.Object);
 	}
-}
 
-void AAB_SoundCube_Prepared::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
+	if (NumCubes > 0 && pCubeMeshes.Num() > 0)
+	{
+		const float TotalLength = NumCubes * CubeSize;
 
-	SpawnCubes(0);
+		for (int32 j = 0; j < NumCubes; j++)
+		{
+			for (int32 i = 0; i < NumCubes; i++)
+			{
+				FString ComponentName = FString::Printf(TEXT("%d %d"), i, j);
+
+				pCubeComponent = CreateDefaultSubobject<UStaticMeshComponent>(*ComponentName);
+				pCubeComponent->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
+				pCubeComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+				pCubeComponent->SetupAttachment(RootComponent);
+
+				pCubeComponent->SetRelativeLocation(FVector(i * CubeSize * 0.4f, j * CubeSize * 0.4f, 0.f));
+				pCubeComponent->SetRelativeRotation(
+					FRotator(FMath::FRandRange(-30.0f, 30.0f), FMath::FRandRange(-30.0f, 30.0f), 0.0f));
+				pCubeComponent->SetRelativeScale3D(FVector(CubeSize / 250.0f));
+				pCubeComponent->SetMobility(EComponentMobility::Static);
+
+				pCubeComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+				pCubeComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+				pCubeComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+
+				pCubeComponent->SetStaticMesh(pCubeMeshes[StaticMeshNum]);
+				pCubeComponent->SetVisibility(true);
+			}
+		}
+
+		SetActorScale3D(FVector(TotalLength / 100.0f));
+	}
 }
 
 void AAB_SoundCube_Prepared::BeginPlay()
@@ -74,40 +102,4 @@ void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonUp_Implementation(UP
 {
 	_ClosestHit->SetVisibility(true);
 	_ClosestHit->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-}
-
-void AAB_SoundCube_Prepared::SpawnCubes(int _StaticMeshNum)
-{
-	if (NumCubes > 0 && pCubeMeshes.Num() > 0)
-	{
-		const float TotalLength = NumCubes * CubeSize;
-
-		for (int32 j = 0; j < NumCubes; j++)
-		{
-			for (int32 i = 0; i < NumCubes; i++)
-			{
-				FString ComponentName = FString::Printf(TEXT("%d %d"), i, j);
-
-				pCubeComponent = CreateDefaultSubobject<UStaticMeshComponent>(*ComponentName);
-				pCubeComponent->SetCollisionObjectType(ECollisionChannel::ECC_Visibility);
-				pCubeComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-				pCubeComponent->SetupAttachment(RootComponent);
-
-				pCubeComponent->SetRelativeLocation(FVector(i * CubeSize * 0.4f, j * CubeSize * 0.4f, 0.f));
-				pCubeComponent->SetRelativeRotation(
-					FRotator(FMath::FRandRange(-30.0f, 30.0f), FMath::FRandRange(-30.0f, 30.0f), 0.0f));
-				pCubeComponent->SetRelativeScale3D(FVector(CubeSize / 250.0f));
-				pCubeComponent->SetMobility(EComponentMobility::Static);
-
-				pCubeComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
-				pCubeComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-				pCubeComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-
-				pCubeComponent->SetStaticMesh(pCubeMeshes[_StaticMeshNum]);
-				pCubeComponent->SetVisibility(true);
-			}
-		}
-
-		SetActorScale3D(FVector(TotalLength / 100.0f));
-	}
 }
