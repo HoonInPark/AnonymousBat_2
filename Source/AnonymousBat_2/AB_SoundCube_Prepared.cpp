@@ -112,9 +112,7 @@ void AAB_SoundCube_Prepared::SetStaticMeshNum(int32 NewStaticMeshNum)
 		{
 			UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(CubeComponent);
 			if (StaticMeshComponent && StaticMeshComponent != RootComponent)
-			{
 				StaticMeshComponent->SetStaticMesh(pCubeMeshes[StaticMeshNum]);
-			}
 		}
 	}
 }

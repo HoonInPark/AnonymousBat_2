@@ -57,16 +57,16 @@ AAB_Pawn::AAB_Pawn()
 		pSoundCubeHeld = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SOUNDCUBEHELD"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_0(
 			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor01.Actor01_Actor01'"));
+				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor01.Actor01_Actor01"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_1(
 			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor02.Actor02_Actor02'"));
+				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor02.Actor02_Actor02"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_2(
 			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor03.Actor03_Actor03'"));
+				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor03.Actor03_Actor03"));
 		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SoundCubeHeldFinder_3(
 			TEXT(
-				"/Script/Engine.SkeletalMesh'/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor04.Actor04_Actor04'"));
+				"/Game/_05_DancingCubes/Meshes/SK_SoundCube_Held/Actor04.Actor04_Actor04"));
 
 		if (SoundCubeHeldFinder_0.Succeeded() && SoundCubeHeldFinder_1.Succeeded() && SoundCubeHeldFinder_2.Succeeded()
 			&& SoundCubeHeldFinder_3.Succeeded())
@@ -317,15 +317,15 @@ void AAB_Pawn::AttachMeshWithDelay()
 	if (!bShouldAttach)
 	{
 		bShouldAttach = true;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttachDelay, this, &AAB_Pawn::AttachMeshToSocket, 0.6f,
-		                                       false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_AttachDelay, this, &AAB_Pawn::AttachMeshToSocket, 1.33f,
+											   false);
 	}
 }
 
 void AAB_Pawn::AttachMeshToSocket()
 {
 	pSoundCubeHeld->AttachToComponent(pSkeletalMesh_R, FAttachmentTransformRules::SnapToTargetNotIncludingScale,
-	                                  SoundCubeHeldSocket);
+									  SoundCubeHeldSocket);
 	bShouldAttach = false;
 }
 

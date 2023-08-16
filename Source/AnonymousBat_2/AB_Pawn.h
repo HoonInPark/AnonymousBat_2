@@ -108,6 +108,8 @@ public:
 	AAB_SoundCube_2* pAB_SoundCube;
 	UPROPERTY()
 	UPrimitiveComponent* pClosestHitCube;
+	UPROPERTY()
+	TMap<UPrimitiveComponent*, UStaticMesh*> CubeMeshMap;
 
 private:
 	UPROPERTY()
