@@ -77,9 +77,9 @@ void AAB_SoundCube_Prepared::BeginPlay()
 	
 }
 
-void AAB_SoundCube_Prepared::Tick(float DeltaSeconds)
+void AAB_SoundCube_Prepared::Tick(float _DeltaSeconds)
 {
-	Super::Tick(DeltaSeconds);
+	Super::Tick(_DeltaSeconds);
 }
 
 void AAB_SoundCube_Prepared::SoundCubeVisualizer_MouseButtonDown_Implementation(UPrimitiveComponent* _ClosestHit, AAB_Pawn* _pCaller)

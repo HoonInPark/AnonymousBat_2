@@ -31,7 +31,7 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float _DeltaTime) override;
 
 private:
 	TArray<FTransform> SpawnTransforms;

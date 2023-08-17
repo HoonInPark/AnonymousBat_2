@@ -9,7 +9,7 @@
 AAB_SoundCube_Prepared_Spawner::AAB_SoundCube_Prepared_Spawner()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	const TArray<FSpawnTransform> TransformDataArray = {
 		{
@@ -41,9 +41,9 @@ void AAB_SoundCube_Prepared_Spawner::BeginPlay()
 }
 
 // Called every frame
-void AAB_SoundCube_Prepared_Spawner::Tick(float DeltaTime)
+void AAB_SoundCube_Prepared_Spawner::Tick(float _DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(_DeltaTime);
 }
 
 void AAB_SoundCube_Prepared_Spawner::SpawnSoundCubes(int32 _SpawnStaticMeshNum, const FTransform& _SpawnTransform)
